@@ -192,11 +192,6 @@ dialog::backdrop { background: #12261dc0; }
 .cuisine-links small { margin-top: 1px; font-size: .61rem; }
 .cuisine-links .all-regions { display: grid; place-content: center; padding: 8px 12px; color: var(--red); border: 0; }
 .experience-intro { margin-top: 10px; font-size: .85rem; color: var(--muted); }
-.menu-controls { position: sticky; z-index: 2; top: 0; background: var(--paper); }
-.menu-controls .filters { position: static; }
-.region-filter { display: flex; flex-wrap: wrap; gap: 5px; padding-block: 7px; border-bottom: 1px solid var(--line); }
-.region-filter button { min-width: 31px; min-height: 36px; padding: 0 6px; border: 1px solid var(--line); color: var(--red); background: transparent; font-size: .88rem; }
-.region-filter button[aria-pressed="true"] { color: var(--white); background: var(--red); border-color: var(--red); }
 .menu-entry .photo { border-radius: 2px; }
 @media (min-width: 820px) {
   .menu-list { display: grid; grid-template-columns: repeat(2,minmax(0, 1fr)); gap: 0 28px; }
@@ -246,12 +241,11 @@ dialog::backdrop { background: #12261dc0; }
   .cuisine-links a:nth-child(4n) { border-inline-end: 0; }
   .cuisine-links a:nth-child(n+5) { border-top: 1px solid var(--line); }
   .cuisine-links .all-regions { grid-column: 1 / -1; grid-auto-flow: column; align-items: center; gap: 7px; min-height: 42px; }
-  .region-filter { gap: 3px; }
-  .region-filter button { min-height: 36px; min-width: 27px; padding-inline: 4px; }
   .set-grid, .heritage-grid { grid-template-columns: 1fr; }
 }
 
-.active-region { margin: 11px 0 0; color: var(--red); font-size: .83rem; }
+.active-region { margin: 0 0 11px; color: var(--red); font-size: .83rem; }
+.active-region a { display: inline-flex; align-items: center; gap: .35em; min-height: 44px; margin-left: .7em; text-decoration: underline; }
 .heritage-pairings { margin-top: 24px; }
 .heritage-pairings ul { padding: 0; list-style: none; border-top: 1px solid var(--line); }
 .heritage-pairings li { display: flex; align-items: start; gap: 6px; padding-block: 11px; border-bottom: 1px solid var(--line); }

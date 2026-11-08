@@ -190,14 +190,6 @@ function showItem(id) {
   dialogContent.querySelector('.detail-add').disabled = (order.get(id) || 0) >= 99;
 }
 
-function regionFilters() {
-  const options = [['','全菜系','All cuisines'], ...cuisines];
-  return '<div class="region-filter" role="group" aria-label="按菜系筛选 / Filter by cuisine">'
-    + options.map(([seal, zh, en]) => '<button type="button" data-action="region" data-region="' + seal
-      + '" aria-label="' + escape(zh + ' / ' + en) + '" aria-pressed="' + (seal === region) + '">'
-      + (seal || zh) + '</button>').join('') + '</div>';
-}
-
 function renderMenu() {
   const options = [['', 'All', '全部'], ...groups[route]];
   const activeCuisine = cuisines.find(([seal]) => seal === region);
@@ -226,10 +218,10 @@ function renderMenu() {
       : copy('午市及晚市供应 · 菜品可按类别或菜系浏览。', 'Served at lunch and dinner. Browse by chapter or cuisine.');
   const regionNote = activeCuisine
     ? '<p class="active-region"><span class="seal" aria-hidden="true">' + activeCuisine[0] + '</span>'
-      + escape(activeCuisine[1] + ' · ' + activeCuisine[3]) + '</p>' : '';
-  content.innerHTML = note + '<div class="menu-controls">'
+      + escape(activeCuisine[1] + ' · ' + activeCuisine[3])
+      + ' <a href="./#' + route + '">查看完整菜单 <span lang="en">Full Menu</span></a></p>' : '';
+  content.innerHTML = note + regionNote
     + (route !== 'night' ? '<div class="filters" role="group" aria-label="菜单章节 / Menu chapters">' + filters + '</div>' : '')
-    + (route !== 'drinks' ? regionFilters() : '') + '</div>' + regionNote
     + (chapters || copy('该类别暂无此菜系的菜品。可切换至全部类别。', 'There are no dishes in this chapter for the selected cuisine. Try All.'))
     + (route === 'night' ? '<nav class="menu-next"><a href="#drinks">查看饮品 <span lang="en">Drinks ↗</span></a></nav>'
       : '<nav class="menu-next" aria-label="套餐 / Set menus"><a href="#tea">以茶入席 <span lang="en">Tea Sets ↗</span></a>'
@@ -445,15 +437,14 @@ document.addEventListener('click', event => {
     renderSets();
     content.querySelector('.set-period [aria-pressed="true"]').focus({preventScroll:true});
   }
-  if (name === 'filter' || name === 'region') {
-    if (name === 'filter') category = button.dataset.category;
-    else region = button.dataset.region;
+  if (name === 'filter') {
+    category = button.dataset.category;
     renderMenu();
-    const selected = content.querySelector('[data-action="' + name + '"][aria-pressed="true"]');
+    const selected = content.querySelector('.filters [aria-pressed="true"]');
     selected.focus({preventScroll: true});
     selected.scrollIntoView({block: 'nearest', inline: 'nearest'});
     const chapter = content.querySelector('.menu-chapter');
-    const controls = content.querySelector('.menu-controls');
+    const controls = content.querySelector('.filters');
     if (chapter && chapter.getBoundingClientRect().top < controls.offsetHeight) {
       window.scrollBy(0, chapter.getBoundingClientRect().top - controls.offsetHeight - 12);
     }
