@@ -288,3 +288,17 @@ dialog::backdrop { background: #12261dc0; }
   .hero-menus { margin-top: 14px; }
   .stamps button { min-height: 121px; }
 }
+
+/* SVG arrows follow the text colour without emoji font fallback. */
+.link-arrow {
+  display: inline-block;
+  flex: none;
+  width: 1em;
+  height: 1em;
+  vertical-align: -.12em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

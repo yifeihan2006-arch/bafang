@@ -53,8 +53,9 @@ const escape = value => String(value).replace(/[&<>"']/g, ch => ({
   '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;',
 })[ch]);
 const bilingual = (zh, en) => escape(zh) + '<small lang="en">' + escape(en) + '</small>';
+const forwardArrow = '<svg class="link-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4.5 11.5l7-7m-5 0h5v5"/></svg>';
 const setLink = target => '<a href="#' + target + '">' + pages[target][0]
-  + ' <span lang="en">' + pages[target][1] + ' ↗</span></a>';
+  + ' <span lang="en">' + pages[target][1] + '</span>' + forwardArrow + '</a>';
 const copy = (zh, en) => '<p class="copy">' + bilingual(zh, en) + '</p>';
 
 function load(key) {
@@ -243,7 +244,7 @@ function renderMenu() {
     + '<nav class="menu-related" aria-label="相关菜单 / Related Menu"><a href="#' + relatedRoute + '">'
     + '<span class="related-label"><span class="related-kicker" aria-hidden="true">继续浏览 <span lang="en">· EXPLORE MORE</span></span>'
     + '<span class="related-title">' + bilingual(relatedZh, relatedEn) + '</span></span>'
-    + '<span class="related-arrow" aria-hidden="true">↗</span></a></nav>';
+    + '<span class="related-arrow" aria-hidden="true">' + forwardArrow + '</span></a></nav>';
   updateOrder();
 }
 
@@ -320,7 +321,7 @@ function renderHeritage() {
       + '<div class="craft-table"><h3>' + bilingual('在八方的餐桌上', 'At Bafang') + '</h3>' + copy(...craft.atTable) + '</div>'
       + '<a class="craft-link" href="' + craft.url + '" target="_blank" rel="noopener noreferrer" aria-label="'
       + escape('阅读 UNESCO 官方介绍：' + craft.element[0] + '（新窗口） / Read on UNESCO, opens in a new tab')
-      + '">' + bilingual('阅读 UNESCO 官方介绍', 'Read on UNESCO') + '<span aria-hidden="true">↗</span></a></div></article>'
+      + '">' + bilingual('阅读 UNESCO 官方介绍', 'Read on UNESCO') + forwardArrow + '</a></div></article>'
     ).join('') + '</div>';
 }
 
