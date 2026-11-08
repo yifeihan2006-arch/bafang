@@ -221,20 +221,27 @@ function renderMenu() {
     night: ['夜宵小食供应时间为 21:00 至次日 02:00。', 'Late-night bites are served from 21:00 to 02:00 the following day.'],
     'night-drinks': ['中式特调、咖啡与清饮于 21:00 至次日 02:00 供应。', 'Chinese-inspired cocktails, coffee and soft drinks are served from 21:00 to 02:00 the following day.'],
   };
+  const [relatedRoute, relatedZh, relatedEn] = {
+    menu: ['drinks', '查看午晚市饮品', 'View Lunch & Dinner Drinks'],
+    drinks: ['menu', '查看正餐菜单', 'View Food Menu'],
+    night: ['night-drinks', '查看夜宵饮品', 'View Late-Night Drinks'],
+    'night-drinks': ['night', '查看夜宵小食', 'View Late-Night Bites'],
+  }[route];
+  const relatedLink = '<a href="#' + relatedRoute + '">' + relatedZh
+    + ' <span lang="en">' + relatedEn + ' ↗</span></a>';
   const isDrinks = route === 'drinks' || route === 'night-drinks';
   const links = isDrinks
     ? '<nav class="drink-switch" aria-label="饮品时段 / Drinks by service">'
       + [['drinks','午晚市饮品','Lunch & Dinner Drinks'],['night-drinks','夜宵饮品','Late-Night Drinks']].map(([target, zh, en]) =>
         '<a href="#' + target + '"' + (target === route ? ' aria-current="page"' : '') + '>' + bilingual(zh, en) + '</a>').join('')
       + '</nav>'
-    : '<nav class="menu-next menu-top"><a href="#' + (route === 'night'
-      ? 'night-drinks">查看夜宵饮品 <span lang="en">View Late-Night Drinks ↗'
-      : 'drinks">查看午晚市饮品 <span lang="en">View Lunch & Dinner Drinks ↗') + '</span></a></nav>';
+    : '<nav class="menu-next menu-top">' + relatedLink + '</nav>';
   content.innerHTML = links + copy(...notes[route])
     + (route !== 'night' ? '<div class="filters" role="group" aria-label="菜单章节 / Menu chapters">' + filters + '</div>' : '')
     + chapters
     + (route === 'menu' ? '<nav class="menu-next" aria-label="套餐 / Set Menus">' + setLink('tea') + setLink('wine') + '</nav>'
-      : route === 'night-drinks' ? '<nav class="menu-next"><a href="#night">查看夜宵小食 <span lang="en">View Late-Night Bites ↗</span></a></nav>' : '');
+      : '')
+    + '<nav class="menu-next menu-related" aria-label="相关菜单 / Related Menu">' + relatedLink + '</nav>';
   updateOrder();
 }
 
