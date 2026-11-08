@@ -3,45 +3,83 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f4f1e9">
-<meta name="description" content="日膳夜酌 · 八方有味。点菜、饮品、茶酒搭配、集章与预订。">
+<meta name="theme-color" content="#f7f2e8">
+<meta name="description" content="日膳夜酌 · 八方有味。翻开八方食志，探索菜品、茶酒搭配与八方集章。">
 <title>日膳夜酌 · 八方有味 | Ba Fang</title>
-<link rel="icon" href="favicon.svg">
-<link rel="stylesheet" href="bafang.css">
-<script src="menu-data.js" defer></script>
-<script src="bafang.js" defer></script>
+<link rel="icon" href="bafang-mark.jpg" type="image/jpeg">
+<link rel="stylesheet" href="bafang.css?v=2">
+<script src="menu-data.js?v=2" defer></script>
+<script src="bafang.js?v=2" defer></script>
 </head>
 <body>
-<header class="wrap header">
-  <a href="./" class="brand"><b aria-hidden="true">八</b><span>日膳夜酌 · 八方有味<small lang="en">SAVOUR THE DAY, TOAST THE NIGHT</small></span></a>
-  <button id="order-button" type="button" hidden>点单清单 <span lang="en">Order</span> <strong id="order-count">0</strong></button>
-</header>
-<main class="wrap">
-  <section id="home">
-    <div class="intro">
-      <div><p class="kicker" lang="en">BA FANG · MODERN CHINESE BISTRO</p><h1>欢迎入席</h1><p class="welcome" lang="en">Welcome to our table</p></div>
-      <img src="images/table.webp" alt="" fetchpriority="high">
-    </div>
-    <nav class="tiles" aria-label="餐厅服务 / Restaurant services">
-      <a href="#menu"><b aria-hidden="true">膳</b><span>点菜<small lang="en">Food Menu</small></span></a>
-      <a href="#drinks"><b aria-hidden="true">饮</b><span>饮品<small lang="en">Drinks</small></span></a>
-      <a href="#tea"><b aria-hidden="true">茶</b><span>以茶入席<small lang="en">Tea Pairings</small></span></a>
-      <a href="#wine"><b aria-hidden="true">酒</b><span>以酒入席<small lang="en">Alcohol Pairings</small></span></a>
-      <a href="#passport"><b aria-hidden="true">印</b><span>集章<small lang="en">Taste Passport</small></span></a>
-      <a href="#reserve"><b aria-hidden="true">席</b><span>预订<small lang="en">Reservations</small></span></a>
+<a class="skip" href="#main">跳到正文 <span lang="en">Skip to content</span></a>
+<header class="site-header">
+  <div class="wrap header">
+    <a href="./" class="brand" aria-label="八方首页 / Ba Fang home">
+      <img src="bafang-mark.jpg" alt="" width="28" height="33">
+      <span>八方 <small lang="en">BAFANG</small></span>
+    </a>
+    <nav class="header-nav" aria-label="主菜单 / Main navigation">
+      <a href="#menu">菜单 <span lang="en">Menu</span></a>
+      <a href="#drinks">饮品 <span lang="en">Drinks</span></a>
     </nav>
-    <noscript><p>请启用 JavaScript 以使用菜单和预订功能。 <span lang="en">Enable JavaScript to use the menu and booking features.</span></p></noscript>
+    <a class="reserve-link" href="#reserve">订一席 <span lang="en">Reserve</span><span aria-hidden="true">↗</span></a>
+  </div>
+</header>
+<main id="main" class="wrap" tabindex="-1">
+  <section id="home">
+    <div class="hero">
+      <div class="hero-copy">
+        <img class="hero-logo" src="bafang-logo.jpg" alt="八方 BAFANG · 日膳夜酌" width="110" height="170">
+        <p class="eyebrow" lang="en">MODERN CHINESE BISTRO</p>
+        <h1>八方有味</h1>
+        <p class="hero-tagline" lang="en">Savour the Day, Toast the Night</p>
+        <p class="hero-description">循八方风味，赴一席中式好味。</p>
+        <div class="hero-actions">
+          <a class="primary" href="#menu">翻开菜单 <small lang="en">View Food Menu</small><span aria-hidden="true">↗</span></a>
+          <a class="quiet-link" href="#drinks">茶与酒 <small lang="en">View Drinks</small><span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <figure class="hero-image">
+        <img src="images/table.webp" alt="深色木桌上的中式料理与手作器皿" fetchpriority="high">
+        <figcaption><span>八方一席</span><small lang="en">EIGHT FLAVOURS, ONE TABLE</small></figcaption>
+      </figure>
+    </div>
+    <section class="experiences" aria-labelledby="experience-title">
+      <div>
+        <p class="eyebrow" lang="en">AT THE TABLE</p>
+        <h2 id="experience-title">席间雅事</h2>
+      </div>
+      <nav class="experience-list" aria-label="席间体验 / At the table">
+        <a href="#tea"><span class="experience-no">01</span><span>以茶入席<small lang="en">Tea Pairings</small></span><span aria-hidden="true">↗</span></a>
+        <a href="#wine"><span class="experience-no">02</span><span>以酒入席<small lang="en">Cocktail Pairings</small></span><span aria-hidden="true">↗</span></a>
+        <a href="#passport"><span class="experience-no">03</span><span>八方集章<small lang="en">Taste Passport</small></span><span aria-hidden="true">↗</span></a>
+      </nav>
+    </section>
+    <noscript><p>请启用 JavaScript 以使用菜单和预订功能。 <span lang="en">Enable JavaScript to use the menu and reservation features.</span></p></noscript>
   </section>
-  <section id="feature" hidden>
-    <a class="back" href="./">← 返回首页 <span lang="en">Home</span></a>
-    <h1 id="title" tabindex="-1"></h1>
+  <section id="feature" hidden aria-labelledby="title">
+    <div class="feature-head">
+      <a class="back" href="#">← 首页 <span lang="en">Home</span></a>
+      <p id="feature-kicker" class="eyebrow" lang="en"></p>
+      <h1 id="title" tabindex="-1"></h1>
+    </div>
     <div id="content"></div>
   </section>
 </main>
-<footer class="wrap footer">日膳夜酌 · 八方有味 <span lang="en">BA FANG · MODERN CHINESE BISTRO</span></footer>
+<footer class="wrap footer"><span>八方 · 日膳夜酌</span><span lang="en">BAFANG · MODERN CHINESE BISTRO</span></footer>
+<div id="order-dock" hidden>
+  <p id="order-feedback" aria-hidden="true"></p>
+  <button id="order-button" type="button">
+    <span class="order-name">本桌清单 <small lang="en">Table Selection</small></span>
+    <span id="order-count" class="order-count">0</span>
+    <strong id="order-total">¥0</strong>
+    <span aria-hidden="true">↗</span>
+  </button>
+</div>
 <p id="status" class="sr-only" role="status"></p>
 <dialog id="dialog" aria-labelledby="dialog-title">
-  <div class="dialog-head"><h2 id="dialog-title"></h2><button id="close" type="button" aria-label="关闭 / Close">×</button></div>
+  <div class="dialog-head"><h2 id="dialog-title"></h2><button id="close" type="button" aria-label="关闭 / Close" autofocus>×</button></div>
   <div id="dialog-content"></div>
 </dialog>
 </body>
