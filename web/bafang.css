@@ -30,10 +30,9 @@ small[lang="en"] { display: block; margin-top: 4px; color: var(--muted); font: .
 .header { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 71px; }
 .brand { display: inline-flex; align-items: center; gap: 11px; min-height: 44px; font: 600 1.2rem/1.12 var(--serif); }
 .brand small { font: .58rem/1.1 Georgia, serif; letter-spacing: .21em; }
-.header-nav { display: flex; gap: clamp(20px, 5vw, 75px); margin-inline: auto; }
-.header-nav a, .reserve-link { display: flex; min-height: 44px; align-items: center; gap: .45em; font-size: .93rem; }
-.header-nav span, .reserve-link span[lang] { color: var(--muted); font: italic .84rem Georgia, serif; }
-.header-nav a[aria-current], .header-nav a:hover, .reserve-link:hover { color: var(--red); }
+.reserve-link { display: flex; min-height: 44px; align-items: center; gap: .45em; font-size: .93rem; }
+.reserve-link span[lang] { color: var(--muted); font: italic .84rem Georgia, serif; }
+.reserve-link[aria-current], .reserve-link:hover { color: var(--red); }
 .reserve-link { border-bottom: 1px solid var(--red); }
 .reserve-link span:last-child { margin-left: 6px; color: var(--red); }
 .hero { display: grid; grid-template-columns: minmax(330px, .85fr) minmax(0, 1.15fr); margin-top: clamp(20px, 4vw, 54px); border-block: 1px solid var(--line); }
@@ -127,8 +126,7 @@ dialog::backdrop { background: #12261dc0; }
 @media (max-width: 720px) {
   .wrap { width: calc(100% - 32px); }
   .header { min-height: 58px; gap: 11px; }
-  .header-nav { gap: 15px; }
-  .header-nav span, .reserve-link span[lang] { display: none; }
+  .reserve-link span[lang] { display: none; }
   .hero { grid-template-columns: 1fr; margin-top: 16px; }
   .hero-copy { justify-items: center; padding: 20px 10px 25px; text-align: center; }
   .hero-logo { width: 62px; margin-bottom: 13px; }
@@ -197,7 +195,6 @@ dialog::backdrop { background: #12261dc0; }
 .set-drinks .copy { margin-bottom: 0; }
 @media (max-width: 720px) {
   .header { gap: 8px; }
-  .header-nav { gap: clamp(8px, 3vw, 17px); }
   .hero { margin-top: 12px; }
   .hero-logo { width: 56px; margin-bottom: 10px; }
   .hero-copy { padding: 15px 7px 17px; }

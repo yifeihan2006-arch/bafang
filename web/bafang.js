@@ -424,7 +424,6 @@ function renderRoute(focus = false) {
     if (link.hash === '#' + route) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   });
-  document.querySelector('.header-nav').hidden = !route;
   $('home').hidden = Boolean(route);
   $('feature').hidden = !route;
   updateOrder();
