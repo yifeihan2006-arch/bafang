@@ -7,9 +7,9 @@
 <meta name="description" content="日膳夜酌 · 八方有味。八大菜系、正餐与夜小食、茶酒套餐及三段营业时间。">
 <title>日膳夜酌 · 八方有味 | Ba Fang</title>
 <link rel="icon" href="bafang-mark.png" type="image/png">
-<link rel="stylesheet" href="bafang.css?v=7">
+<link rel="stylesheet" href="bafang.css?v=8">
 <script src="menu-data.js?v=4" defer></script>
-<script src="bafang.js?v=7" defer></script>
+<script src="bafang.js?v=8" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">跳到正文 <span lang="en">Skip to content</span></a>
@@ -36,11 +36,23 @@
         <h1>八方有味</h1>
         <p class="hero-tagline" lang="en">Savour the Day, Toast the Night</p>
         <p class="hero-description">八大菜系，一席中餐。白日以茶佐膳，入夜以酒伴小食。<small lang="en">Eight regional cuisines, tea with meals and late-night bites over drinks.</small></p>
-        <div class="hero-actions">
-          <a class="primary" href="#menu">正餐菜单 <small lang="en">Food Menu</small><span aria-hidden="true">↗</span></a>
-          <a class="quiet-link" href="#drinks">饮品 <small lang="en">Drinks</small><span aria-hidden="true">↗</span></a>
-          <a class="quiet-link" href="#night">夜宵 <small lang="en">Late Night</small><span aria-hidden="true">↗</span></a>
-        </div>
+        <nav class="hero-menus" aria-label="浏览菜单 / Explore the menus">
+          <a href="#menu">
+            <span class="menu-index" aria-hidden="true">01</span>
+            <span class="menu-label">正餐菜单<small lang="en">Food Menu</small></span>
+            <span class="menu-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a href="#drinks">
+            <span class="menu-index" aria-hidden="true">02</span>
+            <span class="menu-label">饮品<small lang="en">Drinks</small></span>
+            <span class="menu-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a href="#night">
+            <span class="menu-index" aria-hidden="true">03</span>
+            <span class="menu-label">夜宵<small lang="en">Late Night</small></span>
+            <span class="menu-arrow" aria-hidden="true">↗</span>
+          </a>
+        </nav>
       </div>
       <figure class="hero-image">
         <img src="images/table.webp" alt="深色木桌上的中式料理与手作器皿" fetchpriority="high">

@@ -274,14 +274,42 @@ function renderSets() {
 }
 
 function renderHeritage() {
-  content.innerHTML = '<div class="heritage-grid">'
-    + '<article>' + photo(items[itemIds.get('龙井虾仁')])
-    + '<h2>' + bilingual('器以载味','Longquan Celadon') + '</h2>'
-    + copy('龙泉青瓷的传统烧制技艺启发了龙井虾仁的器物设计，温润的青釉衬托虾仁与茶香。', 'Traditional Longquan celadon firing inspires the tableware concept for Longjing Tea Prawns.')
-    + '</article><article>' + photo(items[itemIds.get('龙井绿茶')])
-    + '<h2>' + bilingual('茶有来处','Traditional Chinese Tea Craft') + '</h2>'
-    + copy('从制茶到待客，茶承载着分享的习惯。龙井的清香和乌龙的焙香也融入了我们的夜酌。', 'Tea is part of the way we welcome guests. Our evening cocktails draw on the fresh aroma of Longjing and the roasted notes of oolong.')
-    + '</article></div>';
+  const crafts = [
+    {
+      number: '01', year: '2022', image: '龙井绿茶',
+      title: ['茶有来处', 'From Leaf to Cup'],
+      element: ['中国传统制茶技艺及其相关习俗', 'Traditional tea processing and social practices in China'],
+      story: ['茶从栽培、采摘到手工制作，各地因气候与习惯形成了不同的做法。泡茶、敬茶与分茶，也是待客和亲友相聚的一部分。',
+        'Local climates and customs shape how tea is grown, picked and made by hand. Brewing and sharing tea are also part of welcoming guests and spending time together.'],
+      steps: [['采摘','Pick'],['制茶','Process'],['奉茶','Serve']],
+      atTable: ['从龙井的清鲜到武夷岩茶的焙香，午晚市茶单让客人从一壶茶认识不同的风味。',
+        'Our lunch and dinner tea list moves from fresh Longjing to roasted Wuyi rock tea, one pot at a time.'],
+      url: 'https://ich.unesco.org/en/RL/traditional-tea-processing-techniques-and-associated-social-practices-in-china-01884',
+    },
+    {
+      number: '02', year: '2009', image: '龙井虾仁',
+      title: ['器以载味', 'A Vessel for Flavour'],
+      element: ['龙泉青瓷传统烧制技艺', 'Traditional firing technology of Longquan celadon'],
+      story: ['浙江龙泉的匠人将釉施于已烧过的器坯上，再入窑复烧。烧制时细察火色并控制升温与降温，才能呈现青瓷温润如玉的釉色。',
+        'In Longquan, Zhejiang, artisans glaze a previously fired vessel and return it to the kiln. They watch the flame and control heating and cooling to bring out the jade-like finish.'],
+      steps: [['施釉','Glaze'],['入窑','Fire'],['控温','Control heat']],
+      atTable: ['龙井虾仁的摆盘借鉴青瓷的釉色，让淡青器面衬出虾仁和茶叶的色泽。',
+        'Longjing Tea Prawns draw on the pale greens of celadon to frame the colours of the prawns and tea leaves.'],
+      url: 'https://ich.unesco.org/en/RL/longquan-celadon-firing-technology-00205',
+    },
+  ];
+  content.innerHTML = copy('一壶茶，一只盘，从八方的餐桌认识两项中国非遗。', 'Explore two Chinese living traditions through a pot of tea and a plate at Bafang.')
+    + '<div class="heritage-grid">' + crafts.map(craft =>
+      '<article class="craft-story">' + photo(items[itemIds.get(craft.image)])
+      + '<div class="craft-body"><p class="eyebrow craft-index">' + craft.number + ' · UNESCO ICH · ' + craft.year + '</p>'
+      + '<h2>' + bilingual(...craft.title) + '</h2><p class="craft-element">' + bilingual(...craft.element) + '</p>'
+      + copy(...craft.story)
+      + '<ol class="craft-steps">' + craft.steps.map(([zh, en]) => '<li>' + bilingual(zh, en) + '</li>').join('') + '</ol>'
+      + '<div class="craft-table"><h3>' + bilingual('在八方的餐桌上', 'At Bafang') + '</h3>' + copy(...craft.atTable) + '</div>'
+      + '<a class="craft-link" href="' + craft.url + '" target="_blank" rel="noopener noreferrer" aria-label="'
+      + escape('阅读 UNESCO 官方介绍：' + craft.element[0] + '（新窗口） / Read on UNESCO, opens in a new tab')
+      + '">' + bilingual('阅读 UNESCO 官方介绍', 'Read on UNESCO') + '<span aria-hidden="true">↗</span></a></div></article>'
+    ).join('') + '</div>';
 }
 
 // A tea sprig, bamboo steamer, scallions, osmanthus, wine jar, hills, peppercorns and chilli.
@@ -296,27 +324,40 @@ const cuisineMotifs = {
   湘: '<path d="M32 20c5 4 1 10-4 13-5 3-12 4-17 3 5-2 7-7 11-13 3-4 6-6 10-3Zm0 0c0-3 2-6 5-6m-13 12c1-2 3-4 5-4"/>',
 };
 
+function cuisineIcon(seal) {
+  return '<svg class="cuisine-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false">'
+    + '<path class="cuisine-frame" d="M4 43V23a20 20 0 0 1 40 0v20H4Z"/>'
+    + '<g class="cuisine-motif">' + cuisineMotifs[seal] + '</g></svg>';
+}
+
 $('cuisine-list').innerHTML = cuisines.map(([seal, zh, en]) =>
-  '<li><svg class="cuisine-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false">'
-  + '<path class="cuisine-frame" d="M4 43V23a20 20 0 0 1 40 0v20H4Z"/>'
-  + '<g class="cuisine-motif">' + cuisineMotifs[seal] + '</g></svg>'
-  + bilingual(zh, en) + '</li>').join('');
+  '<li>' + cuisineIcon(seal) + bilingual(zh, en) + '</li>').join('');
 
 function updateStamps() {
-  $('stamp-count').value = stamps.size + ' / 8';
+  $('stamp-count').textContent = String(stamps.size).padStart(2, '0');
   $('stamp-progress').value = stamps.size;
   content.querySelectorAll('[data-seal]').forEach(button => {
-    const seal = button.dataset.seal;
-    button.setAttribute('aria-pressed', stamps.has(seal));
-    button.querySelector('b').textContent = seal + (stamps.has(seal) ? ' ✓' : '');
+    const collected = stamps.has(button.dataset.seal);
+    button.setAttribute('aria-pressed', collected);
+    button.querySelector('.stamp-state').innerHTML = collected
+      ? bilingual('已集章', 'Stamped') : bilingual('待集章', 'To collect');
   });
 }
+
 function renderPassport() {
-  content.innerHTML = copy('点一下记录尝过的菜系，再点一次取消。进度保存在当前设备。', 'Tap to stamp a cuisine you have tried. Tap again to undo. Progress is saved on this device.')
-    + '<div class="stamp-meter"><output id="stamp-count"></output><progress id="stamp-progress" max="8" aria-label="集章进度 / Stamp progress"></progress></div>'
-    + '<div class="stamps">' + cuisines.map(([seal,zh,en]) => '<button type="button" data-action="stamp" data-seal="'
-      + seal + '"><b aria-hidden="true">' + seal + '</b>' + bilingual(zh,en) + '</button>').join('') + '</div>'
-    + '<p id="stamp-status" role="status"></p>';
+  content.innerHTML = '<div class="passport-meter"><div><p class="eyebrow" lang="en">BAFANG TASTE PASSPORT</p>'
+    + '<h2>' + bilingual('尝遍八方', 'Eight flavours to discover') + '</h2>'
+    + '<progress id="stamp-progress" max="' + cuisines.length + '" aria-label="集章进度 / Stamp progress"></progress></div>'
+    + '<p class="stamp-counter" role="status"><span id="stamp-count"></span><span> / 08</span>'
+    + '<small lang="en">已集章 · Collected</small></p></div>'
+    + copy('尝过一道菜，就点一下对应菜系盖章。再次点按可撤销，进度保存在当前设备。',
+      'After trying a dish, tap its cuisine to stamp your passport. Tap again to undo. Your progress is saved on this device.')
+    + '<div class="stamps">' + cuisines.map(([seal,zh,en], index) =>
+      '<button type="button" data-action="stamp" data-seal="' + seal + '" aria-label="' + escape(zh + ' / ' + en) + '">'
+      + '<span class="stamp-index" aria-hidden="true">' + String(index + 1).padStart(2, '0') + '</span>'
+      + '<span class="stamp-check" aria-hidden="true">✓</span>' + cuisineIcon(seal)
+      + '<span class="stamp-label">' + bilingual(zh,en) + '</span><span class="stamp-state" aria-hidden="true"></span></button>'
+    ).join('') + '</div><p id="stamp-status" role="status"></p>';
   updateStamps();
 }
 
