@@ -284,8 +284,23 @@ function renderHeritage() {
     + '</article></div>';
 }
 
+// A tea sprig, bamboo steamer, scallions, osmanthus, wine jar, hills, peppercorns and chilli.
+const cuisineMotifs = {
+  浙: '<path d="M15 36c7-5 12-11 17-22M21 31c-5 0-9-4-9-9 5 0 9 3 9 9ZM26 26c0-6 5-10 10-10-1 5-5 9-10 10ZM23 29c5-3 10-3 13-1-3 4-9 5-13 1Z"/>',
+  粤: '<ellipse cx="24" cy="25" rx="12" ry="4"/><path d="M12 25v8c0 5 24 5 24 0v-8M12 29c0 5 24 5 24 0M20 17c-3-2 2-3 0-6m5 6c-3-2 2-3 0-6m5 6c-3-2 2-3 0-6"/>',
+  鲁: '<path d="M18 36c1-9 3-18 10-23-3 7-6 16-6 23h-4Zm4 0c3-9 7-15 15-19-5 6-8 12-10 19h-5Zm-4-2c0-6-1-11-5-16 5 1 8 5 8 9m-4 9-2 2m5-2v2m7-2 1 2"/>',
+  苏: '<path d="M15 36c7-4 12-8 15-15m-8 10c-6 1-10-2-11-6 6-1 9 1 11 6Zm4-4c4 1 8 0 11-4-5-2-9 0-11 4Z"/><path d="M23 15c-2-3 1-5 3-3 2-2 5 0 3 3 3 2 1 5-2 4-1 3-5 1-4-2-3 0-3-3 0-2Z"/><path d="M34 14v6m-3-3h6"/>',
+  闽: '<path d="M17 18h14v-5H17v5Zm2 0v4c-8 3-10 9-5 14h20c5-5 3-11-5-14v-4M13 31h22m-11-7 4 4-4 4-4-4 4-4Z"/>',
+  徽: '<path d="m10 33 11-14 5 6 4-4 8 12H10Zm6-8 5 2 4-3m-11 13h20"/><circle cx="31" cy="15" r="3"/>',
+  川: '<path d="M16 36c5-6 9-11 13-21m-8 13-6-4m10 1 7-2m-13 9 10 2"/><circle cx="29" cy="14" r="2.5"/><circle cx="14" cy="23" r="3"/><circle cx="34" cy="22" r="3"/><circle cx="32" cy="33" r="3"/><circle cx="20" cy="19" r="2.5"/>',
+  湘: '<path d="M32 20c5 4 1 10-4 13-5 3-12 4-17 3 5-2 7-7 11-13 3-4 6-6 10-3Zm0 0c0-3 2-6 5-6m-13 12c1-2 3-4 5-4"/>',
+};
+
 $('cuisine-list').innerHTML = cuisines.map(([seal, zh, en]) =>
-  '<li><b aria-hidden="true">' + seal + '</b>' + bilingual(zh, en) + '</li>').join('');
+  '<li><svg class="cuisine-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false">'
+  + '<path class="cuisine-frame" d="M4 43V23a20 20 0 0 1 40 0v20H4Z"/>'
+  + '<g class="cuisine-motif">' + cuisineMotifs[seal] + '</g></svg>'
+  + bilingual(zh, en) + '</li>').join('');
 
 function updateStamps() {
   $('stamp-count').value = stamps.size + ' / 8';
