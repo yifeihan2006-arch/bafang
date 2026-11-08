@@ -56,7 +56,7 @@
       "category": "regional",
       "image": "images/new-menu/regional-05.webp",
       "flavour": "福州 · 红曲、糯米香",
-      "flavourEn": "Fuzhou · Red yeast rice, mellow",
+      "flavourEn": "Fuzhou · Red yeast rice and glutinous rice aromas",
       "abv": "~12%*",
       "volume": 60
     },
@@ -74,13 +74,13 @@
     },
     {
       "name": "豉汁蒸凤爪",
-      "en": "Steamed Chicken Feet with Black Bean Sauce",
+      "en": "Steamed Chicken Feet with Fermented Black Bean Sauce",
       "price": 48,
       "seal": "粤",
       "category": "snacks",
       "image": "images/new-menu/snacks-01.webp",
       "flavour": "3 只 · 豆豉香、软糯",
-      "flavourEn": "3 pieces · Black bean, tender"
+      "flavourEn": "3 pieces · Fermented black beans, tender"
     },
     {
       "name": "广式咸水角",
@@ -110,7 +110,7 @@
       "category": "snacks",
       "image": "images/new-menu/snacks-04.webp",
       "flavour": "一小碟 · 苔菜鲜咸、酥脆",
-      "flavourEn": "Small plate · Seaweed, crisp"
+      "flavourEn": "Small plate · Savoury seaweed, crisp"
     },
     {
       "name": "济南葱香油旋",
@@ -144,7 +144,7 @@
     },
     {
       "name": "苏式卤汁豆腐干",
-      "en": "Suzhou Soy-Braised Tofu",
+      "en": "Suzhou Soy-Braised Firm Tofu",
       "price": 36,
       "seal": "苏",
       "category": "snacks",
@@ -325,5 +325,117 @@
         }
       ]
     }
-  ]
+  ],
+  "translations": {
+    "陈皮冰梅番茄": {
+      "en": "Chilled Tomatoes with Aged Mandarin Peel & Plum"
+    },
+    "桂花糟香鸡": {
+      "en": "Chicken with Osmanthus & Rice Wine Lees",
+      "flavourEn": "Rice-wine aroma, gently sweet"
+    },
+    "红糟海鲜小碟": {
+      "en": "Small Plate of Seafood with Red Rice Wine Lees",
+      "flavourEn": "Wine-scented, savoury"
+    },
+    "青花椒口水鸡": {
+      "en": "Sichuan Chicken with Green Sichuan Peppercorn Dressing"
+    },
+    "擂椒皮蛋茄子": {
+      "en": "Aubergine with Pounded Chilli & Century Egg"
+    },
+    "鸡汁煮干丝": {
+      "en": "Shredded Tofu in Chicken Broth"
+    },
+    "葱烧菌菇": {
+      "en": "Scallion-Braised Mushrooms"
+    },
+    "红糟蒸海鲈": {
+      "en": "Steamed Sea Bass with Red Rice Wine Lees",
+      "flavourEn": "Wine-scented, savoury"
+    },
+    "青花椒酸汤鱼": {
+      "en": "Fish in Sour Broth with Green Sichuan Peppercorn"
+    },
+    "剁椒蒸鱼头": {
+      "en": "Steamed Fish Head with Chopped Chilli"
+    },
+    "片儿川": {
+      "en": "Pian’erchuan Noodles with Pork & Bamboo Shoots"
+    },
+    "海鲜打卤面": {
+      "en": "Shandong Noodles with Seafood Gravy"
+    },
+    "沙茶海鲜面": {
+      "en": "Seafood Noodles with Shacha Sauce",
+      "flavourEn": "Fragrant shacha sauce, rich umami"
+    },
+    "腊味煲仔饭": {
+      "en": "Cantonese Claypot Rice with Cured Meats"
+    },
+    "笋干火腿焖饭": {
+      "en": "Braised Rice with Dried Bamboo Shoots & Ham"
+    },
+    "陈皮蜜汁叉烧": {
+      "en": "Honey Char Siu with Aged Mandarin Peel"
+    },
+    "桂花糖醋小排": {
+      "en": "Osmanthus Sweet & Sour Ribs",
+      "flavourEn": "Sweet-tart, fragrant osmanthus"
+    },
+    "藤椒脆皮鸡": {
+      "en": "Crispy Chicken with Green Sichuan Peppercorn",
+      "flavourEn": "Fragrant, numbing and crisp"
+    },
+    "梅干菜焖五花肉": {
+      "en": "Braised Pork Belly with Preserved Mustard Greens"
+    },
+    "葱烧牛肋条": {
+      "en": "Scallion-Braised Beef Rib Strips"
+    },
+    "椒麻炙烤牛小排": {
+      "en": "Grilled Beef Short Ribs with Sichuan Peppercorn"
+    },
+    "陈皮红豆沙": {
+      "en": "Sweet Red Bean Soup with Aged Mandarin Peel"
+    },
+    "桂花酒酿圆子": {
+      "en": "Osmanthus Rice Dumplings in Sweet Fermented Rice"
+    },
+    "古早花生汤": {
+      "en": "Traditional Fujian Peanut Soup",
+      "flavourEn": "Peanut aroma, rich and creamy"
+    },
+    "黄山毛峰茶酥": {
+      "en": "Huangshan Maofeng Tea Pastry",
+      "flavourEn": "Tea-scented, crisp and sweet"
+    },
+    "黄山毛峰": {
+      "en": "Huangshan Maofeng Green Tea"
+    },
+    "龙井脏咖": {
+      "en": "Longjing Dirty Coffee"
+    },
+    "青花椒葡萄柚苏打": {
+      "en": "Green Sichuan Peppercorn & Grapefruit Soda"
+    },
+    "桂花黄酒鸡尾酒": {
+      "en": "Osmanthus Huangjiu Cocktail"
+    },
+    "梨香白酒柯林斯": {
+      "en": "Pear & Baijiu Collins",
+      "flavourEn": "Pear-scented, crisp"
+    },
+    "祁门红茶古典": {
+      "en": "Keemun Black Tea Old Fashioned"
+    },
+    "青花椒嗨棒": {
+      "en": "Green Sichuan Peppercorn Highball",
+      "flavourEn": "Fresh, numbing and citrusy"
+    },
+    "八方": {
+      "en": "Eight Directions",
+      "flavourEn": "Baijiu, tea, plum, aged mandarin peel & osmanthus"
+    }
+  }
 }

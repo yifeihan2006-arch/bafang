@@ -2,18 +2,21 @@
 
 const items = menuData;
 const pages = {
-  menu: ['八方食志', 'À la Carte', 'THE FOOD MENU'], drinks: ['午晚市饮品', 'Lunch & Dinner Drinks', 'TEA & REGIONAL WINES'],
-  'night-drinks': ['夜宵饮品', 'Late-Night Drinks', '21:00–02:00 · LATE NIGHT'],
-  night: ['八方夜小食', 'Late-Night Bites', '21:00–02:00 · LATE NIGHT'],
-  heritage: ['茶艺与器物', 'Craft at the Table', 'HERITAGE & HOSPITALITY'],
-  tea: ['以茶入席', 'Tea Sets', 'SET MENUS / 01'], wine: ['以酒入席', 'Regional Wine Sets', 'SET MENUS / 02'],
-  passport: ['八方集章', 'Taste Passport', 'AT THE TABLE / 03'], reserve: ['订一席', 'Reservations', 'RESERVATIONS'],
+  menu: ['八方食志', 'À la Carte', ['正餐菜单','Food Menu']],
+  drinks: ['午晚市饮品', 'Lunch & Dinner Drinks', ['中国茶与地方酿造酒','Chinese Tea, Regional Wines & Beer']],
+  'night-drinks': ['夜宵饮品', 'Late-Night Drinks', ['供应时段 21:00–次日 02:00','Service Hours']],
+  night: ['八方夜小食', 'Late-Night Bites', ['供应时段 21:00–次日 02:00','Service Hours']],
+  heritage: ['茶艺与器物', 'Craft at the Table', ['非遗与待客之道','Heritage & Hospitality']],
+  tea: ['以茶入席套餐', 'Tea Sets', ['01 套餐','Set Menus']],
+  wine: ['以酒入席套餐', 'Regional Wine Sets', ['02 套餐','Set Menus']],
+  passport: ['八方集章', 'Taste Passport', ['03 席间雅事','At the Table']],
+  reserve: ['订一席', 'Reservations', ['预订意向','Reservation Requests']],
 };
 const groups = {
   menu: [['开席','Small Plates & Starters'],['山海','Seafood'],['炙火','Meat & Grill'],
     ['田园','Vegetables'],['五谷','Rice, Noodles & Dim Sum'],['余味','Desserts']],
   drinks: [['tea','Chinese Tea','中国茶'],['regional','Regional Wines & Beer','地方酿造酒']],
-  'night-drinks': [['清饮','Coffee & Soft Drinks','咖啡与清饮'],['夜酌','Cocktails','中式特调']],
+  'night-drinks': [['清饮','Coffee & Soft Drinks','咖啡与清饮'],['夜酌','Chinese-Inspired Cocktails','中式特调']],
   night: [['snacks','Late-Night Bites','八方夜小食']],
 };
 const cuisines = [
@@ -50,6 +53,8 @@ const escape = value => String(value).replace(/[&<>"']/g, ch => ({
   '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;',
 })[ch]);
 const bilingual = (zh, en) => escape(zh) + '<small lang="en">' + escape(en) + '</small>';
+const setLink = target => '<a href="#' + target + '">' + pages[target][0]
+  + ' <span lang="en">' + pages[target][1] + ' ↗</span></a>';
 const copy = (zh, en) => '<p class="copy">' + bilingual(zh, en) + '</p>';
 
 function load(key) {
@@ -121,7 +126,7 @@ function updateOrder() {
   $('order-total').textContent = '¥' + total;
   $('order-dock').hidden = !count && !menuRoutes.includes(route);
   $('order-button').setAttribute('aria-label', '本桌清单 ' + count + ' 项，合计 ¥' + total
-    + ' / Table selection, ' + count + ' items');
+    + ' / Table selection, ' + count + ' items, total ¥' + total);
   document.querySelectorAll('.quick-add').forEach(button => {
     const quantity = order.get(Number(button.dataset.item)) || 0;
     button.textContent = quantity || '+';
@@ -137,7 +142,7 @@ function adjust(index, delta) {
   else order.delete(index);
   persistOrder();
   updateOrder();
-  $('status').textContent = items[index].name + ' × ' + quantity + '。本桌清单已更新 / Table selection updated';
+  $('status').textContent = items[index].name + ' × ' + quantity + '，本桌清单已更新。 / ' + items[index].en + ' × ' + quantity + ', table selection updated.';
 }
 
 function showDialog(title, body) {
@@ -159,7 +164,7 @@ function showOrder(index, buttonAction) {
   });
   showDialog(bilingual('本桌清单', 'Table Selection'),
     copy('选好后，可将清单出示给服务员。', 'Show your selection to your server when ready.')
-    + (lines.join('') || copy('还没有选菜。', 'Your selection is empty.'))
+    + (lines.join('') || copy('本桌清单还是空的。', 'Your selection is empty.'))
     + '<div class="order-summary"><span>' + bilingual('合计', 'Total') + '</span><strong class="price">¥'
     + orderTotals().total + '</strong></div>');
   if (buttonAction) {
@@ -173,7 +178,7 @@ function photo(item, lazy = true) {
 }
 
 function itemPrice(item) {
-  const unit = item.volume ? item.volume + ' mL' : teaNames.has(item.name) ? '每壶 / Per pot' : '';
+  const unit = item.volume ? item.volume + ' mL' : teaNames.has(item.name) ? '<span lang="zh-CN">每壶</span> / Per pot' : '';
   return '<span class="item-price"><strong class="price">¥' + item.price + '</strong>'
     + (unit ? '<small lang="en">' + unit + '</small>' : '') + '</span>';
 }
@@ -183,7 +188,7 @@ function showItem(id) {
   if (!item) return;
   showDialog('<span class="seal">' + escape(item.seal) + '</span>' + bilingual(item.name, item.en),
     photo(item, false) + '<p class="detail-copy">' + bilingual(item.flavour, item.flavourEn)
-    + (item.abv ? '<small lang="en">' + escape(item.abv) + ' ABV</small>' : '') + '</p>'
+    + (item.abv ? '<small lang="en"><span lang="zh-CN">酒精度</span> ' + escape(item.abv) + ' ABV</small>' : '') + '</p>'
     + '<div class="detail-actions">' + itemPrice(item)
     + action('add', id, '加入本桌清单', 'Add to table selection', 'primary detail-add') + '</div>');
   dialogContent.querySelector('.detail-add').disabled = (order.get(id) || 0) >= 99;
@@ -212,35 +217,34 @@ function renderMenu() {
   const notes = {
     menu: ['正餐于午市及晚市供应。', 'The à la carte menu is served at lunch and dinner.'],
     drinks: ['中国茶及地方酿造酒仅于午市和晚市供应。标有 * 的酒精度以实际酒标为准。',
-      'Chinese tea and regional wines are served at lunch and dinner only. For ABV marked *, check the bottle label.'],
-    night: ['夜宵小食供应时间为 21:00 至次日 02:00。', 'Late-night bites are served from 21:00 to 02:00.'],
-    'night-drinks': ['中式特调、咖啡与清饮于 21:00 至次日 02:00 供应。', 'Cocktails, coffee and soft drinks are served from 21:00 to 02:00.'],
+      'Chinese tea, regional wines and beer are served at lunch and dinner only. For ABV marked *, check the bottle label.'],
+    night: ['夜宵小食供应时间为 21:00 至次日 02:00。', 'Late-night bites are served from 21:00 to 02:00 the following day.'],
+    'night-drinks': ['中式特调、咖啡与清饮于 21:00 至次日 02:00 供应。', 'Chinese-inspired cocktails, coffee and soft drinks are served from 21:00 to 02:00 the following day.'],
   };
   const isDrinks = route === 'drinks' || route === 'night-drinks';
   const links = isDrinks
     ? '<nav class="drink-switch" aria-label="饮品时段 / Drinks by service">'
-      + [['drinks','午晚市饮品','Lunch & Dinner'],['night-drinks','夜宵饮品','Late Night']].map(([target, zh, en]) =>
+      + [['drinks','午晚市饮品','Lunch & Dinner Drinks'],['night-drinks','夜宵饮品','Late-Night Drinks']].map(([target, zh, en]) =>
         '<a href="#' + target + '"' + (target === route ? ' aria-current="page"' : '') + '>' + bilingual(zh, en) + '</a>').join('')
       + '</nav>'
     : '<nav class="menu-next menu-top"><a href="#' + (route === 'night'
-      ? 'night-drinks">查看夜宵饮品 <span lang="en">Late-Night Drinks ↗'
-      : 'drinks">查看午晚市饮品 <span lang="en">Lunch & Dinner Drinks ↗') + '</span></a></nav>';
+      ? 'night-drinks">查看夜宵饮品 <span lang="en">View Late-Night Drinks ↗'
+      : 'drinks">查看午晚市饮品 <span lang="en">View Lunch & Dinner Drinks ↗') + '</span></a></nav>';
   content.innerHTML = links + copy(...notes[route])
     + (route !== 'night' ? '<div class="filters" role="group" aria-label="菜单章节 / Menu chapters">' + filters + '</div>' : '')
     + chapters
-    + (route === 'menu' ? '<nav class="menu-next" aria-label="套餐 / Set menus"><a href="#tea">以茶入席 <span lang="en">Tea Sets ↗</span></a>'
-        + '<a href="#wine">以酒入席 <span lang="en">Wine Sets ↗</span></a></nav>'
-      : route === 'night-drinks' ? '<nav class="menu-next"><a href="#night">查看夜宵小食 <span lang="en">Late-Night Bites ↗</span></a></nav>' : '');
+    + (route === 'menu' ? '<nav class="menu-next" aria-label="套餐 / Set Menus">' + setLink('tea') + setLink('wine') + '</nav>'
+      : route === 'night-drinks' ? '<nav class="menu-next"><a href="#night">查看夜宵小食 <span lang="en">View Late-Night Bites ↗</span></a></nav>' : '');
   updateOrder();
 }
 
 function renderSets() {
   const tea = route === 'tea';
   const volume = tea
-    ? [['所选茶一壶，约 500 mL','One pot, approx. 500 mL'],['所选两款各一壶，每壶约 450 mL','One pot of each, approx. 450 mL each']]
-    : [['所选酒两杯，每杯 60 mL','Two 60 mL glasses of the chosen wine'],['所选两款各 160 mL，全桌分杯试饮','160 mL of each, shared at the table']];
+    ? [['所选茶一壶，约 500 mL','One pot of the chosen tea, approx. 500 mL'],['所选两款各一壶，每壶约 450 mL','One pot of each selected tea, approx. 450 mL per pot']]
+    : [['所选酒两杯，每杯 60 mL','Two 60 mL glasses of the chosen wine'],['所选两款各 160 mL，全桌分杯试饮','160 mL of each selected wine, shared at the table']];
   const portions = [
-    ['咸口菜与主食供两人分享，红糖冰粉每位一份。','Savoury courses are shared. Each guest receives one ice jelly.'],
+    ['咸口菜与主食供两人分享，红糖冰粉每位一份。','Savoury dishes and staples are shared by two. Each guest receives one brown sugar ice jelly.'],
     ['三位或四位同菜、同量、同价，按四位分享份量出品。','The same dishes, four-person portions and price apply to parties of three or four.'],
   ];
   const cards = setMenus.map((set, index) => {
@@ -250,9 +254,9 @@ function renderSets() {
       return '<li>' + photo(item) + '<span>' + bilingual(item.name, item.en) + '</span></li>';
     }).join('');
     return '<article class="set-card"><div class="set-head"><div><p class="eyebrow">'
-      + (index === 0 ? '02 GUESTS' : '03–04 GUESTS') + '</p><h2>' + bilingual(set.name, set.en)
+      + (index === 0 ? '2 位 <span lang="en">· 2 GUESTS</span>' : '3–4 位 <span lang="en">· 3–4 GUESTS</span>') + '</p><h2>' + bilingual(set.name, set.en)
       + '</h2></div><div class="set-price"><strong class="price">¥' + prices[tea ? 0 : 1]
-      + '</strong><small lang="en">全桌 / Per table</small></div></div>'
+      + '</strong><small lang="en"><span lang="zh-CN">全桌</span> / Per table</small></div></div>'
       + '<ol class="set-dishes">' + dishes.map(name => {
         const id = itemIds.get(name);
         const item = items[id];
@@ -260,17 +264,16 @@ function renderSets() {
           '<span class="seal">' + item.seal + '</span><span>' + bilingual(item.name, item.en) + '</span>') + '</li>';
       }).join('') + '</ol>' + copy(...portions[index])
       + '<div class="set-drinks"><h3>' + (index === 0
-        ? bilingual(tea ? '茶饮 · 两款选一' : '地方酒 · 两款选一', 'Choose 1 of 2')
-        : bilingual(tea ? '茶饮 · 三款选二' : '地方酒 · 三款选二', 'Choose 2 of 3'))
+        ? bilingual(tea ? '茶饮 · 两款选一' : '地方酒 · 两款选一', tea ? 'Choose 1 of 2 Teas' : 'Choose 1 of 2 Regional Wines')
+        : bilingual(tea ? '茶饮 · 三款选二' : '地方酒 · 三款选二', tea ? 'Choose 2 of 3 Teas' : 'Choose 2 of 3 Regional Wines'))
       + '</h3><ul>' + drinks + '</ul>' + copy(...volume[index]) + '</div></article>';
   }).join('');
-  content.innerHTML = copy('全桌选择茶套餐或酒套餐。套餐菜品固定，饮品按所示数量选择。', 'Choose a tea or wine set for the table. Dishes are fixed, with a choice of drinks.')
+  content.innerHTML = copy('全桌选择茶套餐或酒套餐。套餐菜品固定，饮品按所示数量选择。', 'Choose a tea or wine set for the whole table. Dishes are fixed. Choose the number of drinks indicated for your set.')
     + '<div class="filters set-period" role="group" aria-label="用餐时段 / Service">'
     + [['午市','Lunch'],['晚市','Dinner']].map(([zh,en], i) => '<button type="button" data-action="service" data-service="'
       + i + '" aria-pressed="' + (i === setService) + '">' + bilingual(zh, en) + '</button>').join('') + '</div>'
     + '<div class="set-grid">' + cards + '</div>'
-    + '<div class="pair-switch"><a href="' + (tea ? '#wine">' + bilingual('以酒入席','Wine Sets ↗')
-      : '#tea">' + bilingual('以茶入席','Tea Sets ↗')) + '</a></div>';
+    + '<div class="pair-switch">' + setLink(tea ? 'wine' : 'tea') + '</div>';
 }
 
 function renderHeritage() {
@@ -278,9 +281,9 @@ function renderHeritage() {
     {
       number: '01', year: '2022', image: '龙井绿茶',
       title: ['茶有来处', 'From Leaf to Cup'],
-      element: ['中国传统制茶技艺及其相关习俗', 'Traditional tea processing and social practices in China'],
+      element: ['中国传统制茶技艺及其相关习俗', 'Traditional tea processing techniques and associated social practices in China'],
       story: ['茶从栽培、采摘到手工制作，各地因气候与习惯形成了不同的做法。泡茶、敬茶与分茶，也是待客和亲友相聚的一部分。',
-        'Local climates and customs shape how tea is grown, picked and made by hand. Brewing and sharing tea are also part of welcoming guests and spending time together.'],
+        'Local climates and customs shape how tea is grown, picked and made by hand. Brewing, serving and sharing tea are part of welcoming guests and spending time with family and friends.'],
       steps: [['采摘','Pick'],['制茶','Process'],['奉茶','Serve']],
       atTable: ['从龙井的清鲜到武夷岩茶的焙香，午晚市茶单让客人从一壶茶认识不同的风味。',
         'Our lunch and dinner tea list moves from fresh Longjing to roasted Wuyi rock tea, one pot at a time.'],
@@ -292,13 +295,13 @@ function renderHeritage() {
       element: ['龙泉青瓷传统烧制技艺', 'Traditional firing technology of Longquan celadon'],
       story: ['浙江龙泉的匠人将釉施于已烧过的器坯上，再入窑复烧。烧制时细察火色并控制升温与降温，才能呈现青瓷温润如玉的釉色。',
         'In Longquan, Zhejiang, artisans glaze a previously fired vessel and return it to the kiln. They watch the flame and control heating and cooling to bring out the jade-like finish.'],
-      steps: [['施釉','Glaze'],['入窑','Fire'],['控温','Control heat']],
+      steps: [['施釉','Glaze'],['入窑','Fire'],['控温','Temperature Control']],
       atTable: ['龙井虾仁的摆盘借鉴青瓷的釉色，让淡青器面衬出虾仁和茶叶的色泽。',
-        'Longjing Tea Prawns draw on the pale greens of celadon to frame the colours of the prawns and tea leaves.'],
+        'Our plating for Longjing Tea Prawns takes its cue from celadon. The pale green plate sets off the colours of the prawns and tea leaves.'],
       url: 'https://ich.unesco.org/en/RL/longquan-celadon-firing-technology-00205',
     },
   ];
-  content.innerHTML = copy('一壶茶，一只盘，从八方的餐桌认识两项中国非遗。', 'Explore two Chinese living traditions through a pot of tea and a plate at Bafang.')
+  content.innerHTML = copy('一壶茶，一只盘，从八方的餐桌认识两项中国非遗。', 'Discover two forms of Chinese intangible cultural heritage through a pot of tea and a plate at Bafang.')
     + '<div class="heritage-grid">' + crafts.map(craft =>
       '<article class="craft-story">' + photo(items[itemIds.get(craft.image)])
       + '<div class="craft-body"><p class="eyebrow craft-index">' + craft.number + ' · UNESCO ICH · ' + craft.year + '</p>'
@@ -349,7 +352,7 @@ function renderPassport() {
     + '<h2>' + bilingual('尝遍八方', 'Eight flavours to discover') + '</h2>'
     + '<progress id="stamp-progress" max="' + cuisines.length + '" aria-label="集章进度 / Stamp progress"></progress></div>'
     + '<p class="stamp-counter" role="status"><span id="stamp-count"></span><span> / 08</span>'
-    + '<small lang="en">已集章 · Collected</small></p></div>'
+    + '<small lang="en"><span lang="zh-CN">已集章</span> · Collected</small></p></div>'
     + copy('尝过一道菜，就点一下对应菜系盖章。再次点按可撤销，进度保存在当前设备。',
       'After trying a dish, tap its cuisine to stamp your passport. Tap again to undo. Your progress is saved on this device.')
     + '<div class="stamps">' + cuisines.map(([seal,zh,en], index) =>
@@ -366,8 +369,8 @@ function restaurantDate(offset = 0) {
 }
 function renderReserve() {
   content.innerHTML = copy('选择日期、时间和人数，生成预订意向单。此功能为演示，餐厅暂未开放线上订位。',
-    'Choose a date, time and party size to create a demo reservation request. Online bookings are not open yet.')
-    + '<form id="reservation"><label><span>' + bilingual('到店日期（午夜后请选次日）', 'Arrival date (choose the next day after midnight)')
+    'Choose a date, time and party size to create a reservation request. This feature is for demonstration only. Online bookings are not yet open.')
+    + '<form id="reservation"><label><span>' + bilingual('到店日期（午夜后请选次日）', 'Arrival date (for visits after midnight, select the next calendar day)')
     + '</span><input type="date" name="date" min="' + restaurantDate() + '" value="'
     + (reservation?.date || restaurantDate(1)) + '" required></label><label><span>'
     + bilingual('到店时间（北京时间）', 'Time (China Standard Time)') + '</span><select name="time">'
@@ -392,7 +395,7 @@ function reserve(event) {
   $('reserve-error').textContent = '';
   reservation = {date, time, guests};
   showDialog(bilingual('预订意向单已生成', 'Reservation Request Created'),
-    copy('此意向单仅供演示，尚未发送至餐厅。', 'This demo request has not been sent to the restaurant.')
+    copy('此意向单仅供演示，尚未发送至餐厅。', 'This request is for demonstration only and has not been sent to the restaurant.')
     + '<p>' + escape(date) + ' · ' + escape(time) + ' (UTC+8) · ' + guests + ' 位 / Guests</p>'
     + '<button class="primary" type="button" data-action="download">' + bilingual('下载意向单', 'Download Request') + '</button>');
 }
@@ -401,7 +404,7 @@ function downloadRequest() {
   const {date,time,guests} = reservation;
   const body = ['日膳夜酌 · 八方有味', '预订意向单 / Demo Reservation Request', '',
     '日期 / Date: ' + date, '时间 / Time: ' + time + ' (UTC+8)', '人数 / Guests: ' + guests, '',
-    '此意向单仅供演示，尚未发送至餐厅。', 'This demo request has not been sent to the restaurant.'].join('\n');
+    '此意向单仅供演示，尚未发送至餐厅。', 'This request is for demonstration only and has not been sent to the restaurant.'].join('\n');
   const url = URL.createObjectURL(new Blob([body], {type:'text/plain;charset=utf-8'}));
   const link = document.createElement('a');
   link.href = url;
@@ -425,7 +428,7 @@ function renderRoute(focus = false) {
   $('feature').hidden = !route;
   updateOrder();
   if (!route) {
-    document.title = '日膳夜酌 · 八方有味 | Ba Fang';
+    document.title = '日膳夜酌 · 八方有味 | Bafang';
     if (name === 'cuisines') {
       $('cuisines').scrollIntoView();
       if (focus) $('cuisine-title').focus({preventScroll:true});
@@ -438,7 +441,7 @@ function renderRoute(focus = false) {
   }
   const [title, subtitle, kicker] = pages[route];
   $('title').innerHTML = bilingual(title, subtitle);
-  $('feature-kicker').textContent = kicker;
+  $('feature-kicker').innerHTML = escape(kicker[0]) + ' <span lang="en">· ' + escape(kicker[1]) + '</span>';
   document.title = pages[route][0] + ' | 日膳夜酌 · 八方有味';
   if (menuRoutes.includes(route)) {
     const query = new URLSearchParams(location.search);
@@ -497,7 +500,8 @@ document.addEventListener('click', event => {
   if (name === 'add') {
     adjust(id, 1);
     if (dialog.open) dialog.close();
-    $('order-feedback').textContent = '已加入 · ' + items[id].name + ' × ' + order.get(id);
+    $('order-feedback').innerHTML = bilingual('已加入 · ' + items[id].name + ' × ' + order.get(id),
+      'Added · ' + items[id].en + ' × ' + order.get(id));
     clearTimeout(feedbackTimer);
     feedbackTimer = setTimeout(() => { $('order-feedback').textContent = ''; }, 2500);
   }
@@ -510,7 +514,7 @@ document.addEventListener('click', event => {
     if (stamps.has(seal)) stamps.delete(seal);
     else stamps.add(seal);
     $('stamp-status').innerHTML = save(stampKey, [...stamps])
-      ? '' : bilingual('当前浏览器暂时无法保存。', 'This browser could not save your stamps.');
+      ? '' : bilingual('当前浏览器暂时无法保存。', 'This browser is temporarily unable to save your stamps.');
     updateStamps();
   }
   if (name === 'download') downloadRequest();

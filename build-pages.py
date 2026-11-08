@@ -140,6 +140,12 @@ def build():
         for path in sorted(images):
             archive.extract(path, out)
     printed = json.loads(Path('web/printed-menu.json').read_text(encoding='utf-8'))
+    translations = printed['translations']
+    unknown_translations = translations.keys() - {item['name'] for item in records}
+    if unknown_translations:
+        raise ValueError(f'No original menu item for translation: {unknown_translations}')
+    for item in records:
+        item.update(translations.get(item['name'], {}))
     records.extend(printed['items'])
     if len(records) != 88 or len({item['name'] for item in records}) != len(records):
         raise ValueError('Expected 88 unique items from both printed menus')
