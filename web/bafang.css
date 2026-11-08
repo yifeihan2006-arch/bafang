@@ -232,15 +232,15 @@ dialog::backdrop { background: #12261dc0; }
 .drink-switch a[aria-current="page"] small { color: var(--gold); }
 
 /* The menu index spans the full width beneath the cover photograph. */
-.hero-menus { display: grid; grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
-.hero-menus a { display: grid; grid-template-columns: 1fr auto; gap: 5px 4px; align-items: start; padding: 10px clamp(6px, 1vw, 12px) 12px; border-inline-end: 1px solid var(--line); text-align: left; background: var(--paper); }
+.hero-menus { display: grid; grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: clamp(20px, 3.3vw, 36px); background: var(--ink); border: 1px solid #a98b63; }
+.hero-menus a { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 7px 4px; align-items: start; align-content: start; padding: clamp(12px, 2.3vw, 20px) clamp(8px, 2vw, 20px); border-inline-end: 1px solid #e4cba055; text-align: left; color: var(--white); }
 .hero-menus a:last-child { border-inline-end: 0; }
-.hero-menus a:hover { background: var(--ink); color: var(--white); }
-.hero-menus a:hover small, .hero-menus a:hover .menu-index, .hero-menus a:hover .menu-arrow { color: var(--gold); }
-.menu-index, .menu-arrow { color: var(--red); font: .73rem Georgia, serif; }
+.hero-menus a:hover { background: #28463a; }
+.hero-menus a:focus-visible { outline: 2px solid var(--gold); outline-offset: -4px; }
+.menu-index, .menu-arrow { color: var(--gold); font: .78rem Georgia, serif; }
 .menu-arrow { grid-area: 1 / 2; }
-.menu-label { grid-column: 1 / -1; font: 600 clamp(.97rem, 1.5vw, 1.16rem)/1.23 var(--serif); }
-.menu-label small { margin-top: 3px; font-size: .67rem; }
+.menu-label { grid-column: 1 / -1; font: 700 clamp(1.04rem, 1.65vw, 1.36rem)/1.23 var(--serif); }
+.menu-label small { margin-top: 4px; color: var(--gold); font-size: .73rem; }
 
 /* The passport reuses the homepage's arched cuisine illustrations. */
 .passport-meter { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 10px 20px; margin-bottom: 16px; padding: clamp(12px, 3vw, 24px); border: 1px solid #a38762; background: var(--ink); color: var(--white); }
