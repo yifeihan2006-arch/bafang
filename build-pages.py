@@ -101,6 +101,11 @@ def from_menu_html(archive, members):
 
 def redirect(root, target):
     home = root + target
+    qr_redirect = ''
+    if target == '#menu':
+        # Printed menus use this URL without a category or query string.
+        home = root + '?entry=qr-v15'
+        qr_redirect = f'if (!location.search) location.replace({json.dumps(home)}); else '
     destination = json.dumps(target)
     if target in ('#menu', '#drinks'):
         destination = ("((category) => ['soft','cocktails'].includes(category) ? '#night-drinks'"
@@ -109,7 +114,7 @@ def redirect(root, target):
     return f"""<!doctype html>
 <html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
 <title>日膳夜酌 · 八方有味</title>
-<script>location.replace({json.dumps(root)} + location.search + {destination});</script>
+<script>{qr_redirect}location.replace({json.dumps(root)} + location.search + {destination});</script>
 <p><a href="{home}">继续访问八方有味 / Continue to Ba Fang</a></p></html>
 """
 

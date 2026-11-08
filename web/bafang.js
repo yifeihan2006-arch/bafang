@@ -53,7 +53,7 @@ const escape = value => String(value).replace(/[&<>"']/g, ch => ({
   '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;',
 })[ch]);
 const bilingual = (zh, en) => escape(zh) + '<small lang="en">' + escape(en) + '</small>';
-const forwardArrow = '<svg class="link-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4.5 11.5l7-7m-5 0h5v5"/></svg>';
+const forwardArrow = '<svg class="link-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" aria-hidden="true" focusable="false"><path d="M4.5 11.5l7-7m-5 0h5v5"/></svg>';
 const setLink = target => '<a href="#' + target + '">' + pages[target][0]
   + ' <span lang="en">' + pages[target][1] + '</span>' + forwardArrow + '</a>';
 const copy = (zh, en) => '<p class="copy">' + bilingual(zh, en) + '</p>';
@@ -529,4 +529,13 @@ document.addEventListener('click', event => {
   }
   if (name === 'download') downloadRequest();
 });
+if (location.hash === '#menu' && !location.search && document.referrer) {
+  const from = new URL(document.referrer);
+  const menuPath = location.pathname.replace(/index\.html$/, '') + 'menu';
+  if (from.origin === location.origin && !from.search
+      && [menuPath, menuPath + '/', menuPath + '.html'].includes(from.pathname)) {
+    // A cached print-menu redirect may still point to the old menu fragment.
+    history.replaceState(history.state, '', location.pathname);
+  }
+}
 renderRoute();

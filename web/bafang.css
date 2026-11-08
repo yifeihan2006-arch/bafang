@@ -231,8 +231,8 @@ dialog::backdrop { background: #12261dc0; }
 .drink-switch a[aria-current="page"] { border-color: var(--ink); background: var(--ink); color: var(--white); }
 .drink-switch a[aria-current="page"] small { color: var(--gold); }
 
-/* The three menu links read as a single index at the foot of the cover. */
-.hero-menus { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-self: start; width: 100%; max-width: 410px; margin-top: 23px; border-block: 1px solid var(--line); }
+/* The menu index spans the full width beneath the cover photograph. */
+.hero-menus { display: grid; grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
 .hero-menus a { display: grid; grid-template-columns: 1fr auto; gap: 5px 4px; align-items: start; padding: 10px clamp(6px, 1vw, 12px) 12px; border-inline-end: 1px solid var(--line); text-align: left; background: var(--paper); }
 .hero-menus a:last-child { border-inline-end: 0; }
 .hero-menus a:hover { background: var(--ink); color: var(--white); }
@@ -285,7 +285,6 @@ dialog::backdrop { background: #12261dc0; }
 .craft-link small { margin-left: auto; font-size: .63rem; }
 .craft-link:hover { background: var(--paper); border-color: var(--red); }
 @media (max-width: 720px) {
-  .hero-menus { margin-top: 14px; }
   .stamps button { min-height: 121px; }
 }
 
