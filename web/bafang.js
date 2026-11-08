@@ -227,21 +227,23 @@ function renderMenu() {
     night: ['night-drinks', '查看夜宵饮品', 'View Late-Night Drinks'],
     'night-drinks': ['night', '查看夜宵小食', 'View Late-Night Bites'],
   }[route];
-  const relatedLink = '<a href="#' + relatedRoute + '">' + relatedZh
-    + ' <span lang="en">' + relatedEn + ' ↗</span></a>';
+
   const isDrinks = route === 'drinks' || route === 'night-drinks';
   const links = isDrinks
     ? '<nav class="drink-switch" aria-label="饮品时段 / Drinks by service">'
       + [['drinks','午晚市饮品','Lunch & Dinner Drinks'],['night-drinks','夜宵饮品','Late-Night Drinks']].map(([target, zh, en]) =>
         '<a href="#' + target + '"' + (target === route ? ' aria-current="page"' : '') + '>' + bilingual(zh, en) + '</a>').join('')
       + '</nav>'
-    : '<nav class="menu-next menu-top">' + relatedLink + '</nav>';
+    : '';
   content.innerHTML = links + copy(...notes[route])
     + (route !== 'night' ? '<div class="filters" role="group" aria-label="菜单章节 / Menu chapters">' + filters + '</div>' : '')
     + chapters
     + (route === 'menu' ? '<nav class="menu-next" aria-label="套餐 / Set Menus">' + setLink('tea') + setLink('wine') + '</nav>'
       : '')
-    + '<nav class="menu-next menu-related" aria-label="相关菜单 / Related Menu">' + relatedLink + '</nav>';
+    + '<nav class="menu-related" aria-label="相关菜单 / Related Menu"><a href="#' + relatedRoute + '">'
+    + '<span class="related-label"><span class="related-kicker" aria-hidden="true">继续浏览 <span lang="en">· EXPLORE MORE</span></span>'
+    + '<span class="related-title">' + bilingual(relatedZh, relatedEn) + '</span></span>'
+    + '<span class="related-arrow" aria-hidden="true">↗</span></a></nav>';
   updateOrder();
 }
 
