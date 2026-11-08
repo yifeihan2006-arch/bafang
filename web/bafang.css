@@ -29,7 +29,6 @@ small[lang="en"] { display: block; margin-top: 4px; color: var(--muted); font: .
 .site-header { border-bottom: 1px solid var(--line); }
 .header { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 71px; }
 .brand { display: inline-flex; align-items: center; gap: 11px; min-height: 44px; font: 600 1.2rem/1.12 var(--serif); }
-.brand img, .hero-logo { mix-blend-mode: multiply; }
 .brand small { font: .58rem/1.1 Georgia, serif; letter-spacing: .21em; }
 .header-nav { display: flex; gap: clamp(20px, 5vw, 75px); margin-inline: auto; }
 .header-nav a, .reserve-link { display: flex; min-height: 44px; align-items: center; gap: .45em; font-size: .93rem; }
