@@ -1,0 +1,329 @@
+{
+  "items": [
+    {
+      "name": "桂花冬酿酒",
+      "en": "Osmanthus Winter Rice Wine",
+      "price": 38,
+      "seal": "苏",
+      "category": "regional",
+      "image": "images/new-menu/regional-01.webp",
+      "flavour": "苏州 · 糯米清甜、桂花香",
+      "flavourEn": "Suzhou · Sweet rice, osmanthus",
+      "abv": "<5%*",
+      "volume": 90
+    },
+    {
+      "name": "青岛奥古特拉格",
+      "en": "Tsingtao Augerta Lager",
+      "price": 48,
+      "seal": "鲁",
+      "category": "regional",
+      "image": "images/new-menu/regional-02.webp",
+      "flavour": "青岛 · 麦香、清爽",
+      "flavourEn": "Qingdao · Malty, crisp",
+      "abv": "5%",
+      "volume": 330
+    },
+    {
+      "name": "镇隆荔枝发酵酒",
+      "en": "Zhenlong Lychee Wine",
+      "price": 48,
+      "seal": "粤",
+      "category": "regional",
+      "image": "images/new-menu/regional-03.webp",
+      "flavour": "惠州 · 鲜荔枝、果香",
+      "flavourEn": "Huizhou · Fresh lychee, fruity",
+      "abv": "8%",
+      "volume": 90
+    },
+    {
+      "name": "绍兴清爽型黄酒",
+      "en": "Light-style Shaoxing Huangjiu",
+      "price": 48,
+      "seal": "浙",
+      "category": "regional",
+      "image": "images/new-menu/regional-04.webp",
+      "flavour": "绍兴 · 米香、柔和",
+      "flavourEn": "Shaoxing · Rice aroma, mellow",
+      "abv": "11%",
+      "volume": 60
+    },
+    {
+      "name": "闽侯青红酒",
+      "en": "Minhou Qinghong Rice Wine",
+      "price": 52,
+      "seal": "闽",
+      "category": "regional",
+      "image": "images/new-menu/regional-05.webp",
+      "flavour": "福州 · 红曲、糯米香",
+      "flavourEn": "Fuzhou · Red yeast rice, mellow",
+      "abv": "~12%*",
+      "volume": 60
+    },
+    {
+      "name": "中方刺葡萄干红",
+      "en": "Zhongfang Spine Grape Dry Red",
+      "price": 58,
+      "seal": "湘",
+      "category": "regional",
+      "image": "images/new-menu/regional-06.webp",
+      "flavour": "怀化 · 深色果香、干型",
+      "flavourEn": "Huaihua · Dark fruit, dry",
+      "abv": "12%",
+      "volume": 90
+    },
+    {
+      "name": "豉汁蒸凤爪",
+      "en": "Steamed Chicken Feet with Black Bean Sauce",
+      "price": 48,
+      "seal": "粤",
+      "category": "snacks",
+      "image": "images/new-menu/snacks-01.webp",
+      "flavour": "3 只 · 豆豉香、软糯",
+      "flavourEn": "3 pieces · Black bean, tender"
+    },
+    {
+      "name": "广式咸水角",
+      "en": "Cantonese Fried Glutinous Rice Dumplings",
+      "price": 42,
+      "seal": "粤",
+      "category": "snacks",
+      "image": "images/new-menu/snacks-02.webp",
+      "flavour": "3 只 · 酥糯外皮、咸鲜肉馅",
+      "flavourEn": "3 pieces · Crisp-chewy shell, savoury pork"
+    },
+    {
+      "name": "杭州葱包桧",
+      "en": "Hangzhou Griddled Scallion & Youtiao Wrap",
+      "price": 42,
+      "seal": "浙",
+      "category": "snacks",
+      "image": "images/new-menu/snacks-03.webp",
+      "flavour": "4 段 · 葱香、外脆",
+      "flavourEn": "4 bites · Scallion, crisp griddled wrap"
+    },
+    {
+      "name": "宁波苔菜油赞子",
+      "en": "Ningbo Seaweed Dough Twists",
+      "price": 32,
+      "seal": "浙",
+      "category": "snacks",
+      "image": "images/new-menu/snacks-04.webp",
+      "flavour": "一小碟 · 苔菜鲜咸、酥脆",
+      "flavourEn": "Small plate · Seaweed, crisp"
+    },
+    {
+      "name": "济南葱香油旋",
+      "en": "Jinan Scallion Spiral Pastries",
+      "price": 38,
+      "seal": "鲁",
+      "category": "snacks",
+      "image": "images/new-menu/snacks-05.webp",
+      "flavour": "2 只 · 葱香、层层酥皮",
+      "flavourEn": "2 pieces · Scallion, flaky layers"
+    },
+    {
+      "name": "博山炸肉",
+      "en": "Boshan Crispy Pork Strips",
+      "price": 58,
+      "seal": "鲁",
+      "category": "snacks",
+      "image": "images/new-menu/snacks-06.webp",
+      "flavour": "约 90 g · 脆衣、花椒盐",
+      "flavourEn": "Approx. 90 g · Crisp batter, peppercorn salt"
+    },
+    {
+      "name": "扬州三丁包",
+      "en": "Yangzhou Steamed Buns with Three Diced Fillings",
+      "price": 42,
+      "seal": "苏",
+      "category": "snacks",
+      "image": "images/new-menu/snacks-07.webp",
+      "flavour": "2 只 · 鸡丁、肉丁、笋丁",
+      "flavourEn": "2 buns · Chicken, pork & bamboo shoots"
+    },
+    {
+      "name": "苏式卤汁豆腐干",
+      "en": "Suzhou Soy-Braised Tofu",
+      "price": 36,
+      "seal": "苏",
+      "category": "snacks",
+      "image": "images/new-menu/snacks-08.webp",
+      "flavour": "一小碟 · 甜咸卤香",
+      "flavourEn": "Small plate · Sweet-savoury soy glaze"
+    },
+    {
+      "name": "厦门炸五香卷",
+      "en": "Xiamen Fried Five-Spice Pork Roll",
+      "price": 58,
+      "seal": "闽",
+      "category": "snacks",
+      "image": "images/new-menu/snacks-09.webp",
+      "flavour": "4 段 · 豆皮酥、荸荠脆",
+      "flavourEn": "4 bites · Crisp tofu skin, water chestnut"
+    },
+    {
+      "name": "福州包心鱼丸",
+      "en": "Fuzhou Stuffed Fish Balls in Clear Broth",
+      "price": 52,
+      "seal": "闽",
+      "category": "snacks",
+      "image": "images/new-menu/snacks-10.webp",
+      "flavour": "3 颗 · 鱼丸鲜弹、肉馅多汁",
+      "flavourEn": "3 pieces · Bouncy fish balls, juicy pork filling"
+    },
+    {
+      "name": "黄山梅干菜小烧饼",
+      "en": "Huangshan Preserved Mustard Greens Pastries",
+      "price": 42,
+      "seal": "徽",
+      "category": "snacks",
+      "image": "images/new-menu/snacks-11.webp",
+      "flavour": "3 只 · 芝麻酥壳、梅干菜咸香",
+      "flavourEn": "3 pieces · Flaky sesame crust, savoury greens"
+    },
+    {
+      "name": "徽州苞芦松",
+      "en": "Huizhou Corn Crisps",
+      "price": 32,
+      "seal": "徽",
+      "category": "snacks",
+      "image": "images/new-menu/snacks-12.webp",
+      "flavour": "一小碟 · 玉米香、薄脆",
+      "flavourEn": "Small plate · Toasted corn, light crunch"
+    },
+    {
+      "name": "川北凉粉",
+      "en": "Northern Sichuan Chilli Bean Jelly",
+      "price": 42,
+      "seal": "川",
+      "category": "snacks",
+      "image": "images/new-menu/snacks-13.webp",
+      "flavour": "一小碗 · 红油、醋香",
+      "flavourEn": "Small bowl · Chilli oil, tangy vinegar"
+    },
+    {
+      "name": "乐山钵钵鸡",
+      "en": "Leshan Chilli-Oil Chicken Skewers",
+      "price": 58,
+      "seal": "川",
+      "category": "snacks",
+      "image": "images/new-menu/snacks-14.webp",
+      "flavour": "5 串 · 鸡肉、藕片、豆皮",
+      "flavourEn": "5 skewers · Chicken, lotus root & tofu skin"
+    },
+    {
+      "name": "湘西酸萝卜",
+      "en": "Western Hunan Pickled Radish",
+      "price": 32,
+      "seal": "湘",
+      "category": "snacks",
+      "image": "images/new-menu/snacks-15.webp",
+      "flavour": "一小碟 · 酸脆、微辣",
+      "flavourEn": "Small plate · Tangy, crunchy, mildly spicy"
+    },
+    {
+      "name": "长沙糖油粑粑",
+      "en": "Changsha Caramelised Glutinous Rice Cakes",
+      "price": 42,
+      "seal": "湘",
+      "category": "snacks",
+      "image": "images/new-menu/snacks-16.webp",
+      "flavour": "3 只 · 糖香、软糯",
+      "flavourEn": "3 pieces · Caramelised, soft and chewy"
+    }
+  ],
+  "sets": [
+    {
+      "name": "双人寻味",
+      "en": "Tasting Set for Two",
+      "tea": [
+        "龙井绿茶",
+        "陈皮普洱"
+      ],
+      "wine": [
+        "绍兴清爽型黄酒",
+        "镇隆荔枝发酵酒"
+      ],
+      "services": [
+        {
+          "prices": [
+            376,
+            416
+          ],
+          "dishes": [
+            "陈皮冰梅番茄",
+            "龙井虾仁",
+            "鸡汁煮干丝",
+            "腊肉炒饭",
+            "红糖冰粉"
+          ]
+        },
+        {
+          "prices": [
+            556,
+            596
+          ],
+          "dishes": [
+            "陈皮冰梅番茄",
+            "葱油海蜇头",
+            "龙井虾仁",
+            "椒麻炙烤牛小排",
+            "鸡汁煮干丝",
+            "腊肉炒饭",
+            "红糖冰粉"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "八方共席",
+      "en": "Sharing Set for 3–4",
+      "tea": [
+        "武夷岩茶",
+        "安化黑茶",
+        "黄山毛峰"
+      ],
+      "wine": [
+        "镇隆荔枝发酵酒",
+        "闽侯青红酒",
+        "中方刺葡萄干红"
+      ],
+      "services": [
+        {
+          "prices": [
+            658,
+            728
+          ],
+          "dishes": [
+            "陈皮冰梅番茄",
+            "葱油海蜇头",
+            "鸡汁煮干丝",
+            "红糟蒸海鲈",
+            "小炒黄牛肉",
+            "笋干火腿焖饭",
+            "龙井茶奶冻",
+            "红糖冰粉"
+          ]
+        },
+        {
+          "prices": [
+            968,
+            1038
+          ],
+          "dishes": [
+            "陈皮蜜汁叉烧",
+            "葱油海蜇头",
+            "鸡汁煮干丝",
+            "红糟蒸海鲈",
+            "葱烧海参",
+            "小炒黄牛肉",
+            "笋干火腿焖饭",
+            "龙井茶奶冻",
+            "红糖冰粉"
+          ]
+        }
+      ]
+    }
+  ]
+}

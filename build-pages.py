@@ -103,7 +103,7 @@ def redirect(root, target):
     home = root + target
     destination = json.dumps(target)
     if target == '#menu':
-        destination = "(['soft','cocktails'].includes(new URLSearchParams(location.search).get('category')) ? '#drinks' : '#menu')"
+        destination = "(['soft','cocktails','tea','regional'].includes(new URLSearchParams(location.search).get('category')) ? '#drinks' : '#menu')"
     return f"""<!doctype html>
 <html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
 <title>日膳夜酌 · 八方有味</title>
@@ -137,17 +137,33 @@ def build():
             images.add(image)
         for path in sorted(images):
             archive.extract(path, out)
+    printed = json.loads(Path('web/printed-menu.json').read_text(encoding='utf-8'))
+    records.extend(printed['items'])
+    if len(records) != 88 or len({item['name'] for item in records}) != len(records):
+        raise ValueError('Expected 88 unique items from both printed menus')
+    if {item['seal'] for item in records if item['category'] == 'snacks'} != {'浙', '粤', '鲁', '苏', '闽', '徽', '川', '湘'}:
+        raise ValueError('Late-night menu must represent all eight cuisines')
+    by_name = {item['name']: item for item in records}
+    for item in records:
+        if not all(item.get(field) for field in required) or not (out / item['image']).is_file():
+            raise ValueError(f'Incomplete menu listing: {item["name"]}')
+    for set_menu in printed['sets']:
+        for name in set_menu['tea'] + set_menu['wine'] + [name for service in set_menu['services'] for name in service['dishes']]:
+            if name not in by_name:
+                raise ValueError(f'Set item is missing from the menu: {name}')
     data = json.dumps(records, ensure_ascii=False, separators=(',', ':'))
-    (out / 'menu-data.js').write_text('const menuData = ' + data + ';\n', encoding='utf-8')
+    sets = json.dumps(printed['sets'], ensure_ascii=False, separators=(',', ':'))
+    (out / 'menu-data.js').write_text(f'const menuData = {data};\nconst setMenus = {sets};\n', encoding='utf-8')
+    (out / 'printed-menu.json').unlink()
     (out / '.nojekyll').touch()
     redirects = {'menu': '#menu', 'drinks': '#drinks', 'reserve': '#reserve', 'day-night': '#drinks',
-                 'flavours': '#passport', 'experience': '#menu', 'about': '', 'heritage': ''}
+                 'flavours': '#cuisines', 'experience': '#tea', 'about': '', 'heritage': '#heritage', 'night': '#night'}
     for old, target in redirects.items():
         directory = out / old
         directory.mkdir(exist_ok=True)
         (directory / 'index.html').write_text(redirect('../', target), encoding='utf-8')
         (out / f'{old}.html').write_text(redirect('./', target), encoding='utf-8')
-    print(f'Preserved {len(records)} bilingual selections and {len(images) - 1} original photographs.')
+    print(f'Built {len(records)} bilingual menu items and {len(printed["sets"])} set menus.')
 
 
 if __name__ == '__main__':
