@@ -114,12 +114,18 @@ function photo(item, lazy = true) {
   return '<img class="photo" src="' + escape(item.image) + '" alt=""'
     + (lazy ? ' loading="lazy" decoding="async"' : '') + '>';
 }
+const teasByPot = new Set(['龙井绿茶','碧螺春','黄山毛峰','武夷岩茶','陈皮普洱','安化黑茶']);
+function itemPrice(item) {
+  const unit = item.note === 'Per pot' || teasByPot.has(item.name)
+    ? '<small lang="en">每壶 / Per pot</small>' : '';
+  return '<span><strong class="price">¥' + item.price + '</strong>' + unit + '</span>';
+}
 function showItem(id) {
   const item = items[id];
   if (!item) return;
   showDialog(bilingual(item.name, item.en), photo(item, false)
     + '<p>' + bilingual(item.flavour, item.flavourEn) + '</p>'
-    + '<p><strong class="price">¥' + item.price + '</strong></p>'
+    + '<p>' + itemPrice(item) + '</p>'
     + action('add', id, '加入清单', 'Add to order'));
 }
 function renderMenu() {
@@ -133,7 +139,7 @@ function renderMenu() {
   ).map(({item,id}) =>
     '<article class="card">' + photo(item) + '<div class="item"><h2>' + bilingual(item.name, item.en) + '</h2>'
     + action('detail', id, '查看详情', 'Details', 'details')
-    + '<div class="item-controls"><strong class="price">¥' + item.price + '</strong>'
+    + '<div class="item-controls">' + itemPrice(item)
     + action('add', id, '加入清单', 'Add') + '</div></div></article>').join('');
   content.innerHTML = '<div class="filters" aria-label="菜单分类 / Menu categories">' + filters + '</div>'
     + (route === 'drinks' ? copy('含酒精饮品仅供成年人。', 'Alcoholic drinks are for adults only.') : '')

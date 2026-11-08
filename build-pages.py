@@ -101,10 +101,13 @@ def from_menu_html(archive, members):
 
 def redirect(root, target):
     home = root + target
+    destination = json.dumps(target)
+    if target == '#menu':
+        destination = "(['soft','cocktails'].includes(new URLSearchParams(location.search).get('category')) ? '#drinks' : '#menu')"
     return f"""<!doctype html>
 <html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
 <title>日膳夜酌 · 八方有味</title>
-<script>location.replace({json.dumps(root)} + location.search + {json.dumps(target)});</script>
+<script>location.replace({json.dumps(root)} + location.search + {destination});</script>
 <p><a href="{home}">继续访问八方有味 / Continue to Ba Fang</a></p></html>
 """
 
