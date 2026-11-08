@@ -24,10 +24,11 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v4
 
-      - name: Unpack interactive website
+      - name: Build the simplified website from the original menu and photos
         run: |
-          mkdir -p public
-          unzip -q site.zip -d public
+          python3 build-pages.py
+          node --check public/menu-data.js
+          node --check public/bafang.js
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5

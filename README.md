@@ -1,5 +1,7 @@
 # 日膳夜酌 · 八方有味
 
-微信可直接访问的动态交互版餐厅网站。网站保留菜单筛选、菜品弹窗、八方风味地图、寻味进度、昼夜转场、酒饮详情和预订体验。
+扫码首页提供六个入口：点菜、饮品、以茶入席、以酒入席、集章和预订。
 
-Savour the Day, Toast the Night — an interactive journey through China's eight culinary traditions.
+点单清单与集章进度保存在当前浏览器。预订生成可下载的演示意向单。
+
+GitHub Pages 通过 `python3 build-pages.py` 生成网站。`web/` 保存页面源码，`site.zip` 保存原版菜单数据与图片。
