@@ -227,8 +227,7 @@ dialog::backdrop { background: #12261dc0; }
 
 /* The three menu links read as a single index at the foot of the cover. */
 .hero-menus { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-self: start; width: 100%; max-width: 410px; margin-top: 23px; border-block: 1px solid var(--line); }
-.hero-menus a { display: grid; grid-template-columns: 1fr auto; gap: 5px 4px; align-items: start; padding: 10px clamp(6px, 1vw, 12px) 12px; border-inline-end: 1px solid var(--line); text-align: left; }
-.hero-menus a:first-child { background: #ebe1cf; }
+.hero-menus a { display: grid; grid-template-columns: 1fr auto; gap: 5px 4px; align-items: start; padding: 10px clamp(6px, 1vw, 12px) 12px; border-inline-end: 1px solid var(--line); text-align: left; background: var(--paper); }
 .hero-menus a:last-child { border-inline-end: 0; }
 .hero-menus a:hover { background: var(--ink); color: var(--white); }
 .hero-menus a:hover small, .hero-menus a:hover .menu-index, .hero-menus a:hover .menu-arrow { color: var(--gold); }
