@@ -2,9 +2,9 @@
 
 const items = menuData;
 const pages = {
-  menu: ['八方食志', 'À la Carte', 'THE FOOD MENU'], drinks: ['杯中八方', 'Tea, Wine & Cocktails', 'THE DRINKS LIST'],
+  menu: ['八方食志', 'À la Carte', 'THE FOOD MENU'], drinks: ['午晚市饮品', 'Lunch & Dinner Drinks', 'TEA & REGIONAL WINES'],
+  'night-drinks': ['夜宵饮品', 'Late-Night Drinks', '21:00–02:00 · LATE NIGHT'],
   night: ['八方夜小食', 'Late-Night Bites', '21:00–02:00 · LATE NIGHT'],
-  cuisines: ['八大菜系', 'Eight Regional Cuisines', 'EIGHT FLAVOURS'],
   heritage: ['茶艺与器物', 'Craft at the Table', 'HERITAGE & HOSPITALITY'],
   tea: ['以茶入席', 'Tea Sets', 'SET MENUS / 01'], wine: ['以酒入席', 'Regional Wine Sets', 'SET MENUS / 02'],
   passport: ['八方集章', 'Taste Passport', 'AT THE TABLE / 03'], reserve: ['订一席', 'Reservations', 'RESERVATIONS'],
@@ -12,19 +12,19 @@ const pages = {
 const groups = {
   menu: [['开席','Small Plates & Starters'],['山海','Seafood'],['炙火','Meat & Grill'],
     ['田园','Vegetables'],['五谷','Rice, Noodles & Dim Sum'],['余味','Desserts']],
-  drinks: [['tea','Chinese Tea','中国茶'],['regional','Regional Wines & Beer','地方酿造酒'],
-    ['清饮','Coffee & Soft Drinks','咖啡与清饮'],['夜酌','Cocktails','中式特调']],
+  drinks: [['tea','Chinese Tea','中国茶'],['regional','Regional Wines & Beer','地方酿造酒']],
+  'night-drinks': [['清饮','Coffee & Soft Drinks','咖啡与清饮'],['夜酌','Cocktails','中式特调']],
   night: [['snacks','Late-Night Bites','八方夜小食']],
 };
 const cuisines = [
-  ['浙','浙菜','Zhejiang','清鲜 · 茶香','龙井虾仁'],
-  ['粤','粤菜','Cantonese','清鲜 · 陈香','豉油清蒸时鱼'],
-  ['鲁','鲁菜','Shandong','醇鲜 · 葱香','葱烧海参'],
-  ['苏','苏菜','Jiangsu','柔和 · 鲜甜','桂花糖醋小排'],
-  ['闽','闽菜','Fujian','海味 · 糟香','红糟蒸海鲈'],
-  ['徽','徽菜','Anhui','山珍 · 醇厚','徽州刀板香'],
-  ['川','川菜','Sichuan','椒麻 · 鲜香','藤椒脆皮鸡'],
-  ['湘','湘菜','Hunan','鲜辣 · 烟香','小炒黄牛肉'],
+  ['浙','浙菜','Zhejiang'],
+  ['粤','粤菜','Cantonese'],
+  ['鲁','鲁菜','Shandong'],
+  ['苏','苏菜','Jiangsu'],
+  ['闽','闽菜','Fujian'],
+  ['徽','徽菜','Anhui'],
+  ['川','川菜','Sichuan'],
+  ['湘','湘菜','Hunan'],
 ];
 const slots = ['11:30','12:00','12:30','13:00','13:30','17:30','18:00','18:30','19:00','19:30','20:00','20:30',
   '21:00','21:30','22:00','22:30','23:00','23:30','00:00','00:30','01:00','01:30'];
@@ -94,7 +94,6 @@ const itemCategory = item => teaNames.has(item.name) ? 'tea' : item.category;
 let route = '';
 let setService = 0;
 let category = '';
-let region = '';
 let reservation;
 let feedbackTimer;
 let dialogTrigger;
@@ -192,14 +191,13 @@ function showItem(id) {
 
 function renderMenu() {
   const options = [['', 'All', '全部'], ...groups[route]];
-  const activeCuisine = cuisines.find(([seal]) => seal === region);
   const filters = options.map(([key, en, zh = key]) =>
     '<button type="button" data-action="filter" data-category="' + key
     + '" aria-pressed="' + (category === key) + '">' + bilingual(zh, en) + '</button>').join('');
   const chapters = groups[route].map(([key, en, zh = key], chapter) => {
     if (category && key !== category) return '';
     const rows = items.map((item, id) => ({item, id})).filter(({item}) =>
-      itemCategory(item) === key && (!region || item.seal === region)
+      itemCategory(item) === key
     ).map(({item, id}) =>
       '<li class="menu-entry">' + action('detail', id, '查看详情', 'Details', 'dish-open',
         photo(item) + '<span class="dish-title"><span class="seal">' + escape(item.seal) + '</span>'
@@ -211,21 +209,28 @@ function renderMenu() {
       + String(chapter + 1).padStart(2, '0') + '</span><h2>' + bilingual(zh, en) + '</h2></div>'
       + '<ul class="menu-list">' + rows + '</ul></section>';
   }).join('');
-  const note = route === 'night'
-    ? copy('21:00 后供应八方小食与饮品。', 'From 21:00, we serve regional bites and drinks.')
-    : route === 'drinks'
-      ? copy('含酒精饮品仅供成年人。标有 * 的酒精度以实际酒标为准。', 'Alcoholic drinks are for adults only. For ABV marked *, check the bottle label.')
-      : copy('午市及晚市供应 · 菜品可按类别或菜系浏览。', 'Served at lunch and dinner. Browse by chapter or cuisine.');
-  const regionNote = activeCuisine
-    ? '<p class="active-region"><span class="seal" aria-hidden="true">' + activeCuisine[0] + '</span>'
-      + escape(activeCuisine[1] + ' · ' + activeCuisine[3])
-      + ' <a href="./#' + route + '">查看完整菜单 <span lang="en">Full Menu</span></a></p>' : '';
-  content.innerHTML = note + regionNote
+  const notes = {
+    menu: ['正餐于午市及晚市供应。', 'The à la carte menu is served at lunch and dinner.'],
+    drinks: ['中国茶及地方酿造酒仅于午市和晚市供应。标有 * 的酒精度以实际酒标为准。',
+      'Chinese tea and regional wines are served at lunch and dinner only. For ABV marked *, check the bottle label.'],
+    night: ['夜宵小食供应时间为 21:00 至次日 02:00。', 'Late-night bites are served from 21:00 to 02:00.'],
+    'night-drinks': ['中式特调、咖啡与清饮于 21:00 至次日 02:00 供应。', 'Cocktails, coffee and soft drinks are served from 21:00 to 02:00.'],
+  };
+  const isDrinks = route === 'drinks' || route === 'night-drinks';
+  const links = isDrinks
+    ? '<nav class="drink-switch" aria-label="饮品时段 / Drinks by service">'
+      + [['drinks','午晚市饮品','Lunch & Dinner'],['night-drinks','夜宵饮品','Late Night']].map(([target, zh, en]) =>
+        '<a href="#' + target + '"' + (target === route ? ' aria-current="page"' : '') + '>' + bilingual(zh, en) + '</a>').join('')
+      + '</nav>'
+    : '<nav class="menu-next menu-top"><a href="#' + (route === 'night'
+      ? 'night-drinks">查看夜宵饮品 <span lang="en">Late-Night Drinks ↗'
+      : 'drinks">查看午晚市饮品 <span lang="en">Lunch & Dinner Drinks ↗') + '</span></a></nav>';
+  content.innerHTML = links + copy(...notes[route])
     + (route !== 'night' ? '<div class="filters" role="group" aria-label="菜单章节 / Menu chapters">' + filters + '</div>' : '')
-    + (chapters || copy('该类别暂无此菜系的菜品。可切换至全部类别。', 'There are no dishes in this chapter for the selected cuisine. Try All.'))
-    + (route === 'night' ? '<nav class="menu-next"><a href="#drinks">查看饮品 <span lang="en">Drinks ↗</span></a></nav>'
-      : '<nav class="menu-next" aria-label="套餐 / Set menus"><a href="#tea">以茶入席 <span lang="en">Tea Sets ↗</span></a>'
-        + '<a href="#wine">以酒入席 <span lang="en">Wine Sets ↗</span></a></nav>');
+    + chapters
+    + (route === 'menu' ? '<nav class="menu-next" aria-label="套餐 / Set menus"><a href="#tea">以茶入席 <span lang="en">Tea Sets ↗</span></a>'
+        + '<a href="#wine">以酒入席 <span lang="en">Wine Sets ↗</span></a></nav>'
+      : route === 'night-drinks' ? '<nav class="menu-next"><a href="#night">查看夜宵小食 <span lang="en">Late-Night Bites ↗</span></a></nav>' : '');
   updateOrder();
 }
 
@@ -268,15 +273,6 @@ function renderSets() {
       : '#tea">' + bilingual('以茶入席','Tea Sets ↗')) + '</a></div>';
 }
 
-function renderCuisines() {
-  content.innerHTML = copy('从浙菜的茶香到湘菜的烟辣。每个印章都能打开对应的正餐和夜宵。', 'From Zhejiang’s tea notes to Hunan’s smoky heat. Browse each region’s dishes and late-night bites.')
-    + '<div class="regional-gallery">' + cuisines.map(([seal, zh, en, flavour, dish]) =>
-      '<article>' + photo(items[itemIds.get(dish)]) + '<div><h2><span class="seal">' + seal + '</span>' + bilingual(zh, en)
-      + '</h2><p>' + escape(flavour) + '</p><nav aria-label="' + zh + '菜单"><a href="#menu/' + encodeURIComponent(seal)
-      + '">正餐 <span lang="en">Food ↗</span></a><a href="#night/' + encodeURIComponent(seal)
-      + '">夜小食 <span lang="en">Bites ↗</span></a></nav></div></article>').join('') + '</div>';
-}
-
 function renderHeritage() {
   content.innerHTML = '<div class="heritage-grid">'
     + '<article>' + photo(items[itemIds.get('龙井虾仁')])
@@ -285,18 +281,11 @@ function renderHeritage() {
     + '</article><article>' + photo(items[itemIds.get('龙井绿茶')])
     + '<h2>' + bilingual('茶有来处','Traditional Chinese Tea Craft') + '</h2>'
     + copy('从制茶到待客，茶承载着分享的习惯。龙井的清香和乌龙的焙香也融入了我们的夜酌。', 'Tea is part of the way we welcome guests. Our evening cocktails draw on the fresh aroma of Longjing and the roasted notes of oolong.')
-    + '</article></div>'
-    + '<section class="heritage-pairings"><h2>' + bilingual('从一口到一杯', 'From Plate to Glass') + '</h2><ul>'
-    + [['龙井虾仁','龙井金汤力'],['陈皮蜜汁叉烧','陈皮威士忌酸'],['红糟蒸海鲈','乌龙嗨棒']].map(pair => {
-      const [dish, drink] = pair.map(name => items[itemIds.get(name)]);
-      return '<li><span class="seal" aria-hidden="true">' + dish.seal + '</span>'
-        + '<span>' + bilingual(dish.name + ' × ' + drink.name, dish.en + ' × ' + drink.en) + '</span></li>';
-    }).join('') + '</ul></section>';
+    + '</article></div>';
 }
 
-$('cuisine-links').innerHTML = cuisines.map(([seal, zh, en]) => '<a href="#menu/' + encodeURIComponent(seal)
-  + '"><b aria-hidden="true">' + seal + '</b>' + bilingual(zh, en) + '</a>').join('')
-  + '<a class="all-regions" href="#cuisines">' + bilingual('看八方','All Regions ↗') + '</a>';
+$('cuisine-list').innerHTML = cuisines.map(([seal, zh, en]) =>
+  '<li><b aria-hidden="true">' + seal + '</b>' + bilingual(zh, en) + '</li>').join('');
 
 function updateStamps() {
   $('stamp-count').value = stamps.size + ' / 8';
@@ -368,8 +357,7 @@ function downloadRequest() {
 }
 
 function renderRoute(focus = false) {
-  const [name, encodedRegion] = location.hash.slice(1).split('/');
-  const linkedRegion = cuisines.find(([seal]) => [seal, encodeURIComponent(seal)].includes(encodedRegion))?.[0];
+  const [name] = location.hash.slice(1).split('/');
   const previous = route;
   route = Object.prototype.hasOwnProperty.call(pages, name) ? name : '';
   if (dialog.open) dialog.close();
@@ -382,7 +370,10 @@ function renderRoute(focus = false) {
   updateOrder();
   if (!route) {
     document.title = '日膳夜酌 · 八方有味 | Ba Fang';
-    if (focus && previous) {
+    if (name === 'cuisines') {
+      $('cuisines').scrollIntoView();
+      if (focus) $('cuisine-title').focus({preventScroll:true});
+    } else if (focus && previous) {
       window.scrollTo(0, 0);
       (document.querySelector('#home a[href="#' + previous + '"]') || document.querySelector('.reserve-link'))
         .focus({preventScroll: true});
@@ -399,12 +390,9 @@ function renderRoute(focus = false) {
       grill:'炙火',desserts:'余味',soft:'清饮',cocktails:'夜酌',tea:'tea',regional:'regional'};
     const requested = legacyCategories[query.get('category')];
     category = groups[route].some(([name]) => name === requested) ? requested : '';
-    const requestedRegion = linkedRegion || query.get('region');
-    region = route !== 'drinks' && cuisines.some(([seal]) => seal === requestedRegion) ? requestedRegion : '';
     renderMenu();
   }
   if (route === 'tea' || route === 'wine') renderSets();
-  if (route === 'cuisines') renderCuisines();
   if (route === 'heritage') renderHeritage();
   if (route === 'passport') renderPassport();
   if (route === 'reserve') renderReserve();

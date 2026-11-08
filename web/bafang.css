@@ -181,24 +181,22 @@ dialog::backdrop { background: #12261dc0; }
 .service-hours small { display: inline; margin-left: 4px; color: var(--gold); font-size: .74rem; }
 .service-hours a > strong { font: 600 clamp(1.05rem, 2.65vw, 2rem)/1.2 Georgia, serif; white-space: nowrap; }
 .service-hours .next-day { font-family: var(--sans); font-weight: 400; }
-.service-hours a > span:not([class]) { font-size: .84rem; }
 .service-name { color: var(--gold); font-family: var(--serif); }
 .service-name small { font: .65rem Georgia, serif; letter-spacing: .12em; }
 .service-arrow { position: absolute; top: 12px; right: 13px; color: var(--gold); }
-.cuisine-links { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)) auto; align-items: stretch; border-block: 1px solid var(--line); }
-.cuisine-links a { display: block; padding: 11px 3px; text-align: center; border-inline-end: 1px solid var(--line); font: 600 1rem var(--serif); }
-.cuisine-links a:hover { background: #ebe1d2; }
-.cuisine-links b { display: grid; width: 34px; aspect-ratio: 1; place-items: center; margin: 0 auto 6px; border: 1px solid var(--red); color: var(--red); font: 1.1rem var(--serif); }
-.cuisine-links small { margin-top: 1px; font-size: .61rem; }
-.cuisine-links .all-regions { display: grid; place-content: center; padding: 8px 12px; color: var(--red); border: 0; }
+.cuisine-list { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); align-items: stretch; margin: 0; padding: 0; list-style: none; border-block: 1px solid var(--line); }
+.cuisine-list li { display: block; padding: 11px 3px; text-align: center; border-inline-end: 1px solid var(--line); font: 600 1rem var(--serif); }
+.cuisine-list li:last-child { border-inline-end: 0; }
+.cuisine-list b { display: grid; width: 34px; aspect-ratio: 1; place-items: center; margin: 0 auto 6px; border: 1px solid var(--red); color: var(--red); font: 1.1rem var(--serif); }
+.cuisine-list small { margin-top: 1px; font-size: .61rem; }
 .experience-intro { margin-top: 10px; font-size: .85rem; color: var(--muted); }
 .menu-entry .photo { border-radius: 2px; }
 @media (min-width: 820px) {
   .menu-list { display: grid; grid-template-columns: repeat(2,minmax(0, 1fr)); gap: 0 28px; }
   .menu-entry { gap: 12px; }
 }
-.set-grid, .heritage-grid, .regional-gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 3vw, 30px); margin-top: 19px; align-items: start; }
-.set-card, .heritage-grid article, .regional-gallery article { background: var(--white); border: 1px solid var(--line); padding: clamp(13px, 2.4vw, 24px); }
+.set-grid, .heritage-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 3vw, 30px); margin-top: 19px; align-items: start; }
+.set-card, .heritage-grid article { background: var(--white); border: 1px solid var(--line); padding: clamp(13px, 2.4vw, 24px); }
 .set-head { display: flex; justify-content: space-between; align-items: end; gap: 10px; margin-bottom: 13px; }
 .set-head h2 { margin-top: 4px; }
 .set-price { text-align: right; }
@@ -215,13 +213,8 @@ dialog::backdrop { background: #12261dc0; }
 .set-drinks li { display: flex; align-items: center; gap: 10px; padding: 5px 0; font-size: .84rem; }
 .set-drinks .photo { width: 68px; height: 46px; flex: 0 0 auto; }
 .set-drinks .copy { margin-bottom: 0; }
-.heritage-grid .photo, .regional-gallery .photo { aspect-ratio: 2; margin-bottom: 12px; }
+.heritage-grid .photo { aspect-ratio: 2; margin-bottom: 12px; }
 .heritage-grid .copy { margin: 10px 0 0; }
-.regional-gallery h2 { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-.regional-gallery h2 small { margin: 0; }
-.regional-gallery nav { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 5px; }
-.regional-gallery nav a { display: inline-flex; gap: 4px; align-items: center; min-height: 44px; color: var(--red); border-bottom: 1px solid var(--line); }
-.regional-gallery nav span { font: italic .8rem Georgia, serif; }
 @media (max-width: 720px) {
   .header { gap: 8px; }
   .header-nav { gap: clamp(8px, 3vw, 17px); }
@@ -231,25 +224,24 @@ dialog::backdrop { background: #12261dc0; }
   .hero-actions { gap: 8px 12px; margin-top: 13px; }
   .hero-image { min-height: clamp(138px, 36vw, 220px); }
   .service-hours { gap: 1px; }
-  .service-hours a { padding: 8px 5px 9px; text-align: center; gap: 4px; }
+  .service-hours a { padding: 13px 5px 14px; text-align: center; gap: 4px; }
   .service-hours a > strong { font-size: clamp(.82rem, 3.7vw, 1.28rem); }
-  .service-hours a > span:not([class]) { font-size: .7rem; }
   .service-hours small { display: block; margin: 0; font-size: .62rem; }
   .service-hours .next-day { display: inline; font-size: .55rem; }
   .service-arrow { display: none; }
-  .cuisine-links { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .cuisine-links a:nth-child(4n) { border-inline-end: 0; }
-  .cuisine-links a:nth-child(n+5) { border-top: 1px solid var(--line); }
-  .cuisine-links .all-regions { grid-column: 1 / -1; grid-auto-flow: column; align-items: center; gap: 7px; min-height: 42px; }
+  .cuisine-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .cuisine-list li:nth-child(4n) { border-inline-end: 0; }
+  .cuisine-list li:nth-child(n+5) { border-top: 1px solid var(--line); }
   .set-grid, .heritage-grid { grid-template-columns: 1fr; }
 }
 
-.active-region { margin: 0 0 11px; color: var(--red); font-size: .83rem; }
-.active-region a { display: inline-flex; align-items: center; gap: .35em; min-height: 44px; margin-left: .7em; text-decoration: underline; }
-.heritage-pairings { margin-top: 24px; }
-.heritage-pairings ul { padding: 0; list-style: none; border-top: 1px solid var(--line); }
-.heritage-pairings li { display: flex; align-items: start; gap: 6px; padding-block: 11px; border-bottom: 1px solid var(--line); }
 .hero-description small { letter-spacing: 0; }
 @media (max-width: 410px) {
   .service-hours .next-day { position: absolute; right: 2px; top: 3px; }
 }
+
+.menu-top { margin: 0 0 11px; }
+.drink-switch { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.drink-switch a { padding: 7px 12px; min-height: 44px; border: 1px solid var(--line); font-size: .9rem; }
+.drink-switch a[aria-current="page"] { border-color: var(--ink); background: var(--ink); color: var(--white); }
+.drink-switch a[aria-current="page"] small { color: var(--gold); }

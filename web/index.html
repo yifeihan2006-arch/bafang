@@ -7,9 +7,9 @@
 <meta name="description" content="日膳夜酌 · 八方有味。八大菜系、正餐与夜小食、茶酒套餐及三段营业时间。">
 <title>日膳夜酌 · 八方有味 | Ba Fang</title>
 <link rel="icon" href="bafang-mark.png" type="image/png">
-<link rel="stylesheet" href="bafang.css?v=5">
+<link rel="stylesheet" href="bafang.css?v=6">
 <script src="menu-data.js?v=4" defer></script>
-<script src="bafang.js?v=5" defer></script>
+<script src="bafang.js?v=6" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">跳到正文 <span lang="en">Skip to content</span></a>
@@ -50,20 +50,19 @@
     <section class="service-section" aria-labelledby="hours-title">
       <div class="section-label">
         <div><p class="eyebrow" lang="en">SERVICE HOURS</p><h2 id="hours-title">一日三席</h2></div>
-        <p>北京时间 · 人均参考 <small lang="en">China Standard Time · Spend per guest</small></p>
+        <p>北京时间 <small lang="en">China Standard Time</small></p>
       </div>
       <div class="service-hours">
-        <a href="#menu"><span class="service-name">午市 <small lang="en">LUNCH</small></span><strong>11:30–14:00</strong><span>¥180–220 <small>人均约 ¥200</small></span><span class="service-arrow" aria-hidden="true">↗</span></a>
-        <a href="#menu"><span class="service-name">晚市 <small lang="en">DINNER</small></span><strong>17:30–21:00</strong><span>¥280–320 <small>人均约 ¥300</small></span><span class="service-arrow" aria-hidden="true">↗</span></a>
-        <a href="#night"><span class="service-name">夜宵 <small lang="en">LATE NIGHT</small></span><strong>21:00–02:00 <small class="next-day">次日</small></strong><span>¥160–220 <small>人均约 ¥180</small></span><span class="service-arrow" aria-hidden="true">↗</span></a>
+        <a href="#menu"><span class="service-name">午市 <small lang="en">LUNCH</small></span><strong>11:30–14:00</strong><span class="service-arrow" aria-hidden="true">↗</span></a>
+        <a href="#menu"><span class="service-name">晚市 <small lang="en">DINNER</small></span><strong>17:30–21:00</strong><span class="service-arrow" aria-hidden="true">↗</span></a>
+        <a href="#night"><span class="service-name">夜宵 <small lang="en">LATE NIGHT</small></span><strong>21:00–02:00 <small class="next-day">次日</small></strong><span class="service-arrow" aria-hidden="true">↗</span></a>
       </div>
     </section>
-    <section class="cuisine-section" aria-labelledby="cuisine-title">
+    <section id="cuisines" class="cuisine-section" aria-labelledby="cuisine-title">
       <div class="section-label">
-        <div><p class="eyebrow" lang="en">EIGHT REGIONAL CUISINES</p><h2 id="cuisine-title">八大菜系</h2></div>
-        <p>点选菜系，查看对应菜品 <small lang="en">Tap a seal to explore its dishes</small></p>
+        <div><p class="eyebrow" lang="en">EIGHT REGIONAL CUISINES</p><h2 id="cuisine-title" tabindex="-1">八大菜系</h2></div>
       </div>
-      <nav id="cuisine-links" class="cuisine-links" aria-label="八大菜系 / Eight Regional Cuisines"></nav>
+      <ul id="cuisine-list" class="cuisine-list" role="list"></ul>
     </section>
     <section class="experiences" aria-labelledby="experience-title">
       <div>

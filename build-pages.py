@@ -102,8 +102,10 @@ def from_menu_html(archive, members):
 def redirect(root, target):
     home = root + target
     destination = json.dumps(target)
-    if target == '#menu':
-        destination = "(['soft','cocktails','tea','regional'].includes(new URLSearchParams(location.search).get('category')) ? '#drinks' : '#menu')"
+    if target in ('#menu', '#drinks'):
+        destination = ("((category) => ['soft','cocktails'].includes(category) ? '#night-drinks'"
+                       " : ['tea','regional'].includes(category) ? '#drinks' : " + destination
+                       + ")(new URLSearchParams(location.search).get('category'))")
     return f"""<!doctype html>
 <html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
 <title>日膳夜酌 · 八方有味</title>
@@ -157,7 +159,7 @@ def build():
     (out / 'printed-menu.json').unlink()
     (out / '.nojekyll').touch()
     redirects = {'menu': '#menu', 'drinks': '#drinks', 'reserve': '#reserve', 'day-night': '#drinks',
-                 'flavours': '#cuisines', 'experience': '#tea', 'about': '', 'heritage': '#heritage', 'night': '#night'}
+                 'flavours': '#cuisines', 'experience': '#tea', 'about': '', 'heritage': '#heritage', 'night': '#night', 'night-drinks': '#night-drinks'}
     for old, target in redirects.items():
         directory = out / old
         directory.mkdir(exist_ok=True)
