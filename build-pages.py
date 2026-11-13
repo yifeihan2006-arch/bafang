@@ -4,6 +4,7 @@ from shutil import copytree
 from zipfile import ZipFile
 import json
 import re
+from runpy import run_path
 
 
 CATEGORIES = ('开席', '田园', '山海', '五谷', '炙火', '余味', '清饮', '夜酌')
@@ -176,6 +177,8 @@ def build():
         directory.mkdir(exist_ok=True)
         (directory / 'index.html').write_text(redirect('../', target), encoding='utf-8')
         (out / f'{old}.html').write_text(redirect('./', target), encoding='utf-8')
+    if (out / 'resonance-house-vienna' / 'asset-checksums.txt').exists():
+        run_path('fetch-hotel-assets.py')['install_hotel_media'](out)
     print(f'Built {len(records)} bilingual menu items and {len(printed["sets"])} set menus.')
 
 
