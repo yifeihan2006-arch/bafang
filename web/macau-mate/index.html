@@ -1404,6 +1404,10 @@ details[open] summary {
   .hotel-resultbar .button { flex-shrink:0; }
 }
 
+/* Home centres on the journey planner. */
+.planning-home { min-height:calc(100svh - 153px); padding-bottom:26px; }
+@media(max-width:720px) { .planning-home { min-height:calc(100svh - 235px); padding-bottom:18px; } }
+
 </style>
   </head>
   <body>
@@ -15750,12 +15754,10 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
       ).join("") + "</select></div></div></header>";
     }
     function footer() {
-      return '<footer class="sitefoot"><div class="wrap"><span>MACAU MATE \xB7 ' + txt("footer") + "</span><span>" + txt("liveNote") + "</span></div></footer>";
+      return '<footer class="sitefoot"><div class="wrap"><span>MACAU MATE \xB7 ' + txt("footer") + "</span>" + (model2.page === "home" ? "" : "<span>" + txt("liveNote") + "</span>") + "</div></footer>";
     }
     function home() {
-      return '<main><section class="hero wrap">' + placeImage("paul", true) + '<div class="hero-inner"><div class="eyebrow">' + txt("heroLabel") + "</div><h1>" + txt("heroA") + "<br><em>" + txt("heroB") + "</em></h1><p>" + txt("heroBody") + '</p><form id="start-form"><label for="trip-input">' + txt("tell") + '</label><textarea id="trip-input" name="input" rows="2" maxlength="3000" placeholder="' + txt("placeholder") + '">' + text(model2.input) + '</textarea><div class="hero-actions"><button type="button" class="link-btn" data-action="show-examples">' + txt("try") + '</button><button type="submit" class="button">' + txt("plan") + ' <span aria-hidden="true">\u2197</span></button></div>' + (model2.examples ? '<div class="actions" style="margin-top:9px">' + btn2("familyDemo", "example", "familyDemo", "secondary smallbtn") + btn2("concertDemo", "example", "concertDemo", "secondary smallbtn") + "</div>" : "") + '</form></div></section><div class="wrap"><div class="quick"><strong>' + txt("purpose") + "</strong>" + interests.map(
-        (k, i) => '<button class="chip" type="button" aria-pressed="' + model2.picks.includes(k) + '" data-action="interest" data-value="' + k + '"><span aria-hidden="true">' + ["\u25C7", "\u273A", "\u266B", "\u2606", " bag", "\u25A4"][i].replace(" bag", "\u25A1") + "</span>" + txt(k) + "</button>"
-      ).join("") + '</div><section class="section"><div class="section-head"><div><div class="eyebrow">' + txt("world") + "</div><h2>" + txt("exploreTitle") + "</h2><p>" + txt("exploreBody") + "</p></div>" + btn2("allHeritage", "navigate", "heritage", "secondary") + '</div><div class="cards">' + ["paul", "senado", "ama"].map(placeCard).join("") + "</div></section></div></main>";
+      return '<main class="planning-home"><section class="hero wrap">' + placeImage("paul", true) + '<div class="hero-inner"><div class="eyebrow">' + txt("heroLabel") + "</div><h1>" + txt("heroA") + "<br><em>" + txt("heroB") + "</em></h1><p>" + txt("heroBody") + '</p><form id="start-form"><label for="trip-input">' + txt("tell") + '</label><textarea id="trip-input" name="input" rows="2" maxlength="3000" placeholder="' + txt("placeholder") + '">' + text(model2.input) + '</textarea><div class="hero-actions"><button type="button" class="link-btn" data-action="show-examples">' + txt("try") + '</button><button type="submit" class="button">' + txt("plan") + ' <span aria-hidden="true">\u2197</span></button></div>' + (model2.examples ? '<div class="actions" style="margin-top:9px">' + btn2("familyDemo", "example", "familyDemo", "secondary smallbtn") + btn2("concertDemo", "example", "concertDemo", "secondary smallbtn") + "</div>" : "") + "</form></div></section></main>";
     }
     function field2(key, name, value, type = "text", attrs = "") {
       return '<label class="field"><span>' + txt(key) + '</span><input name="' + name + '" type="' + type + '"' + (type === "checkbox" ? check(value) : ' value="' + esc(value ?? "") + '"') + " " + attrs + "></label>";
@@ -16487,6 +16489,7 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
     model.editing = false;
     model.engine = "local";
     model.loadingPhase = "profile";
+    model.picks = [];
     const localP = parseProfile(input, model.picks), known = { ...localP };
     if (input.trim() && !example) {
       openModal("loading");
