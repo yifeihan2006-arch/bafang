@@ -507,6 +507,7 @@ input.searchbox {
   display: block;
   width: 100%;
   min-width: 0;
+  max-width: 100%;
   border: 1px solid #cfcabe;
   background: #fffefb;
   padding: 9px;
@@ -1084,15 +1085,33 @@ details[open] summary {
   height: 100%;
   object-fit: cover;
 }
-@media (max-width: 980px) {
+@media (max-width: 1120px) {
   .wrap {
     width: calc(100% - 40px);
   }
   .headinner {
-    gap: 10px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 16px;
+    padding-block: 10px 4px;
+  }
+  .sitehead {
+    height: auto;
   }
   .nav {
-    gap: 13px;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: space-between;
+    gap: 18px;
+    min-width: 0;
+  }
+  .headright {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+  .services-page .split {
+    grid-template-columns: minmax(0, 1fr);
   }
   .hero {
     min-height: 545px;
@@ -1119,20 +1138,31 @@ details[open] summary {
   }
   .headinner {
     display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 3px 8px;
-    padding: 10px 0 4px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px 8px;
+    padding: 10px 0 6px;
   }
   .nav {
     grid-row: 2;
     grid-column: 1/-1;
-    overflow: auto;
-    justify-content: space-between;
-    gap: 9px;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 3px 8px;
+    overflow: visible;
   }
   .nav button {
-    font-size: 0.78rem;
-    padding: 6px 0;
+    grid-column: span 2;
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    padding: 9px 6px;
+    font-size: 0.82rem;
+    line-height: 1.35;
+    white-space: normal;
+    border-bottom: 2px solid transparent;
+  }
+  .nav button:nth-child(n + 4) {
+    grid-column: span 3;
   }
   .brand {
     font-size: 0.88rem;
@@ -1169,7 +1199,10 @@ details[open] summary {
     padding: 12px;
   }
   .hero h1 {
-    font-size: clamp(3.15rem, 12vw, 4.85rem);
+    font-size: clamp(2.15rem, 8.8vw, 3.5rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    overflow-wrap: break-word;
   }
   .quick {
     padding: 16px 0;
@@ -1251,7 +1284,63 @@ details[open] summary {
 
 
 /* Official catalogue and provider forms */
+.service-form,
+.service-form form {
+  min-width: 0;
+}
 .service-form form { display:grid; gap:18px; }
+.service-form .fieldgrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 20px;
+  align-items: start;
+}
+.service-form .field {
+  align-content: start;
+  line-height: 1.45;
+  gap: 8px;
+}
+.service-form .field:has(select[name='provider']) {
+  grid-column: 1 / -1;
+}
+.service-form .field > span {
+  min-height: 1.45em;
+}
+.service-form .field input,
+.service-form .field select,
+.service-form .field textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  font-size: 16px;
+  line-height: 1.4;
+  padding: 12px 14px;
+}
+.service-form .field input,
+.service-form .field select {
+  height: 48px;
+}
+.service-form .field input[type='date'],
+.service-form .field input[type='time'] {
+  -webkit-appearance: none;
+  appearance: none;
+  text-align: left;
+}
+.service-form .field input::-webkit-date-and-time-value {
+  min-height: 1.4em;
+  text-align: left;
+}
+.service-form .field input::-webkit-datetime-edit {
+  padding: 0;
+}
+.service-form .field textarea {
+  min-height: 112px;
+}
+@media (max-width: 600px) {
+  .service-form .fieldgrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
 .provider-card h3,.provider-card p { margin:16px 0; }
 .provider-card .thumb { border-radius:16px; overflow:hidden; }
 .service-record { overflow-wrap:anywhere; }
@@ -1261,7 +1350,12 @@ details[open] summary {
 .checkboxline { display:flex; align-items:start; gap:10px; margin:16px 0; }
 .checkboxline input { width:22px; height:22px; flex-shrink:0; }
 .request-text { white-space:pre-wrap; overflow-wrap:anywhere; font:inherit; }
-@media(max-width:700px) { .sitehead .nav { gap:0; justify-content:space-between; } .sitehead .nav button { font-size:.76rem; padding-left:3px; padding-right:3px; } .service-record .button { width:100%; justify-content:center; } }
+@media (max-width: 700px) {
+  .service-record .button {
+    width: 100%;
+    justify-content: center;
+  }
+}
 
 /* Complete directory and inspectable planning decisions. */
 .directory-page > .field { margin-bottom:16px; }
