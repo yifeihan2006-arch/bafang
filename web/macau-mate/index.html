@@ -1374,6 +1374,36 @@ details[open] summary {
 .interest-options .field { display:flex; flex-direction:row; align-items:center; margin:0; }
 @media(max-width:700px) { .directory-list { grid-template-columns:1fr; } .catalogue-toolbar .actions { width:100%; } }
 
+/* Searchable MGTO accommodation directory. */
+.hotel-directory { margin:28px 0; padding-block:24px; border-block:1px solid var(--line); }
+.hotel-directory > h3 { font-size:1.5rem; margin-bottom:10px; }
+.hotel-directory > p { margin-bottom:18px; }
+.hotel-filters { display:grid; grid-template-columns:minmax(0,2fr) repeat(2,minmax(0,1fr)); gap:16px; }
+.hotel-filters input,.hotel-filters select { height:48px; font-size:16px; }
+.hotel-resultbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:18px 0; }
+.hotel-resultbar p { font-weight:650; color:var(--green); }
+.hotel-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+.hotel-card { min-width:0; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper); display:flex; flex-direction:column; }
+.hotel-card.is-selected { border-color:var(--green); box-shadow:0 0 0 1px var(--green); }
+.hotel-card > img { width:100%; height:180px; object-fit:cover; background:var(--pale); }
+.hotel-card-body { padding:18px; display:flex; flex-direction:column; align-items:start; gap:10px; flex:1; }
+.hotel-card h3 { font-size:1.15rem; line-height:1.4; overflow-wrap:anywhere; }
+.hotel-card .button { margin-top:auto; min-height:44px; }
+.hotel-card .textlink { font-size:.8rem; }
+.hotel-more { justify-content:center; margin:22px 0; }
+#service-booking-details { scroll-margin-top:180px; }
+@media(max-width:900px) {
+  .hotel-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .hotel-filters { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .hotel-search-field { grid-column:1/-1; }
+}
+@media(max-width:600px) {
+  .hotel-grid,.hotel-filters { grid-template-columns:minmax(0,1fr); }
+  .hotel-card > img { height:190px; }
+  .hotel-resultbar { align-items:start; }
+  .hotel-resultbar .button { flex-shrink:0; }
+}
+
 </style>
   </head>
   <body>
@@ -1381,7 +1411,7 @@ details[open] summary {
     <div id="message" role="status" aria-live="polite"></div>
     <script>
 (() => {
-  // src/i18n.js
+  // MacauMatePages/src/i18n.js
   var words = {};
   var table = `home|Home|\u9996\u9875|In\xEDcio|\u9996\u9801
 journey|My Journey|\u6211\u7684\u65C5\u7A0B|A minha viagem|\u6211\u7684\u65C5\u7A0B
@@ -2775,8 +2805,30 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
   Object.assign(words, { reasonBudgetCompact: ["Fewer optional stops to protect your budget", "\u51CF\u5C11\u975E\u5FC5\u8981\u7AD9\u70B9\u4EE5\u5B88\u4F4F\u9884\u7B97", "Menos paragens opcionais para cumprir o or\xE7amento", "\u6E1B\u5C11\u975E\u5FC5\u8981\u7AD9\u9EDE\u4EE5\u5B88\u4F4F\u9810\u7B97"] });
   Object.assign(words, { routingComputedNote: ["Road-route data has been queried. Travel times and fares remain estimates; public transport, opening hours and accessibility require confirmation.", "\u5DF2\u67E5\u8BE2\u9053\u8DEF\u8DEF\u7EBF\u6570\u636E\u3002\u4EA4\u901A\u65F6\u95F4\u548C\u8F66\u8D39\u4ECD\u4E3A\u4F30\u7B97\uFF0C\u516C\u4EA4\u3001\u5F00\u653E\u65F6\u95F4\u53CA\u65E0\u969C\u788D\u901A\u884C\u6761\u4EF6\u9700\u786E\u8BA4\u3002", "Foram consultados percursos rodovi\xE1rios. Tempos e tarifas s\xE3o estimados; confirme transportes p\xFAblicos, hor\xE1rios e acessibilidade.", "\u5DF2\u67E5\u8A62\u9053\u8DEF\u8DEF\u7DDA\u8CC7\u6599\u3002\u4EA4\u901A\u6642\u9593\u548C\u8ECA\u8CBB\u4ECD\u70BA\u4F30\u7B97\uFF0C\u5DF4\u58EB\u3001\u958B\u653E\u6642\u9593\u53CA\u7121\u969C\u7919\u901A\u884C\u689D\u4EF6\u9700\u78BA\u8A8D\u3002"] });
   Object.assign(words, { eveningMeal: ["Dinner and rest", "\u665A\u9910\u4E0E\u4F11\u606F", "Jantar e descanso", "\u665A\u9910\u8207\u4F11\u606F"], luggagePickup: ["Collect luggage", "\u53D6\u56DE\u884C\u674E", "Recolher a bagagem", "\u53D6\u56DE\u884C\u674E"] });
+  Object.assign(words, {
+    hotelDirectory: ["Find your accommodation", "\u67E5\u627E\u6FB3\u95E8\u4F4F\u5BBF", "Encontre alojamento", "\u67E5\u627E\u6FB3\u9580\u4F4F\u5BBF"],
+    hotelCoverage: ["{count} official listings \xB7 hotels, apartment hotels and low-cost accommodation", "\u5B98\u65B9\u540D\u5F55 {count} \u5BB6 \xB7 \u9152\u5E97\u3001\u516C\u5BD3\u5F0F\u9152\u5E97\u53CA\u7ECF\u6D4E\u578B\u4F4F\u5BBF", "{count} estabelecimentos oficiais \xB7 hot\xE9is, hot\xE9is-apartamentos e alojamento de baixo custo", "\u5B98\u65B9\u540D\u9304 {count} \u5BB6 \xB7 \u9152\u5E97\u3001\u516C\u5BD3\u5F0F\u9152\u5E97\u53CA\u7D93\u6FDF\u578B\u4F4F\u5BBF"],
+    hotelSearch: ["Search hotel name in Chinese, English or Portuguese", "\u641C\u7D22\u9152\u5E97\u4E2D\u6587\u3001\u82F1\u6587\u6216\u8461\u6587\u540D\u79F0", "Pesquisar nome em chin\xEAs, ingl\xEAs ou portugu\xEAs", "\u641C\u5C0B\u9152\u5E97\u4E2D\u6587\u3001\u82F1\u6587\u6216\u8461\u6587\u540D\u7A31"],
+    hotelDistrict: ["Area", "\u533A\u57DF", "Zona", "\u5340\u57DF"],
+    hotelClass: ["Accommodation class", "\u4F4F\u5BBF\u7B49\u7EA7", "Categoria de alojamento", "\u4F4F\u5BBF\u7B49\u7D1A"],
+    hotelAll: ["All", "\u5168\u90E8", "Todas", "\u5168\u90E8"],
+    hotelMacao: ["Macao Peninsula", "\u6FB3\u95E8\u534A\u5C9B", "Pen\xEDnsula de Macau", "\u6FB3\u9580\u534A\u5CF6"],
+    hotelTaipaArea: ["Taipa and Cotai", "\u6C39\u4ED4\u53CA\u8DEF\u6C39", "Taipa e Cotai", "\u6C39\u4ED4\u53CA\u8DEF\u6C39"],
+    hotelColoane: ["Coloane", "\u8DEF\u73AF", "Coloane", "\u8DEF\u74B0"],
+    hotelMatches: ["Showing {shown} of {count} matches", "\u5DF2\u663E\u793A {shown} \u5BB6\uFF0C\u5171 {count} \u5BB6\u7B26\u5408\u6761\u4EF6", "A mostrar {shown} de {count} resultados", "\u5DF2\u986F\u793A {shown} \u5BB6\uFF0C\u5171 {count} \u5BB6\u7B26\u5408\u689D\u4EF6"],
+    hotelChoose: ["Choose this hotel", "\u9009\u62E9\u6B64\u4F4F\u5BBF", "Escolher alojamento", "\u9078\u64C7\u6B64\u4F4F\u5BBF"],
+    hotelSelected: ["Selected", "\u5DF2\u9009\u62E9", "Selecionado", "\u5DF2\u9078\u64C7"],
+    hotelClosed: ["Temporarily closed \xB7 MGTO notice", "\u4E34\u65F6\u5173\u95ED \xB7 \u65C5\u6E38\u5C40\u63D0\u793A", "Temporariamente encerrado \xB7 DST", "\u81E8\u6642\u95DC\u9589 \xB7 \u65C5\u904A\u5C40\u63D0\u793A"],
+    hotelMore: ["Show more accommodation", "\u663E\u793A\u66F4\u591A\u4F4F\u5BBF", "Mostrar mais alojamentos", "\u986F\u793A\u66F4\u591A\u4F4F\u5BBF"],
+    hotelNoMatches: ["No matches. Try another name or clear the filters.", "\u6CA1\u6709\u7B26\u5408\u6761\u4EF6\u7684\u4F4F\u5BBF\uFF0C\u8BF7\u66F4\u6362\u540D\u79F0\u6216\u6E05\u9664\u7B5B\u9009\u3002", "Sem resultados. Altere o nome ou os filtros.", "\u6C92\u6709\u7B26\u5408\u689D\u4EF6\u7684\u4F4F\u5BBF\uFF0C\u8ACB\u66F4\u63DB\u540D\u7A31\u6216\u6E05\u9664\u7BE9\u9078\u3002"],
+    hotelReset: ["Clear filters", "\u6E05\u9664\u7B5B\u9009", "Limpar filtros", "\u6E05\u9664\u7BE9\u9078"],
+    hotelSource: ["MGTO listing", "\u65C5\u6E38\u5C40\u8D44\u6599", "Ficha da DST", "\u65C5\u904A\u5C40\u8CC7\u6599"],
+    hotelWebsite: ["Hotel website / booking", "\u9152\u5E97\u5B98\u7F51\uFF0F\u9884\u8BA2", "S\xEDtio do hotel / reservas", "\u9152\u5E97\u5B98\u7DB2\uFF0F\u9810\u8A02"],
+    hotelNoWebsite: ["No website listed by MGTO. Contact the accommodation using its official listing.", "\u65C5\u6E38\u5C40\u672A\u5217\u51FA\u5B98\u7F51\uFF0C\u8BF7\u901A\u8FC7\u5B98\u65B9\u8D44\u6599\u9875\u7684\u8054\u7CFB\u65B9\u5F0F\u67E5\u8BE2\u3002", "A DST n\xE3o indica um s\xEDtio. Consulte os contactos na ficha oficial.", "\u65C5\u904A\u5C40\u672A\u5217\u51FA\u5B98\u7DB2\uFF0C\u8ACB\u900F\u904E\u5B98\u65B9\u8CC7\u6599\u9801\u7684\u806F\u7D61\u65B9\u5F0F\u67E5\u8A62\u3002"],
+    hotelChecked: ["Source: MGTO \xB7 checked 18 Nov 2026. Rates and availability are confirmed by each accommodation.", "\u6765\u6E90\uFF1A\u6FB3\u95E8\u65C5\u6E38\u5C40 \xB7 2026\u5E7411\u670818\u65E5\u6838\u67E5\u3002\u623F\u4EF7\u548C\u623F\u6001\u7531\u5404\u4F4F\u5BBF\u573A\u6240\u786E\u8BA4\u3002", "Fonte: DST \xB7 verificado em 18 nov 2026. Pre\xE7os e disponibilidade sujeitos a confirma\xE7\xE3o pelo alojamento.", "\u4F86\u6E90\uFF1A\u6FB3\u9580\u65C5\u904A\u5C40 \xB7 2026\u5E7411\u670818\u65E5\u6838\u67E5\u3002\u623F\u50F9\u548C\u623F\u614B\u7531\u5404\u4F4F\u5BBF\u5834\u6240\u78BA\u8A8D\u3002"]
+  });
 
-  // src/catalogue.js
+  // MacauMatePages/src/catalogue.js
   var officialCatalogue = [
     {
       "id": "ama",
@@ -8033,7 +8085,4015 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
   ];
   var catalogueGroups = ["macao-world-heritage", "churches", "temples", "fortresses", "museums-and-galleries", "gardens", "other-attractions"];
 
-  // src/providers.js
+  // MacauMatePages/src/hotels.js
+  var hotelCatalogue = [
+    {
+      "id": "agora-hotel",
+      "n": [
+        "AGORA HOTEL",
+        "\u805A\u70B9\u9152\u5E97",
+        "HOTEL AGORA",
+        "\u805A\u9EDE\u9152\u5E97"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.19908343114635,
+      "lng": 113.53706453807956,
+      "address": "Terreno junto do Rua do Visconde Pa\xE7o de Arcos, Macau",
+      "phone": "+853 28228880",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/agora-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/cd2a57baf9f9aa51be984c2272cefbab54c61987.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "altira",
+      "n": [
+        "ALTIRA",
+        "\u65B0\u6FE0\u950B",
+        "ALTIRA",
+        "\u65B0\u6FE0\u92D2"
+      ],
+      "star": [
+        "5-star Deluxe Hotel",
+        "\u4E94\u661F\u8C6A\u534E\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas de luxo",
+        "\u4E94\u661F\u8C6A\u83EF\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-deluxe-hotel",
+      "district": "T",
+      "lat": 22.16183092822547,
+      "lng": 113.55508828043537,
+      "address": "Avenida de Kwong Tung, n.\xBAs 786, 798, 816 e 840, Taipa",
+      "phone": "+853 28868888",
+      "url": "http://www.altiramacau.com/en#A11",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/altira/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/9a4d8b11a3621586a434cd0b6ebfd43371eb28a8.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "andaz-macau",
+      "n": [
+        "ANDAZ MACAU",
+        "\u6FB3\u95E8\u5B89\u8FBE\u4ED5\u9152\u5E97",
+        "HOTEL ANDAZ",
+        "\u6FB3\u9580\u5B89\u9054\u4ED5\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "T",
+      "lat": 22.1442159072,
+      "lng": 113.55675519543394,
+      "address": "COTAI, Nascente da Avenida Marginal Flor de L\xF3tus e a Sul da Estrada da Ba\xEDa de Nossa Senhora da Esperan\xE7a",
+      "phone": "+853 88861234",
+      "url": "http://www.andazmacau.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/andaz-macau/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/3bd9b91c73b220c32aab5be90b307eb55e0dd38b.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "artyzen-grand-lapa-macau",
+      "n": [
+        "ARTYZEN GRAND LAPA MACAU",
+        "\u6FB3\u95E8\u96C5\u8FB0\u9152\u5E97",
+        "ARTYZEN GRAND LAPA MACAU",
+        "\u6FB3\u9580\u96C5\u8FB0\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "M",
+      "lat": 22.192502432450752,
+      "lng": 113.55360126396937,
+      "address": "Avenida da Amizade, n.\xBAs 956-1110, Macau",
+      "phone": "+853 28567888",
+      "url": "http://artyzengrandlapamacau.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/artyzen-grand-lapa-macau/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/cfc39890413c7d78068960ac7c37a6a3af2525da.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "ascott-macau",
+      "n": [
+        "ASCOTT MACAU",
+        "\u6FB3\u95E8\u96C5\u8BD7\u9601",
+        "ASCOTT MACAU",
+        "\u6FB3\u9580\u96C5\u8A69\u95A3"
+      ],
+      "star": [
+        "4-star Hotel",
+        "\u56DB\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "4-star-hotel",
+      "district": "M",
+      "lat": 22.187001459949727,
+      "lng": 113.54926644197315,
+      "address": "Rua Cidade de Braga, n.\xBA 339, Macau",
+      "phone": "+853 28220688",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/ascott-macau/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/c4b5d1c99e9147338e0539328ad470258f3b07c3.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "asia-boutique-inn",
+      "n": [
+        "ASIA BOUTIQUE INN",
+        "\u4E9A\u6D32\u7CBE\u54C1\u65C5\u9986",
+        'PENS\xC3O "\xC1SIA BOUTIQUE"',
+        "\u4E9E\u6D32\u7CBE\u54C1\u65C5\u9928"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "T",
+      "lat": 22.15279994265309,
+      "lng": 113.5569432199377,
+      "address": "Rua Correia da Silva, n.\xBA 146, Taipa",
+      "phone": "+853 28223899",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/asia-boutique-inn/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/69b90bb04a48c2dc4e832ea64cc932bd997cf1d3.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "banyan-tree-macau",
+      "n": [
+        "BANYAN TREE MACAU",
+        "\u6FB3\u95E8\u60A6\u6995\u5E84",
+        "BANYAN TREE MACAU",
+        "\u6FB3\u9580\u6085\u6995\u838A"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "T",
+      "lat": 22.14882093944638,
+      "lng": 113.55276953290661,
+      "address": "COTAI, Nascente da Avenida Marginal Flor de L\xF3tus e a Sul da Estrada da Ba\xEDa de Nossa Senhora de Esperan\xE7a",
+      "phone": "+853 88838833",
+      "url": "http://www.galaxymacau.com/hotels/banyan-tree",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/banyan-tree-macau/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/488b27895e20fd3cdb152294bf241459f7d4d587.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "belive-andmore",
+      "n": [
+        "BELIVE ANDMORE",
+        "\u5F7C\u5BD3\u65C5\u5C45",
+        "ACREDITAR E MAIS AL\xC9M",
+        "\u5F7C\u5BD3\u65C5\u5C45"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.191764494021044,
+      "lng": 113.53415659767063,
+      "address": "Rua do Almirante S\xE9rgio n.\xB0s 44 \u2013 48, Macau",
+      "phone": "+853 28509110",
+      "url": "http://www.beliveandmore.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/belive-andmore/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/608fa862bafc1e848180e456a4e66085181e125b.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "broadway-hotel",
+      "n": [
+        "BROADWAY HOTEL",
+        "\u767E\u8001\u6C47\u9152\u5E97",
+        "HOTEL BROADWAY",
+        "\u767E\u8001\u532F\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "T",
+      "lat": 22.146673,
+      "lng": 113.551876,
+      "address": "Sul da Marina Taipa-Sul, junto \xE0 Rotunda do Dique Oeste, Taipa",
+      "phone": "+853 88833338",
+      "url": "http://www.broadwaymacau.com.mo/zh-hant/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/broadway-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/e8211dcec2e04f71728aaf25d094783431e70cc2.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "caravel-hotel",
+      "n": [
+        "CARAVEL HOTEL",
+        "\u5361\u5C14\u9152\u5E97",
+        "HOTEL CARAVELA",
+        "\u5361\u723E\u9152\u5E97"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.198023,
+      "lng": 113.537269,
+      "address": "Rua de Guimar\xE3es, n.\xB0s 96-126, Macau",
+      "phone": "+853 28250108",
+      "url": "http://www.caravelhotelmacau.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/caravel-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/f97d102f4086272112b77019a3ec86f3aa13e74b.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "centro-catolico",
+      "n": [
+        "CENTRO CAT\xD3LICO",
+        "\u516C\u6559\u4E2D\u5FC3",
+        "CENTRO CAT\xD3LICO",
+        "\u516C\u6559\u4E2D\u5FC3"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "M",
+      "lat": 22.193032295990164,
+      "lng": 113.54334305270135,
+      "address": "Avenida da Praia Grande n.\xBA 831, Rua Formosa n.\xBA 28-30A e Rua de Campo n.\xBA25-37, Macau",
+      "phone": "",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/centro-catolico/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/eafcc57f78254a94ac088e2f4e023324af31731e.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "cheng-cheng",
+      "n": [
+        "CHENG CHENG",
+        "\u6676\u6676",
+        "CHENG CHENG",
+        "\u6676\u6676"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.19135382629753,
+      "lng": 113.54370660326771,
+      "address": "Avenida da Praia Grande, n.\xBA 998, 2.\xBA e 4.\xBA andares, Macau",
+      "phone": "+853 68092168",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/cheng-cheng/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/d7f3de3c73a87d5d0df8cbafb069cc709927761a.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "china-dragon-hotel",
+      "n": [
+        "CHINA DRAGON HOTEL",
+        "\u94E7\u9F99\u9152\u5E97",
+        "HOTEL CHINA DRAG\xC3O",
+        "\u93F5\u9F8D\u9152\u5E97"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.1918489522716,
+      "lng": 113.54370657528642,
+      "address": "Avenida da Praia Grande, n.\xBA 944, Macau",
+      "phone": "+853 28301999",
+      "url": "http://www.chinadragon.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/china-dragon-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/07c3e3f5d3146b90f13711d7e90c5a06b04a4098.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "city-inn",
+      "n": [
+        "CITY INN",
+        "\u57CE\u5E02\u5BA2\u6808",
+        "PENS\xC3O CIDADE",
+        "\u57CE\u5E02\u5BA2\u68E7"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.196647734720443,
+      "lng": 113.53758522940473,
+      "address": "Rua de Cinco de Outubro, n.\xBAs 126 \u2013 130, Rua do Guimar\xE3es, n.\xBA 247 e Rua do Pagode, n.\xBAs 2 \u2013 2A, Macau",
+      "phone": "+853 28717668",
+      "url": "http://www.cityinnmacau.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/city-inn/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/8c938a08592acbd81415422ed9336f09c27b3e81.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "city-viva-hotel",
+      "n": [
+        "CITY VIVA HOTEL",
+        "\u57CE\u60A6\u9152\u5E97",
+        "HOTEL CIDADE VIVA",
+        "\u57CE\u6085\u9152\u5E97"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "M",
+      "lat": 22.19306530690986,
+      "lng": 113.55200631783134,
+      "address": "Rua de Xiamen, n.\xBA 59, tendo tamb\xE9m acesso pela porta n.\xBA 37-A dessa Rua e n.\xBA 230 da Rua de Lu\xEDs Gonzaga Gomes, Macau",
+      "phone": "+853 28800888",
+      "url": "http://www.cityviva.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/city-viva-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/f69551ad0378a29467ed1cd051c284b413cd9003.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "conrad-macao-cotai-strip",
+      "n": [
+        "CONRAD MACAO",
+        "\u6FB3\u95E8\u5EB7\u83B1\u5FB7\u9152\u5E97",
+        "CONRAD MACAU",
+        "\u6FB3\u9580\u5EB7\u840A\u5FB7\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "T",
+      "lat": 22.14538224250694,
+      "lng": 113.56541992624273,
+      "address": "COTAI, a Poente do Istmo Taipa-Coloane, parcelas 5 e 6",
+      "phone": "+853 28829000",
+      "url": "http://www.londonermacao.com/hotels/conrad-macao.html",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/conrad-macao-cotai-strip/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/d5d111d2cd5cb80439a49279f85ed09bafa1b841.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "costa",
+      "n": [
+        "COSTA",
+        "\u9AD8\u58EB\u5FB7",
+        "COSTA",
+        "\u9AD8\u58EB\u5FB7"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.202226268944983,
+      "lng": 113.54763552335157,
+      "address": "Avenida de Horta e Costa, n.\xBA 11, C e D, 1\xBA andar, Macau",
+      "phone": "+853 28526176",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/costa/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/f0d2f491ebad7b39437c3b3a4c1ce76bd76d9f42.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "crowne-plaza-macau",
+      "n": [
+        "CROWNE PLAZA MACAU",
+        "\u6FB3\u95E8\u7687\u51A0\u5047\u65E5\u9152\u5E97",
+        "CROWNE PLAZA MACAU",
+        "\u6FB3\u9580\u7687\u51A0\u5047\u65E5\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "M",
+      "lat": 22.212217,
+      "lng": 113.558221,
+      "address": 'Rua da P\xE9rola Oriental, edf. "The Residencia Macau", bloco 7, (cave 3 a 17.\xBA andar), Macau',
+      "phone": "+853 28886888",
+      "url": "http://www.crowneplaza.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/crowne-plaza-macau/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/ac9c077118bd19109276c25d1834f169888dce81.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "dormy-boutique-hostel",
+      "n": [
+        "DORMY BOUTIQUE HOTEL",
+        "\u591A\u7C73\u7CBE\u54C1\u9152\u5E97",
+        "HOTEL TOMAI BOUTIQUE",
+        "\u591A\u7C73\u7CBE\u54C1\u9152\u5E97"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.19582456318635,
+      "lng": 113.54166727286446,
+      "address": "Travessa do Tudum, n.\xBAs 2\u20136 e Cal\xE7ada da Rocha, n.\xBA 12, Macau",
+      "phone": "+853 28788662",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/dormy-boutique-hostel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/411def820b804af0a3eb3f03622901c93337de17.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "east-asia",
+      "n": [
+        "EAST ASIA",
+        "\u4E1C\u4E9A\u9152\u5E97",
+        "EAST ASIA",
+        "\u6771\u4E9E\u9152\u5E97"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.196543185681207,
+      "lng": 113.53735771241361,
+      "address": "Rua da Madeira, n.\xBA 1-A, Macau",
+      "phone": "+853 28775555",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/east-asia/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/e2b28f22ed81e9b3d27a40b40b186f011e61a510.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "emperor-hotel",
+      "n": [
+        "EMPEROR HOTEL",
+        "\u5E1D\u6FE0\u9152\u5E97",
+        "EMPEROR HOTEL",
+        "\u5E1D\u6FE0\u9152\u5E97"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "M",
+      "lat": 22.191086729830033,
+      "lng": 113.54800204236312,
+      "address": "Rua de Xangai, n.\xBA 51 e Rua de Pequim, n.\xBA 106-I, Macau",
+      "phone": "+853 28781888",
+      "url": "http://emperorhotel.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/emperor-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/890ea8a19cab08783f18fb9f72630c78d902646a.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "england-marina-club-hotel",
+      "n": [
+        "ENGLAND MARINA CLUB HOTEL",
+        "\u82F1\u4F26\u6E38\u8247\u4F1A\u9152\u5E97",
+        "HOTEL MARINA CLUBE DE INGLATERRA",
+        "\u82F1\u502B\u904A\u8247\u6703\u9152\u5E97"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "T",
+      "lat": 22.1489566095174,
+      "lng": 113.55030794257323,
+      "address": "Terreno junto \xE0 Avenida Marginal Flor de L\xF3tus e \xE0 Avenida dos Jogos da \xC1sia Oriental (a parte de amplia\xE7\xE3o), Taipa",
+      "phone": "+853 28828383",
+      "url": "http://www.englandmarinaclubhotel.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/england-marina-club-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/ee02a834af544a9044ccb4fc3ac31d19789ad04d.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "fong-loi",
+      "n": [
+        "FONG LOI",
+        "\u84EC\u83B1\u5BBE\u9986",
+        "FONG LOI",
+        "\u84EC\u840A\u8CD3\u9928"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.194629069324577,
+      "lng": 113.53643624226669,
+      "address": "Rua do Bocage, n.\xBA 28, G-3, 2.\xBA andar, Macau",
+      "phone": "+853 28574292",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/fong-loi/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/4454dd4668159c7b19661354778c52057f9ff8a0.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "forson-residential-pension",
+      "n": [
+        "FORSON RESIDENTIAL PENSION",
+        "\u5BCC\u57CE\u5BBE\u9986",
+        "PENS\xC3O RESIDENCIAL FORSON",
+        "\u5BCC\u57CE\u8CD3\u9928"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.196112433232813,
+      "lng": 113.53679299670455,
+      "address": "Avenida de Almeida Ribeiro, n.\xBAs 579, 583 e 587, Macau",
+      "phone": "+853 28933199",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/forson-residential-pension/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/1b7ad3911d70adf68632d3a21ef4e61b8bde949d.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "fortuna",
+      "n": [
+        "FORTUNA",
+        "\u8D22\u795E\u9152\u5E97",
+        "FORTUNA",
+        "\u8CA1\u795E\u9152\u5E97"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "M",
+      "lat": 22.1904654527425,
+      "lng": 113.546044125194,
+      "address": "Rua de Cant\xE3o, n.\xBAs 49, 57 e 63, Pra\xE7a de D. Afonso Henriques, n.\xBAs 76, 80, 90 e Rua de Foshan, n.\xBAs 48-A a 48-G, 56, 60, 62, 64 e 78, Macau",
+      "phone": "+853 28786333",
+      "url": "http://www.hotelfortuna.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/fortuna/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/4d076efcdf3dc97f2b6f20f49c70bc233ace4472.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "four-seasons-hotel-macao",
+      "n": [
+        "FOUR SEASONS HOTEL MACAO",
+        "\u6FB3\u95E8\u56DB\u5B63\u9152\u5E97",
+        "FOUR SEASONS HOTEL MACAO",
+        "\u6FB3\u9580\u56DB\u5B63\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Deluxe Hotel",
+        "\u4E94\u661F\u8C6A\u534E\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas de luxo",
+        "\u4E94\u661F\u8C6A\u83EF\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-deluxe-hotel",
+      "district": "T",
+      "lat": 22.14550191864805,
+      "lng": 113.56163722727831,
+      "address": "COTAI, a Poente do Istmo Taipa-Coloane e a Sul da Ba\xEDa da Nossa Senhora de Esperan\xE7a, sito na parcela 1, zona 6 e zona 7",
+      "phone": "+853 28818888",
+      "url": "http://www.fourseasons.com/macau",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/four-seasons-hotel-macao/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/ec342a12712993f62f9a8cb7f60d587cda5ec571.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "fu-hua-hotel",
+      "n": [
+        "FU HUA HOTEL",
+        "\u5BCC\u534E\u9152\u5E97",
+        "HOTEL FU HUA",
+        "\u5BCC\u83EF\u9152\u5E97"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "M",
+      "lat": 22.202422701086434,
+      "lng": 113.5469465927743,
+      "address": "Rua de Francisco Xavier Pereira, n.\xBAs 98 a 102, Macau",
+      "phone": "+853 28553838",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/fu-hua-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/ff427b4af9bf79f9794521f32c018126928806aa.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "g-harbour",
+      "n": [
+        "G HARBOUR",
+        "\u6E2F\u6E7E\u5927\u9152\u5E97",
+        "HOTEL PORTO GRANDE",
+        "\u6E2F\u7063\u5927\u9152\u5E97"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "M",
+      "lat": 22.202641,
+      "lng": 113.537606,
+      "address": "Travessa Lam Mau, n.\xBA 8, Macau",
+      "phone": "+853 28221381",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/g-harbour/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/4294a986d6400a7f8455596977603d3b0bf0e620.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "galaxy",
+      "n": [
+        "GALAXY",
+        "\u94F6\u6CB3",
+        "GAL\xC1XIA",
+        "\u9280\u6CB3"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "T",
+      "lat": 22.150252789617028,
+      "lng": 113.55346614079605,
+      "address": "COTAI, Nascente da Avenida Marginal Flor de L\xF3tus e a Sul da Estrada da Ba\xEDa de Nossa Senhora da Esperan\xE7a",
+      "phone": "+853 28880888",
+      "url": "http://www.galaxymacau.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/galaxy/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/a46a3d2f2d8ed838118fb6505bab43a48178edbd.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "golden-crown-china-hotel",
+      "n": [
+        "GOLDEN CROWN CHINA HOTEL",
+        "\u91D1\u7687\u51A0\u4E2D\u56FD\u5927\u9152\u5E97",
+        "HOTEL CHINA COROA D'OURO",
+        "\u91D1\u7687\u51A0\u4E2D\u570B\u5927\u9152\u5E97"
+      ],
+      "star": [
+        "4-star Hotel",
+        "\u56DB\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "4-star-hotel",
+      "district": "T",
+      "lat": 22.15849097855235,
+      "lng": 113.57404138886585,
+      "address": "Estrada da Ponta da Cabrita, n.\xBAs 1166B, 1166C e 1166D, Taipa",
+      "phone": "+853 28851166",
+      "url": "http://htlchina.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/golden-crown-china-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/100a84c76c603f9c4b41c946e18ba9aa4e9e2323.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "golden-dragon",
+      "n": [
+        "GOLDEN DRAGON",
+        "\u91D1\u9F99\u9152\u5E97",
+        "DRAG\xC3O DOURADO",
+        "\u91D1\u9F8D\u9152\u5E97"
+      ],
+      "star": [
+        "4-star Hotel",
+        "\u56DB\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "4-star-hotel",
+      "district": "M",
+      "lat": 22.195595140733417,
+      "lng": 113.55418048933689,
+      "address": "Rua de Malaca, n.\xBAs 17, 35, 43, 83, 89 e 103, Macau (Porta principal est\xE1 situada em Rua de Malaca, n.\xBAs 35 e 43)",
+      "phone": "+853 28361999",
+      "url": "http://www.goldendragon.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/golden-dragon/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/1a36ef5b06701a3af5737fae60a74d3902c36251.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "grand-coloane-resort",
+      "n": [
+        "GRAND COLOANE RESORT",
+        "\u9E6D\u73AF\u6D77\u5929\u5EA6\u5047\u9152\u5E97",
+        "RESORT GRANDE COLOANE",
+        "\u9DFA\u74B0\u6D77\u5929\u5EA6\u5047\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "C",
+      "lat": 22.12537,
+      "lng": 113.576734,
+      "address": "Estrada de H\xE1c-S\xE1, n.\xBA 1918, Coloane",
+      "phone": "+853 28871111",
+      "url": "http://grandcoloane.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/grand-coloane-resort/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/76ac336f0a6b9cc2ecc92a03563a5c3ed31f4026.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "grand-dragon-hotel",
+      "n": [
+        "GRAND DRAGON HOTEL",
+        "\u9A8F\u9F99\u9152\u5E97",
+        "HOTEL GRANDE DRAG\xC3O",
+        "\u99FF\u9F8D\u9152\u5E97"
+      ],
+      "star": [
+        "4-star Hotel",
+        "\u56DB\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "4-star-hotel",
+      "district": "T",
+      "lat": 22.15756927013797,
+      "lng": 113.5508821743806,
+      "address": "Rua de Chaves, n.\xBA 36, Taipa, em Macau",
+      "phone": "+853 28839933",
+      "url": "http://www.granddragon.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/grand-dragon-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/dde912364a16941378d760758b057f9d29850973.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "grand-emperor-hotel",
+      "n": [
+        "GRAND EMPEROR HOTEL",
+        "\u82F1\u7687\u5A31\u4E50\u9152\u5E97",
+        "HOTEL ANIMA\xC7\xC3O IMPERIAL",
+        "\u82F1\u7687\u5A1B\u6A02\u9152\u5E97"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "M",
+      "lat": 22.190559248257316,
+      "lng": 113.5408406450303,
+      "address": "Avenida Comercial de Macau, n.\xBAs 251-292D, Macau",
+      "phone": "+853 28889988",
+      "url": "http://www.grandemperor.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/grand-emperor-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/1a7ae971715685d9664fd1978dd456d75e684e39.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "grand-hyatt-macau",
+      "n": [
+        "GRAND HYATT MACAU",
+        "\u6FB3\u95E8\u541B\u60A6\u9152\u5E97",
+        "GRAND HYATT MACAU",
+        "\u6FB3\u9580\u541B\u6085\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "T",
+      "lat": 22.148683973804907,
+      "lng": 113.56763321010624,
+      "address": "Avenida da Nave Desportiva, n.\xBAs 1051 e 1121, COTAI",
+      "phone": "+853 88681234",
+      "url": "http://www.grandhyattmacau.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/grand-hyatt-macau/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/b94f955fa27bb6f9d8d9000e60e0b7d4bb97fe5b.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "grand-lisboa-hotel",
+      "n": [
+        "GRAND LISBOA HOTEL",
+        "\u65B0\u8461\u4EAC\u9152\u5E97",
+        "HOTEL GRANDE LISBOA",
+        "\u65B0\u8461\u4EAC\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Deluxe Hotel",
+        "\u4E94\u661F\u8C6A\u534E\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas de luxo",
+        "\u4E94\u661F\u8C6A\u83EF\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-deluxe-hotel",
+      "district": "M",
+      "lat": 22.190986,
+      "lng": 113.543261,
+      "address": "Avenida de Lisboa, Macau",
+      "phone": "+853 28283838",
+      "url": "http://grandlisboahotels.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/grand-lisboa-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/c2c2f2e9b2ebbc6dc037894090bbc756c1114176.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "grand-lisboa-palace",
+      "n": [
+        "GRAND LISBOA PALACE",
+        "\u4E0A\u8461\u4EAC",
+        "PAL\xC1CIO GRANDE LISBOA",
+        "\u4E0A\u8461\u4EAC"
+      ],
+      "star": [
+        "5-star Deluxe Hotel",
+        "\u4E94\u661F\u8C6A\u534E\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas de luxo",
+        "\u4E94\u661F\u8C6A\u83EF\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-deluxe-hotel",
+      "district": "T",
+      "lat": 22.144017696837963,
+      "lng": 113.57421610615745,
+      "address": "COTAI, Rua do Tiro, Rua da Patinagem, Rua de T\xE9nis e Avenida do Aeroporto",
+      "phone": "+853 88818888",
+      "url": "http://www.grandlisboapalace.com/tc",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/grand-lisboa-palace/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/e84f0fbc9cd8f6a66502851f0a8a0e73fdfdec61.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "grande-hotel-macau",
+      "n": [
+        "GRANDE HOTEL MACAU",
+        "\u56FD\u9645\u9152\u5E97",
+        "GRANDE HOTEL MACAU",
+        "\u570B\u969B\u9152\u5E97"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.19637281336618,
+      "lng": 113.53672804993272,
+      "address": "Avenida de Almeida Ribeiro, n.\xBA 612 e Rua Nova do Com\xE9rcio, n.\xBA 5, Macau",
+      "phone": "+853 28232888",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/grande-hotel-macau/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/3cb9dc129e089756048060ea9f0296f2ff1659fd.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "grandview-hotel",
+      "n": [
+        "GRANDVIEW HOTEL",
+        "\u541B\u6021\u9152\u5E97",
+        "GRANDVIEW HOTEL",
+        "\u541B\u6021\u9152\u5E97"
+      ],
+      "star": [
+        "4-star Hotel",
+        "\u56DB\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "4-star-hotel",
+      "district": "T",
+      "lat": 22.157209392037032,
+      "lng": 113.55194501316026,
+      "address": "Estrada Governador Albano de Oliveira, n.\xBA 142 e Rua de Fat San, n.\xBA 16, Taipa",
+      "phone": "+853 28837788",
+      "url": "http://www.grandview-hotel.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/grandview-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/b5ebb26984a411600c9d95587c06c84941eb7b26.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "greenery-inn",
+      "n": [
+        "GREENERY INN",
+        "\u7EFF\u60A0\u65C5\u820D",
+        "POUSADA VERDE",
+        "\u7DA0\u60A0\u65C5\u820D"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.21033718662295,
+      "lng": 113.54793242028518,
+      "address": "Junto \xE0 Estrada do Arco, n.\xBA 21, A R/C, Macau",
+      "phone": "+853 28339993",
+      "url": "http://greeneryinn.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/greenery-inn/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/ce40fe2120ed1f4c60be1d3e01e860a03ba9176e.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "guia",
+      "n": [
+        "GUIA",
+        "\u4E1C\u671B\u6D0B\u9152\u5E97",
+        "GUIA",
+        "\u6771\u671B\u6D0B\u9152\u5E97"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "M",
+      "lat": 22.195913382203855,
+      "lng": 113.54854793501141,
+      "address": "Estrada do Engenheiro Trigo n\xBAs 1-5, com porta lateral na Cal\xE7ada do Paiol n\xBA 25, Macau",
+      "phone": "+853 28513888",
+      "url": "http://www.hotelguiamacau.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/guia/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/abbe8fd119dd715696b7cada019c03181ece1f8d.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "happy-family-hotel",
+      "n": [
+        "HAPPY FAMILY HOTEL",
+        "\u5BB6\u9038\u9152\u5E97",
+        "HOTEL FAM\xCDLIA FELIZ",
+        "\u5BB6\u9038\u9152\u5E97"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.192220292683274,
+      "lng": 113.54267497964645,
+      "address": "Travessa da Praia Grande, n.\xBA 4, Macau",
+      "phone": "+853 28711212",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/happy-family-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/39c0bdedcdf3ccbae14b93c966f59f95ae983bbb.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "harbourview-hotel",
+      "n": [
+        "HARBOURVIEW HOTEL",
+        "\u52B1\u5EAD\u6D77\u666F\u9152\u5E97",
+        "HOTEL HARBOURVIEW",
+        "\u52F5\u5EAD\u6D77\u666F\u9152\u5E97"
+      ],
+      "star": [
+        "4-star Hotel",
+        "\u56DB\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "4-star-hotel",
+      "district": "M",
+      "lat": 22.190596,
+      "lng": 113.556158,
+      "address": `Avenida Amizade, s/n no interior do Conjunto Tur\xEDstico "Macau Fisherman's Wharf", Macau`,
+      "phone": "+853 87996688",
+      "url": "http://www.fishermanswharf.com.mo/harbourview/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/harbourview-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/e877fe2d05661a66cb5b5399c3b8254ed3b03da4.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "hoi-van",
+      "n": [
+        "HOI VAN",
+        "\u6D77\u8FD0",
+        "HOI VAN",
+        "\u6D77\u904B"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.193478668045785,
+      "lng": 113.53533373692864,
+      "address": "Rua de Francisco Ant\xF3nio, n.\xBA 9, 1.\xBA-J, Macau",
+      "phone": "+853 28514992",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/hoi-van/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/18a0c1a7a084032c78732422cb7413ee559d999e.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "holiday",
+      "n": [
+        "HOLIDAY",
+        "\u5047\u671F\u9152\u5E97",
+        "HOLIDAY",
+        "\u5047\u671F\u9152\u5E97"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.19762951068516,
+      "lng": 113.54366780434628,
+      "address": "Estrada do Repouso n.\xBAs 36 e 38, 1.\xBA a 5.\xBA andares, Macau",
+      "phone": "+853 28350161",
+      "url": "http://www.holiday36.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/holiday/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/289fdeb29aaa4bf2a98d1f5e29960eb669b33814.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "holiday-inn-express-macao-city-centre",
+      "n": [
+        "HOLIDAY INN EXPRESS MACAO CITY CENTRE",
+        "\u6FB3\u95E8\u65B0\u53E3\u5CB8\u667A\u9009\u5047\u65E5\u9152\u5E97",
+        "HOLIDAY INN EXPRESS MACAU CENTRO DE CIDADE",
+        "\u6FB3\u9580\u65B0\u53E3\u5CB8\u667A\u9078\u5047\u65E5\u9152\u5E97"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.192417336052046,
+      "lng": 113.5476872916151,
+      "address": "Avenida do Dr. Rodrigo Rodrigues, n.\xBAs 338 \u2013 362B, Rua de Xangai, 196A \u2013 200, Macau",
+      "phone": "+853 85908888",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/holiday-inn-express-macao-city-centre/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/b54c109250787bb3c4c2793d3c00d987627b0b4f.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "holiday-inn-macau",
+      "n": [
+        "HOLIDAY INN MACAU",
+        "\u6FB3\u95E8\u5047\u65E5\u9152\u5E97",
+        "HOTEL HOLIDAY INN",
+        "\u6FB3\u9580\u5047\u65E5\u9152\u5E97"
+      ],
+      "star": [
+        "4-star Hotel",
+        "\u56DB\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "4-star-hotel",
+      "district": "M",
+      "lat": 22.191397426492017,
+      "lng": 113.54738899221996,
+      "address": "Rua de Pequim, n.\xBAs 68, 82, 86, 102-A, 102-B, 102-C e 102-D, com acesso pelas portas n.\xBAs 93-F e 93-G da Rua de Xangai, Macau",
+      "phone": "+853 28783333",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/holiday-inn-macau/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/ef66a578a5e8005024c142ad7b1d047b6cd36c13.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "hong-thai-hotel",
+      "n": [
+        "HONG THAI HOTEL",
+        "\u5EB7\u6CF0\u9152\u5E97",
+        "HOTEL HONG THAI",
+        "\u5EB7\u6CF0\u9152\u5E97"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.195609068690388,
+      "lng": 113.53687491374978,
+      "address": "Rua de Cinco de Outubro, n.\xBAs 177, 177-A, 179 e 179-A e Rua da Caldeira, n.\xBAs 18, 18-A, 18-B, 18-C e 18-D, r/c, 1.\xBA a 4.\xBA andares, Macau",
+      "phone": "+853 28923923",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/hong-thai-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/dd1b755124e8efe3d56a8ec186d3d785b5525037.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "hostel-jin-wan",
+      "n": [
+        "HOSTEL JIN WAN",
+        "\u91D1\u6E7E\u5BBE\u9986",
+        "PRAIA DOURADA",
+        "\u91D1\u7063\u8CD3\u9928"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.190760110561953,
+      "lng": 113.54509864086663,
+      "address": "Pra\xE7a de D. Afonso Henriques, n.\xBAs 57, 61 e 65, Avenida Dr. Rodrigo Rodrigues, n.\xBAs 10, 12 e 16 e Avenida Lopo Sarmento de Carvalho, n.\xBAs 126, 128 e 132, Macau",
+      "phone": "+853 28780537",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/hostel-jin-wan/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/07601011c6c7f70943c451d77c7f8d6c39debb07.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "hotel-beverly-plaza",
+      "n": [
+        "HOTEL BEVERLY PLAZA",
+        "\u6FB3\u95E8\u5BCC\u8C6A\u9152\u5E97",
+        "BEVERLY PLAZA",
+        "\u6FB3\u9580\u5BCC\u8C6A\u9152\u5E97"
+      ],
+      "star": [
+        "4-star Hotel",
+        "\u56DB\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "4-star-hotel",
+      "district": "M",
+      "lat": 22.191056906553314,
+      "lng": 113.54574767633903,
+      "address": "Avenida do Dr. Rodrigo Rodrigues, n.\xBAs 70, 86, 94, 98 e 106, r/c, s/l e andares superiores, Macau",
+      "phone": "+853 28782288",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/hotel-beverly-plaza/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/db0a09e84105a4c4488fc47cfaaa63e7ed5265d8.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "hotel-casa-real",
+      "n": [
+        "HOTEL CASA REAL",
+        "\u7687\u5BB6\u91D1\u5821\u9152\u5E97",
+        "HOTEL CASA REAL",
+        "\u7687\u5BB6\u91D1\u5821\u9152\u5E97"
+      ],
+      "star": [
+        "4-star Hotel",
+        "\u56DB\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "4-star-hotel",
+      "district": "M",
+      "lat": 22.196683,
+      "lng": 113.553624,
+      "address": "Rua da Malaca, n.\xBA 206 e Avenida do Dr. Rodrigo Rodrigues, n.\xBA 1118, Macau",
+      "phone": "+853 28726288",
+      "url": "http://www.casarealhotel.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/hotel-casa-real/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/0e7bfc70d49abb5a8677d3b0c514f967d070d2e5.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "hotel-central",
+      "n": [
+        "HOTEL CENTRAL",
+        "\u65B0\u4E2D\u592E",
+        "HOTEL CENTRAL",
+        "\u65B0\u4E2D\u592E"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.194303,
+      "lng": 113.539136,
+      "address": "Avenida de Almeida Ribeiro, n.\xBAs 264 e 270, Macau",
+      "phone": "+853 28286668",
+      "url": "http://www.hotelcentral.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/hotel-central/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/7cbf9e78e189508fa15ac1fc29d8f421e8aed70c.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "hotel-cinco-oceanos",
+      "n": [
+        "HOTEL CINCO OCEANOS",
+        "\u4E94\u6D0B\u9152\u5E97",
+        "HOTEL CINCO OCEANOS",
+        "\u4E94\u6D0B\u9152\u5E97"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.194560966432178,
+      "lng": 113.53614075348116,
+      "address": "Rua do Bocage, n.\xBAs 21-35 e Rua das Lorchas, n.\xBA 179, Macau",
+      "phone": "+853 28882736",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/hotel-cinco-oceanos/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/60b695c72c06bdd1980072163dd0d21b8e9d5523.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "hotel-okura-macau",
+      "n": [
+        "HOTEL OKURA MACAU",
+        "\u6FB3\u95E8\u5927\u4ED3\u9152\u5E97",
+        "HOTEL OKURA MACAU",
+        "\u6FB3\u9580\u5927\u5009\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "T",
+      "lat": 22.14922266402239,
+      "lng": 113.55241322914583,
+      "address": "COTAI, Nascente da Avenida Marginal Flor de L\xF3tus e a Sul da Estrada da Ba\xEDa de Nossa Senhora de Esperan\xE7a",
+      "phone": "+853 88835060",
+      "url": "http://www.hotelokuramacau.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/hotel-okura-macau/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/06c7b8f8eeeb1beeb7b9387cdbe3992b48374b25.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "hotel-rocks",
+      "n": [
+        "HOTEL ROCKS",
+        "\u83B1\u65AF\u9152\u5E97",
+        "ROCKS",
+        "\u840A\u65AF\u9152\u5E97"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "M",
+      "lat": 22.189884719888752,
+      "lng": 113.55799605677993,
+      "address": "Macau Fisherman's Wharf, junto \xE0 Avenida da Amizade, Macau",
+      "phone": "+853 28782782",
+      "url": "http://www.fishermanswharf.com.mo/rocks-hotel/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/hotel-rocks/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/d63d5db50e2e2be98a6bf0fb2b2f96cc057e64fc.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "hou-kong",
+      "n": [
+        "HOU KONG",
+        "\u6FE0\u6C5F",
+        "HOU KONG",
+        "\u6FE0\u6C5F"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.195010859529887,
+      "lng": 113.53632615486771,
+      "address": "Travessa das Virtudes, n\xBA 1, Macau",
+      "phone": "+853 28937555 /+853  28950289",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/hou-kong/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/40fe83768d4941b52ec5f65f373d4eec2eab318f.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "hou-kong-boutique-hostel",
+      "n": [
+        "HOU KONG BOUTIQUE HOSTEL",
+        "\u6FE0\u6C5F\u7CBE\u54C1\u5BBE\u9986",
+        "PENS\xC3O BOUTIQUE HOU KONG",
+        "\u6FE0\u6C5F\u7CBE\u54C1\u8CD3\u9928"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.19511058982627,
+      "lng": 113.54450492621146,
+      "address": "Terreno junto \xE0 Rua de Tom\xE1s da Rosa e Rua do Campo, em Macau",
+      "phone": "+853 28555999",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/hou-kong-boutique-hostel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/8f6c16166bb9cd68df4de304d89e63369cc54c33.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "hou-va",
+      "n": [
+        "HOU VA",
+        "\u8C6A\u534E",
+        "HOU VA",
+        "\u8C6A\u83EF"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.202815,
+      "lng": 113.539713,
+      "address": "Rua da Ribeira do Patane, n.\xBA 86, D, 1\xBA andar, Macau",
+      "phone": "+853 28256577",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/hou-va/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/484bb2da9bd9bab286deaeed784838ab0dab4167.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "house-of-art",
+      "n": [
+        "HOUSE OF ART",
+        "\u827A\u5C45",
+        "CASA DO MUSEU",
+        "\u85DD\u5C45"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "T",
+      "lat": 22.16133219392796,
+      "lng": 113.55639496911112,
+      "address": "Avenida Dr. Sun Yat Sen, n\xBA.s 586 - 598, (Lote TN5c), Taipa",
+      "phone": "+853 28822820",
+      "url": "http://houseofartmacau.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/house-of-art/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/dd67e83e3b939e1570f6fc295e9a545b77f77477.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "i-fu-hotel",
+      "n": [
+        "I FU HOTEL",
+        "\u6021\u5BCC\u9152\u5E97",
+        "HOTEL I FU",
+        "\u6021\u5BCC\u9152\u5E97"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.197425589405995,
+      "lng": 113.53717948870559,
+      "address": "Rua Nova do Com\xE9rcio, n.\xBAs 32-34 e Rua do Bispo Enes, n.\xBAs 8-14, Macau",
+      "phone": "+853 28920332",
+      "url": "http://www.ifuhotel.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/i-fu-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/414762b5bdff934a2b6d0a12c9ac063c1301d95b.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "inn-hotel",
+      "n": [
+        "INN HOTEL",
+        "\u76DB\u4E16\u9152\u5E97",
+        "HOTEL INN",
+        "\u76DB\u4E16\u9152\u5E97"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "T",
+      "lat": 22.15655364427046,
+      "lng": 113.56036873792647,
+      "address": "Estrada Governador Nobre de Carvalho, n.\xBAs 812 e 848, Taipa",
+      "phone": "+853 28821666",
+      "url": "http://www.innhotel.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/inn-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/fe3b9cde85a7725d2a3b4d1b33c3e43484d6c308.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "iok-chu",
+      "n": [
+        "IOK CHU",
+        "\u7389\u73E0",
+        "IOK CHU",
+        "\u7389\u73E0"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.202706112189915,
+      "lng": 113.55139056449389,
+      "address": "Rua de Silva Mendes, n.\xBA 45, r/c, Macau",
+      "phone": "+853 28525006",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/iok-chu/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/e614b24792129ba42920b5c4fb6afe618559f603.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "jai-alai",
+      "n": [
+        "JAI ALAI",
+        "\u56DE\u529B\u9152\u5E97",
+        "JAI ALAI",
+        "\u56DE\u529B\u9152\u5E97"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.197569599243224,
+      "lng": 113.55475169004114,
+      "address": 'Avenida do Dr. Rodrigo Rodrigues, Hotel "JAI ALAI", Macau',
+      "phone": "+853 88012788",
+      "url": "http://www.oceanus-macau.com/#!zh-hant/hotel",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/jai-alai/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/903251afc267a1f1b7044141cfc697bd37a073cf.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "jin-jiang-inn",
+      "n": [
+        "JIN JIANG INN",
+        "\u9526\u6C5F\u4E4B\u661F",
+        "PENS\xC3O JIN JIANG",
+        "\u9326\u6C5F\u4E4B\u661F"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.213997576285493,
+      "lng": 113.54523933383058,
+      "address": "Rua Norte do Canal das Hortas n.\xBAs 128 e 136, Macau",
+      "phone": "+853 28261740",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/jin-jiang-inn/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/1a1e75189d94e4b384f7b8a2c3180d69bd534865.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "jw-marriott-hotel-macau",
+      "n": [
+        "JW MARRIOTT HOTEL MACAU",
+        "\u6FB3\u95E8JW\u4E07\u8C6A\u9152\u5E97",
+        "HOTEL JW MARRIOTT MACAU",
+        "\u6FB3\u9580JW\u842C\u8C6A\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "T",
+      "lat": 22.146753706356293,
+      "lng": 113.55558877135888,
+      "address": "COTAI, Nascente da Avenida Marginal Flor de L\xF3tus e a Sul da Estrada da Ba\xEDa de Nossa Senhora da Esperan\xE7a",
+      "phone": "+853 88866003",
+      "url": "http://www.galaxymacau.com/en/jw-marriott-macau",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/jw-marriott-hotel-macau/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/9eed25d880feb5bf4365fd88d173ccce479246a3.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "ka-va",
+      "n": [
+        "KA VA",
+        "\u5609\u534E",
+        "KA VA",
+        "\u5609\u83EF"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.193174051171084,
+      "lng": 113.54142713738781,
+      "address": "Cal\xE7ada de S. Jo\xE3o, n\xBA 5, Macau",
+      "phone": "+853 28323063",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/ka-va/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/e84a5c87da5f206de3d8647c1e276b715a2af337.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "kou-va",
+      "n": [
+        "KOU VA",
+        "\u9AD8\u534E",
+        "KOU VA",
+        "\u9AD8\u83EF"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.194836741137365,
+      "lng": 113.53738323011021,
+      "address": "Rua da Felicidade, n.\xBA 71, r/c, 3.\xBA e 4.\xBA andares, Macau",
+      "phone": "+853 28930755",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/kou-va/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/10836013971637f5f6d50ef462143aac8b96be9a.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "l-arc-hotel-macau",
+      "n": [
+        "L'ARC HOTEL MACAU",
+        "\u6FB3\u95E8\u51EF\u65CB\u95E8\u9152\u5E97",
+        "HOTEL L'ARC MACAU",
+        "\u6FB3\u9580\u51F1\u65CB\u9580\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "M",
+      "lat": 22.188584884362555,
+      "lng": 113.54866868739646,
+      "address": "Avenida 24 de Junho, n.\xBA 278, Cave 2 a 22.\xBA andar, Macau (\xC0rea do Hotel)",
+      "phone": "+853 28223388",
+      "url": "http://www.larcmacau.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/l-arc-hotel-macau/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/4dbed6ab1e99c875534a49ae7b65b09fe82b74a9.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "legend-palace-hotel",
+      "n": [
+        "LEGEND PALACE HOTEL",
+        "\u52B1\u5BAB\u9152\u5E97",
+        "HOTEL PAL\xC1CIO LEGEND\xC1RIO",
+        "\u52F5\u5BAE\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Deluxe Hotel",
+        "\u4E94\u661F\u8C6A\u534E\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas de luxo",
+        "\u4E94\u661F\u8C6A\u83EF\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-deluxe-hotel",
+      "district": "M",
+      "lat": 22.19536945301708,
+      "lng": 113.55629410951724,
+      "address": "Avenida da Amizade e Avenida Dr. Sun Yat-Sen, Macau Fisherman's Wharf, Macau",
+      "phone": "+853 88018801",
+      "url": "http://www.fishermanswharf.com.mo/legend-palace/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/legend-palace-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/20b8458d504775d5bcade0049675581914a7e09c.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "lisboa",
+      "n": [
+        "LISBOA",
+        "\u8461\u4EAC\u9152\u5E97",
+        "LISBOA",
+        "\u8461\u4EAC\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "M",
+      "lat": 22.18991225188404,
+      "lng": 113.54436395138777,
+      "address": "N.\xBAs 1, 3 e 5 da Pra\xE7a de Ferreira do Amaral, n.\xBAs 2 e 4 da Avenida de Lisboa e n.\xBAs 1 e 3 da Avenida de Lopo Sarmento de Carvalho, Macau",
+      "phone": "+853 28883888",
+      "url": "http://hotelisboa.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/lisboa/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/f8b8383e68f02aa4c8f03f3328c7578533f1b611.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "lisboa-citizen",
+      "n": [
+        "LISBOA CITIZEN",
+        "\u8461\u4EAC\u4EBA",
+        "LISBOETA",
+        "\u8461\u4EAC\u4EBA"
+      ],
+      "star": [
+        "4-star Hotel",
+        "\u56DB\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "4-star-hotel",
+      "district": "T",
+      "lat": 22.142602196809477,
+      "lng": 113.57581969505327,
+      "address": "Rotunda da Central T\xE9rmica de Coloane, COTAI",
+      "phone": "+853 88826888",
+      "url": "http://www.lisboetamacau.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/lisboa-citizen/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/af25104eb92f5fc61c2a5fa5c457a8faa60a0b89.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "london",
+      "n": [
+        "LONDON",
+        "\u82F1\u4EAC\u9152\u5E97",
+        "LONDON",
+        "\u82F1\u4EAC\u9152\u5E97"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.193724487242733,
+      "lng": 113.53630215999743,
+      "address": "Pra\xE7a de Ponte e Horta n.\xBA 4-6, Macau",
+      "phone": "+853 28937761",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/london/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/562c4e60c3263b150e9b449b839c3b085cb98454.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "londoner-court",
+      "n": [
+        "LONDONER COURT",
+        "\u4F26\u6566\u4EBA\u5FA1\u56ED",
+        "SOLAR DE LONDRES",
+        "\u502B\u6566\u4EBA\u5FA1\u5712"
+      ],
+      "star": [
+        "4-star Apartment Hotel",
+        "\u56DB\u661F\u7EA7\u516C\u5BD3\u5F0F\u9152\u5E97",
+        "Hot\xE9is-apartamentos de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u516C\u5BD3\u5F0F\u9152\u5E97"
+      ],
+      "classId": "4-star-apartment-hotel",
+      "district": "T",
+      "lat": 22.146346911998307,
+      "lng": 113.5653641334178,
+      "address": "COTAI, a Poente do Istmo Taipa-Coloane, parcelas 5 e 6",
+      "phone": "+853 28886388",
+      "url": "http://www.londonermacao.com/hotels/londoner-court.html",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/londoner-court/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/ec6928d3ec9b36dd0b1ae852096d81438b483243.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "londoner-grand",
+      "n": [
+        "LONDONER GRAND",
+        "\u4F26\u6566\u4EBA\u540D\u6C47",
+        "GRANDE LONDRINO",
+        "\u502B\u6566\u4EBA\u540D\u532F"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "T",
+      "lat": 22.144179873238883,
+      "lng": 113.56558954878255,
+      "address": "COTAI, a Poente do Istmo Taipa-Coloane, parcelas 5 e 6",
+      "phone": "+853 28802000",
+      "url": "http://www.londonermacao.com/hotels/londoner-grand.html",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/londoner-grand/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/effa0b860b35b618cc94fbe51049d4ae45c77a80.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "love-lane-seven-inn",
+      "n": [
+        "LOVE LANE SEVEN INN",
+        "\u604B\u7231\u4E03\u53F7\u65C5\u9986",
+        "PENS\xC3O PAIX\xC3O SETE",
+        "\u6200\u611B\u4E03\u865F\u65C5\u9928"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.197215741766186,
+      "lng": 113.540420957668,
+      "address": "Travessa da Paix\xE3o, n.\xBA 7, Macau",
+      "phone": "+853 28366490",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/love-lane-seven-inn/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/d36fd3ceb1fcb849a4b66c5065fd959c2fe1290b.jpg",
+      "closed": true,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "macau-masters-hotel",
+      "n": [
+        "MACAU MASTERS HOTEL",
+        "\u4E07\u4E8B\u53D1\u9152\u5E97",
+        "MACAU MASTERS HOTEL",
+        "\u842C\u4E8B\u767C\u9152\u5E97"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.19490551150561,
+      "lng": 113.53570839907343,
+      "address": "Rua das Lorchas, n.\xBAs 162 e 178, 1.\xBA, 5.\xBA e 6.\xBA andar",
+      "phone": "+853 28937572",
+      "url": "http://www.mastershotel-macau.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/macau-masters-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/1c8d6fc651560a8ea2ced21f5d2d99325381953d.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "man-va",
+      "n": [
+        "MAN VA",
+        "\u6587\u534E",
+        "MAN VA",
+        "\u6587\u83EF"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.19521541394056,
+      "lng": 113.53710185468918,
+      "address": "Rua da Caldeira, n.\xBAs 30, 32 e 34, Macau",
+      "phone": "+853 28388655",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/man-va/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/3e0f6834a4309b7a5a3c7df63af40924850ee7be.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "man-kok",
+      "n": [
+        "MAN-KOK",
+        "\u66FC\u8C37",
+        "MAN-KOK",
+        "\u66FC\u8C37"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.194369053578782,
+      "lng": 113.53575237552485,
+      "address": "Rua das Lorchas, n.\xBAs 231 a 237, 2\xBA andar, Macau",
+      "phone": "+853 28937889",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/man-kok/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/b574ad75803642388a1ceac2e22dd3684c05d488.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "mandarin-oriental-macau",
+      "n": [
+        "MANDARIN ORIENTAL MACAU",
+        "\u6FB3\u95E8\u6587\u534E\u4E1C\u65B9\u9152\u5E97",
+        "MANDARIN ORIENTAL MACAU",
+        "\u6FB3\u9580\u6587\u83EF\u6771\u65B9\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "M",
+      "lat": 22.184254053114614,
+      "lng": 113.54699245728108,
+      "address": "Avenida Dr. Sun Yat-Sen, n.\xBA 945, Macau",
+      "phone": "+853 88058888",
+      "url": "http://www.mandarinoriental.com/en/macau",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/mandarin-oriental-macau/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/5c66cce551567f71ceaf791ca49d1b4ba676e4ca.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "marina-phantom-apartment-hotel",
+      "n": [
+        "MARINA PHANTOM APARTMENT HOTEL",
+        "\u541B\u4E50\u7687\u5E9C\u516C\u5BD3\u5F0F\u9152\u5E97",
+        "HOTEL-APARTAMENTO MARINA FANTASMA",
+        "\u541B\u6A02\u7687\u5E9C\u516C\u5BD3\u5F0F\u9152\u5E97"
+      ],
+      "star": [
+        "3-star Apartment Hotel",
+        "\u4E09\u661F\u7EA7\u516C\u5BD3\u5F0F\u9152\u5E97",
+        "Hot\xE9is-apartamentos de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u516C\u5BD3\u5F0F\u9152\u5E97"
+      ],
+      "classId": "3-star-apartment-hotel",
+      "district": "T",
+      "lat": 22.14901124456294,
+      "lng": 113.5508388342754,
+      "address": "Terreno junto \xE0 Avenida Marginal Flor de L\xF3tus e \xE0 Avenida dos Jogos da \xC1sia Oriental (a parte de amplia\xE7\xE3o), Taipa",
+      "phone": "+853 28226222",
+      "url": "http://www.marinaphantomhotel.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/marina-phantom-apartment-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/314cf5dd5f55a48a2ec0c94770d42145f890a8ed.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "meng-meng",
+      "n": [
+        "MENG MENG",
+        "\u660E\u660E",
+        "MENG MENG",
+        "\u660E\u660E"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.19211914086503,
+      "lng": 113.54170300232124,
+      "address": 'Rua do Dr. Pedro Jos\xE9 Lobo, n.\xBA 24, 2.\xBA andar, bloco "I", Macau',
+      "phone": "+853 66394177",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/meng-meng/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/138c951700bec44e27b84b56b7a4ce5ee4a8640c.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "metropark-hotel",
+      "n": [
+        "METROPARK HOTEL",
+        "\u7EF4\u666F\u9152\u5E97",
+        "METROPARK",
+        "\u7DAD\u666F\u9152\u5E97"
+      ],
+      "star": [
+        "4-star Hotel",
+        "\u56DB\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "4-star-hotel",
+      "district": "M",
+      "lat": 22.192247942513617,
+      "lng": 113.5482851902288,
+      "address": "Rua de Pequim, n.\xBA 199, Macau",
+      "phone": "+853 28781233",
+      "url": "http://www.ctgh.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/metropark-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/570d58fe0761a75d25171cb1788a8621ad85cec9.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "metropole",
+      "n": [
+        "METR\xD3POLE",
+        "\u4EAC\u90FD\u9152\u5E97",
+        "METR\xD3POLE",
+        "\u4EAC\u90FD\u9152\u5E97"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "M",
+      "lat": 22.19221822536464,
+      "lng": 113.54028395729608,
+      "address": "Avenida da Praia Grande, n.\xBAs 493 e 501, Macau",
+      "phone": "+853 28388166",
+      "url": "http://www.macauctshotel.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/metropole/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/d9f37be352d593b9704a3518fd7df1bdb91e700e.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "mgm-cotai",
+      "n": [
+        "MGM COTAI",
+        "\u7F8E\u72EE\u7F8E\u9AD8\u6885",
+        "MGM COTAI",
+        "\u7F8E\u7345\u7F8E\u9AD8\u6885"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "T",
+      "lat": 22.145070853025928,
+      "lng": 113.56829690245513,
+      "address": "COTAI, junto \xE0 Avenida da Nave Desportiva",
+      "phone": "+853 88068888",
+      "url": "http://www.mgm.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/mgm-cotai/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/c03a9831051a712fb84c81cdbca726db4a26aaa7.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "mgm-macau",
+      "n": [
+        "MGM MACAU",
+        "\u6FB3\u95E8\u7F8E\u9AD8\u6885",
+        "MGM MACAU",
+        "\u6FB3\u9580\u7F8E\u9AD8\u6885"
+      ],
+      "star": [
+        "5-star Deluxe Hotel",
+        "\u4E94\u661F\u8C6A\u534E\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas de luxo",
+        "\u4E94\u661F\u8C6A\u83EF\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-deluxe-hotel",
+      "district": "M",
+      "lat": 22.18597317465273,
+      "lng": 113.54811709965043,
+      "address": "Avenida Dr. Sun Yat-Sen, n.\xBA 1101, Macau",
+      "phone": "+853 88028888",
+      "url": "http://www.mgm.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/mgm-macau/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/2c76f604ab6598afd429ce29b1af9d8ed76017d3.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "morpheus",
+      "n": [
+        "MORPHEUS",
+        "\u6469\u73C0\u65AF",
+        "MORFEU",
+        "\u6469\u73C0\u65AF"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "T",
+      "lat": 22.149834425114804,
+      "lng": 113.56658813440322,
+      "address": "Avenida Doutor Henry Fok, n.\xBAs 48, 112, 172, 182, 238, 266, 296, 322, 362 e 472, COTAI",
+      "phone": "+853 88688888",
+      "url": "http://www.cityofdreamsmacau.com/en",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/morpheus/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/cfbc3d41c3818e778744ec8c47d092e255b60711.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "nam-long",
+      "n": [
+        "NAM LONG",
+        "\u5357\u9F99",
+        "NAM LONG",
+        "\u5357\u9F8D"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.192284300891643,
+      "lng": 113.54187300292455,
+      "address": "Rua do Dr. Pedro Jos\xE9 Lobo n.\xBA 30, Kam Loi I 1\xBA e 2\xBA andares C, Macau",
+      "phone": "+853 28712573",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/nam-long/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/3b7d133eb8c9331b50408675de9a1e3fd6b0ada4.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "new-golden-gate",
+      "n": [
+        "NEW GOLDEN GATE",
+        "\u65B0\u91D1\u95E8",
+        "NEW GOLDEN GATE",
+        "\u65B0\u91D1\u9580"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.20478536411808,
+      "lng": 113.54698016005295,
+      "address": 'Avenida do Ouvidor Arriaga, n.\xBA 76, 1\xBA andar "C1", 2\xBA andar "E2" e "F2", Edif\xEDcio "Kam Mun", Macau',
+      "phone": "+853 28550430",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/new-golden-gate/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/5ea1d431af1fb736505527e9280d1ce9e5ffd26d.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "new-orient-landmark-hotel",
+      "n": [
+        "NEW ORIENT LANDMARK HOTEL",
+        "\u65B0\u4E1C\u65B9\u7F6E\u5730\u9152\u5E97",
+        "HOTEL NOVO ORIENTAL LANDMARK",
+        "\u65B0\u6771\u65B9\u7F6E\u5730\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Deluxe Hotel",
+        "\u4E94\u661F\u8C6A\u534E\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas de luxo",
+        "\u4E94\u661F\u8C6A\u83EF\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-deluxe-hotel",
+      "district": "M",
+      "lat": 22.191243339721296,
+      "lng": 113.54875332974643,
+      "address": "Avenida da Amizade, n.\xBA 555, Edif\xEDcio Macau Landmark, Macau",
+      "phone": "+853 83998888",
+      "url": "http://www.neworientlandmark.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/new-orient-landmark-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/4389fca0d92353cf7997cb8498d37c28e08de311.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "nuwa",
+      "n": [
+        "N\xDCWA",
+        "\u9890\u5C45",
+        "N\xDCWA",
+        "\u9824\u5C45"
+      ],
+      "star": [
+        "5-star Deluxe Hotel",
+        "\u4E94\u661F\u8C6A\u534E\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas de luxo",
+        "\u4E94\u661F\u8C6A\u83EF\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-deluxe-hotel",
+      "district": "T",
+      "lat": 22.149821939528366,
+      "lng": 113.5653102388294,
+      "address": "Avenida Doutor Henry Fok, n.\xBAs 48, 112, 172, 182, 238, 266, 296, 322, 362 e 472, COTAI",
+      "phone": "+853 88686868",
+      "url": "http://www.cityofdreamsmacau.com/sc/hotels/nuwa",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/nuwa/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/0f393aae734f27e69b5a9d6b653baf6dc9022934.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "ole-tai-sam-un-hotel",
+      "n": [
+        "OLE TAI SAM UN HOTEL",
+        "\u6FB3\u83B1\u5927\u4E09\u5143\u9152\u5E97",
+        "OLE AUSPICIOSO",
+        "\u6FB3\u840A\u5927\u4E09\u5143\u9152\u5E97"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.1951669213517,
+      "lng": 113.53746510713398,
+      "address": "Rua da Caldeira, n.\xBAs 43-45, Macau",
+      "phone": "+853 28938818",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/ole-tai-sam-un-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/192b90697eaa0da1bcf96946d5bab84dc6bb872f.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "paiza-lofts",
+      "n": [
+        "PAIZA LOFTS",
+        "\u5FA1\u533E\u5CF0",
+        "EST\xDADIOS PAIZA",
+        "\u5FA1\u533E\u5CF0"
+      ],
+      "star": [
+        "3-star Apartment Hotel",
+        "\u4E09\u661F\u7EA7\u516C\u5BD3\u5F0F\u9152\u5E97",
+        "Hot\xE9is-apartamentos de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u516C\u5BD3\u5F0F\u9152\u5E97"
+      ],
+      "classId": "3-star-apartment-hotel",
+      "district": "T",
+      "lat": 22.1430217929843,
+      "lng": 113.5604258229522,
+      "address": "COTAI, Estrada do Istmo, Lote 3 da Parcela 1",
+      "phone": "+853 28828833",
+      "url": "http://www.parisianmacao.com/paiza-lofts.html",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/paiza-lofts/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/07421beb77a63b5e06f241d8c6bffe142afdaedc.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-coloane-no-1",
+      "n": [
+        'PENS\xC3O "COLOANE N.\xBA 1"',
+        "\u8DEF\u73AF\u58F9\u53F7\u516C\u5BD3",
+        'PENS\xC3O "COLOANE N.\xBA 1"',
+        "\u8DEF\u74B0\u58F9\u865F\u516C\u5BD3"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "C",
+      "lat": 22.116354484438403,
+      "lng": 113.55121994433478,
+      "address": "Rua do Caetano, n.\xBAs 45-47, Coloane",
+      "phone": "+853 28473971",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-coloane-no-1/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/1f8170a27d49643b6bc4c9ef428f1732c724b03a.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-elegante-rua-da-madeira",
+      "n": [
+        "PENS\xC3O CARMEN",
+        "\u5609\u660E",
+        "PENS\xC3O CARMEN",
+        "\u5609\u660E"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.196179336336584,
+      "lng": 113.53774322718266,
+      "address": "Moradias A1, B1 do 1.\xBA andar e A2, B2 do 2.\xBA andar com entrada pelo n.\xBA 7 do pr\xE9dio n.\xBAs 7 e 7D da Rua da Madeira, com porta n.\xBA 22 da Travessa do Pagode, Macau",
+      "phone": "+853 28308984",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-elegante-rua-da-madeira/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/14efe22d77846690b9d946ea70e31ae674e21f7c.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-casa-de-lotus",
+      "n": [
+        "PENS\xC3O CASA DE L\xD3TUS",
+        "\u83B2\u5C45\u5BBE\u9986",
+        "PENS\xC3O CASA DE L\xD3TUS",
+        "\u84EE\u5C45\u8CD3\u9928"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.196227061812138,
+      "lng": 113.53991340700276,
+      "address": "Rua dos Ervan\xE1rios, n.\xBAs 32 e 36, Macau",
+      "phone": "+853 28351358",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-casa-de-lotus/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/c9932e6cfca729176061ea7a74dbfd8fc8ccab1d.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-casa-de-macau",
+      "n": [
+        "PENS\xC3O CASA DE MACAU",
+        "\u6FB3\u95E8\u4E4B\u5BB6",
+        "PENS\xC3O CASA DE MACAU",
+        "\u6FB3\u9580\u4E4B\u5BB6"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.1934616472804,
+      "lng": 113.53641571348521,
+      "address": "Rua de Ponte e Horta, n.\xBA 4, 2.\xBA andar, A, B e C, Macau",
+      "phone": "+853 28573629",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-casa-de-macau/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/290d029c2060cf0c8d4f447591ad640e796c4e57.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-elegante",
+      "n": [
+        "PENS\xC3O ELEGANTE",
+        "\u5662\u522B\u81F4",
+        "PENS\xC3O ELEGANTE",
+        "\u5662\u5225\u7DFB"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.190535128112117,
+      "lng": 113.53541925313579,
+      "address": "Terreno junto \xE0 Cal\xE7ada de Eug\xE9nio Gon\xE7alves",
+      "phone": "+853 28882858",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-elegante/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/d01597903a6203cfb36b8bbe85c3808f19b948b8.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-elegante-rua-da-felicidade",
+      "n": [
+        "PENS\xC3O ELEGANTE (RUA DA FELICIDADE)",
+        "\u5662\u522B\u81F4\uFF08\u798F\u9686\u65B0\u8857\u5E97\uFF09",
+        "PENS\xC3O ELEGANTE (RUA DA FELICIDADE)",
+        "\u5662\u5225\u7DFB\uFF08\u798F\u9686\u65B0\u8857\u5E97\uFF09"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.19354616479241,
+      "lng": 113.53766162933698,
+      "address": "Beco das Galinhas, n.\xBA 3, Macau",
+      "phone": "+853 28886812",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-elegante-rua-da-felicidade/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/6abd7c9d27973911e04162bf4edc0a53104c62ca.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-elegante-ruinas-da-antiga-catedral-de-sao-paulo",
+      "n": [
+        "PENS\xC3O ELEGANTE (RU\xCDNAS DA ANTIGA CATEDRAL DE S\xC3O PAULO)",
+        "\u5662\u522B\u81F4(\u5927\u4E09\u5DF4\u5E97)",
+        "PENS\xC3O ELEGANTE (RU\xCDNAS DA ANTIGA CATEDRAL DE S\xC3O PAULO)",
+        "\u5662\u5225\u7DFB(\u5927\u4E09\u5DF4\u5E97)"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.195353761418346,
+      "lng": 113.5416813252304,
+      "address": "Rua de Santa Filomena, n.\xBA 20 (P\xE1tio do Manto, n.\xBA 19 e junto a esta rua e ao referido p\xE1tio), Macau",
+      "phone": "+853 28992839",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-elegante-ruinas-da-antiga-catedral-de-sao-paulo/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/448a70c579f14b3656550d9e9dfe1174b4a6f506.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-familia-rua-das-estalagens",
+      "n": [
+        "PENS\xC3O FAM\xCDLIA (RUA DAS ESTALAGENS)",
+        "\u5BB6\u6B23\u5BBE\u9986\uFF08\u8349\u5806\u8857\uFF09",
+        "PENS\xC3O FAM\xCDLIA (RUA DAS ESTALAGENS)",
+        "\u5BB6\u6B23\u8CD3\u9928\uFF08\u8349\u5806\u8857\uFF09"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.196393698333196,
+      "lng": 113.53886060835282,
+      "address": "Rua das Estalagens, n.\xBA 46-50, Beco dos Cotovelos, n.\xBA 1, Macau",
+      "phone": "+853 28238222",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-familia-rua-das-estalagens/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/fb24d342b0beb7c82dd7ae8380fe56772986b48f.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-familia-rua-de-camilo-pessanha",
+      "n": [
+        "PENS\xC3O FAM\xCDLIA (RUA DE CAMILO PESSANHA)",
+        "\u5BB6\u6B23\u5BBE\u9986\uFF08\u5E87\u5C71\u8036\u8857\uFF09",
+        "PENS\xC3O FAM\xCDLIA (RUA DE CAMILO PESSANHA)",
+        "\u5BB6\u6B23\u8CD3\u9928\uFF08\u5E87\u5C71\u8036\u8857\uFF09"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.196017305742103,
+      "lng": 113.5391242173697,
+      "address": "Rua de Camilo Pessanha, n\xBAs 11-13 e Beco do Ch\xE1, n\xBA 2, Macau",
+      "phone": "+853 28329222",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-familia-rua-de-camilo-pessanha/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/dd1a83b196d66060e2218cfe3cda3b644b85b1b2.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-familia-rua-de-miguel-aires",
+      "n": [
+        "PENS\xC3O FAM\xCDLIA (RUA DE MIGUEL AIRES)",
+        "\u5BB6\u6B23\u5BBE\u9986\uFF08\u7F8E\u57FA\u8857\uFF09",
+        "PENS\xC3O FAM\xCDLIA (RUA DE MIGUEL AIRES)",
+        "\u5BB6\u6B23\u8CD3\u9928\uFF08\u7F8E\u57FA\u8857\uFF09"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.197163645161552,
+      "lng": 113.53722061082567,
+      "address": "Rua de Miguel Aires, n\xBA 15A, em Macau",
+      "phone": "+853 28280012",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-familia-rua-de-miguel-aires/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/0666570043ce62868f57a76746aec4971555b006.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-familia-templo-de-hong-kung",
+      "n": [
+        "PENS\xC3O FAM\xCDLIA (TEMPLO DE HONG KUNG)",
+        "\u5BB6\u6B23\u5BBE\u9986(\u5EB7\u516C\u5E99)",
+        "PENS\xC3O FAM\xCDLIA (TEMPLO DE HONG KUNG)",
+        "\u5BB6\u6B23\u8CD3\u9928(\u5EB7\u516C\u5EDF)"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.19687282083713,
+      "lng": 113.53745541657588,
+      "address": "Rua de Guimar\xE3es, n.\xB0s 233-237, e Rua de Cinco de Outubro, n.\xB0s 120 \u2013 122, Macau",
+      "phone": "+853 28811222",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-familia-templo-de-hong-kung/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/0a720b767602852be1152968a29ecdb6216d1d9e.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-familia-alegre",
+      "n": [
+        "PENS\xC3O FAM\xCDLIA ALEGRE",
+        "\u5BB6\u9896\u5BBE\u9986",
+        "PENS\xC3O FAM\xCDLIA ALEGRE",
+        "\u5BB6\u7A4E\u8CD3\u9928"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.19252315915378,
+      "lng": 113.53975771186697,
+      "address": "Rua Central, n.\xB0 4A, Macau",
+      "phone": "+853 28835807",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-familia-alegre/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/0bc5de468048f689a20215ce5427b57c412174d2.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-familia-bilionaria",
+      "n": [
+        "PENS\xC3O FAMILIA BILION\xC1RIA",
+        "\u5BB6\u4EBF\u5BBE\u9986",
+        "PENS\xC3O FAMILIA BILION\xC1RIA",
+        "\u5BB6\u5104\u8CD3\u9928"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.19307435760588,
+      "lng": 113.54136474375116,
+      "address": "P\xE1tio das Flores, n.\xBAs 5-7, Macau",
+      "phone": "+853 28828273",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-familia-bilionaria/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/bdd46d95604aab8e4e1e8a87164b7d57c7f53af6.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-familia-perfeita",
+      "n": [
+        "PENS\xC3O FAM\xCDLIA PERFEITA",
+        "\u5BB6\u5706\u5BBE\u9986",
+        "PENS\xC3O FAM\xCDLIA PERFEITA",
+        "\u5BB6\u5713\u8CD3\u9928"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.20159734869341,
+      "lng": 113.53783959866888,
+      "address": "Rua da Ribeira do Patane, n.\xBA 32 e Travessa da Escama, n.\xBA 12-12A, Macau",
+      "phone": "+853 28823629",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-familia-perfeita/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/ce34ffc4f952f599973a9d8f9b153456afcad414.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-keng-iut",
+      "n": [
+        "PENS\xC3O KENG IUT",
+        "\u4EAC\u60A6\u5BBE\u9986",
+        "PENS\xC3O KENG IUT",
+        "\u4EAC\u6085\u8CD3\u9928"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.193694639949726,
+      "lng": 113.53634266647322,
+      "address": "Pra\xE7a de Ponte e Horta e Travessa dos Trens, Macau",
+      "phone": "+853 63719172",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-keng-iut/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/59f6d819109b42ec45b538c4262f7fe67fec78ab.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-lotus",
+      "n": [
+        "PENS\xC3O LOTUS",
+        "\u9047\u83B2\u5BA2\u6808",
+        "PENS\xC3O LOTUS",
+        "\u9047\u84EE\u5BA2\u68E7"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.19215310986499,
+      "lng": 113.54282426021257,
+      "address": "Avenida de D. Jo\xE3o IV, n.\xBA 8, 2.\xBA andar, Macau",
+      "phone": "+853 28482842",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-lotus/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/86dc2b0651ab8834820b7f6ba4af391447c25f2d.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-residencial-florida",
+      "n": [
+        "PENS\xC3O RESIDENCIAL FLORIDA",
+        "\u5BCC\u90FD\u5BBE\u9986",
+        "PENS\xC3O RESIDENCIAL FLORIDA",
+        "\u5BCC\u90FD\u8CD3\u9928"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.19475829976426,
+      "lng": 113.53881963302979,
+      "address": "Travessa do Paralelo, n.\xBA 6 e 8 Beco do Paralelo, n.\xBAs 3 e 5, Macau",
+      "phone": "+853 28923198",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-residencial-florida/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/1e445b3f05e5412d69fd147dcd480fb93d3806ac.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-wa-fat",
+      "n": [
+        "PENS\xC3O WA FAT",
+        "\u534E\u53D1\u5BBE\u9986",
+        "PENS\xC3O WA FAT",
+        "\u83EF\u767C\u8CD3\u9928"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.192483496984664,
+      "lng": 113.54151650663039,
+      "address": "Avenida da Praia Grande, n.\xBA 622, 2.\xBA andar, Macau",
+      "phone": "+853 28880828",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-wa-fat/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/09bb660d276b5203c609afb7adae9f58a63754db.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pensao-yue-zi",
+      "n": [
+        "PENS\xC3O YUE ZI",
+        "\u60A6\u5B50\u516C\u5BD3",
+        "PENS\xC3O YUE ZI",
+        "\u6085\u5B50\u516C\u5BD3"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.202848631508203,
+      "lng": 113.55120756303018,
+      "address": "Avenida do Coronel Mesquita, n.\xBA 7-A, Macau",
+      "phone": "+853 63287564",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pensao-yue-zi/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/32eaacd4c1c725a9e08ebed946db1f428d842be7.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "pousada-de-coloane",
+      "n": [
+        "POUSADA DE COLOANE",
+        "\u7AF9\u6E7E\u9152\u5E97",
+        "POUSADA DE COLOANE",
+        "\u7AF9\u7063\u9152\u5E97"
+      ],
+      "star": [
+        "4-star Hotel",
+        "\u56DB\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "4-star-hotel",
+      "district": "C",
+      "lat": 22.11404045773773,
+      "lng": 113.5616960052979,
+      "address": "Junto \xE0 praia de Cheoc Van, Coloane",
+      "phone": "+853 28882143",
+      "url": "http://www.hotelpcoloane.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/pousada-de-coloane/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/4324046c852bc1a9698ea2bec1ab510d8307d761.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "president-hotel",
+      "n": [
+        "PRESIDENT HOTEL",
+        "\u603B\u7EDF\u9152\u5E97",
+        "PRESIDENTE",
+        "\u7E3D\u7D71\u9152\u5E97"
+      ],
+      "star": [
+        "4-star Hotel",
+        "\u56DB\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "4-star-hotel",
+      "district": "M",
+      "lat": 22.19037786692614,
+      "lng": 113.54693185494244,
+      "address": "Avenida da Amizade, n.\xBA 355, Macau",
+      "phone": "+853 28553888",
+      "url": "http://www.hotelpresident.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/president-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/f4bbc2503416be188f6ee08d0126e6170e610574.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "regency-art-hotel",
+      "n": [
+        "REGENCY ART HOTEL",
+        "\u4E3D\u666F\u6E7E\u827A\u672F\u9152\u5E97",
+        "HOTEL ARTE REG\xCANCIA",
+        "\u9E97\u666F\u7063\u85DD\u8853\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "T",
+      "lat": 22.1622329448312,
+      "lng": 113.55358495716,
+      "address": "Estrada Almirante Marques Esparteiro, n\xBA 2, Taipa",
+      "phone": "+853 28831234",
+      "url": "http://www.regencyarthotel.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/regency-art-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/fede777c22fb60c57f7b100fd70d667f98fe837d.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "regent-hostel",
+      "n": [
+        "REGENT HOSTEL",
+        "\u4E3D\u6676\u5927\u5BBE\u9986",
+        "HOSPEDARIA REGENT",
+        "\u9E97\u6676\u5927\u8CD3\u9928"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "T",
+      "lat": 22.162996238425038,
+      "lng": 113.55602199618818,
+      "address": "Avenida Padre Tom\xE1s Pereira, n.\xBA 889, Cave 2, piso 2 e piso de servi\xE7o (piso EF), Taipa",
+      "phone": "+853 28389527",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/regent-hostel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/6c2abbd0d9a8dea98851fcabd38ceb549cc8c125.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "rem-hotel",
+      "n": [
+        "REM HOTEL",
+        "\u5E7B\u5B87\u9152\u5E97",
+        "HOTEL REM",
+        "\u5E7B\u5B87\u9152\u5E97"
+      ],
+      "star": [
+        "4-star Hotel",
+        "\u56DB\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "4-star-hotel",
+      "district": "T",
+      "lat": 22.148426897864567,
+      "lng": 113.56600487137086,
+      "address": "Avenida da Prosperidade, n.\xBAs 39, 77, 127, 141, 203, 243, 357, 401, 433 e 485, COTAI",
+      "phone": "+853 88683333",
+      "url": "http://www.cityofdreamsmacau.com/en/hotels/rem",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/rem-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/a7db63fe67ccb11c1e6b1a1e9193f6b132ff63c7.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "rio-hotel",
+      "n": [
+        "RIO HOTEL",
+        "\u5229\u6FB3\u9152\u5E97",
+        "RIO",
+        "\u5229\u6FB3\u9152\u5E97"
+      ],
+      "star": [
+        "4-star Hotel",
+        "\u56DB\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "4-star-hotel",
+      "district": "M",
+      "lat": 22.192835196726506,
+      "lng": 113.54990100823068,
+      "address": "Rua de Lu\xEDs Gonzaga Gomes, n.\xBA 33 e Alameda Dr. Carlos D' Assump\xE7\xE3o, n.\xBA 682, Macau",
+      "phone": "+853 28718718",
+      "url": "http://www.riomacau.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/rio-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/f0da442fa8fa92f7a2877b2cb1543a0ae2151b46.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "riviera-hotel-macau",
+      "n": [
+        "RIVIERA HOTEL MACAU",
+        "\u6FE0\u749F\u9152\u5E97",
+        "RIVIERA MACAU",
+        "\u6FE0\u749F\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "M",
+      "lat": 22.186212613111962,
+      "lng": 113.53526136607519,
+      "address": "Rua da Boa Vista, n.\xBA 2, e Rua do Comendador Kou H\xF3 Neng, n.\xBA 7 a 13, Macau",
+      "phone": "+853 28339955",
+      "url": "http://www.rivierahotel.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/riviera-hotel-macau/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/61a8f8e1d89201f40d80cb9617eccb5425f4c996.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "royal",
+      "n": [
+        "ROYAL",
+        "\u7687\u90FD\u9152\u5E97",
+        "ROYAL",
+        "\u7687\u90FD\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "M",
+      "lat": 22.196125587051213,
+      "lng": 113.5472243137462,
+      "address": "Estrada da Vit\xF3ria, n.\xBAs 2-4, Macau",
+      "phone": "+853 28552222",
+      "url": "http://www.hotelroyal.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/royal/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/c0304fa9feced9db83883fdc68203316640a8de0.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "royal-dragon-hotel",
+      "n": [
+        "ROYAL DRAGON HOTEL",
+        "\u5FA1\u9F99\u9152\u5E97",
+        "HOTEL DRAG\xC3O ROYAL",
+        "\u5FA1\u9F8D\u9152\u5E97"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "M",
+      "lat": 22.193433505163554,
+      "lng": 113.5501873967209,
+      "address": "Rua de Goa, n.\xBAs 61 a 77, Rua de Kunming, n.\xBAs 71-A a 97, Macau",
+      "phone": "+853 28261999",
+      "url": "http://www.royaldragon.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/royal-dragon-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/da5022ed15caaf80a304d8810dfadb2cd591570d.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "royal-infante-harbour-view-hotel",
+      "n": [
+        "ROYAL INFANTE HARBOUR VIEW HOTEL",
+        "\u7687\u5EAD\u6D77\u666F\u9152\u5E97",
+        "POUSADA MARINA - INFANTE",
+        "\u7687\u5EAD\u6D77\u666F\u9152\u5E97"
+      ],
+      "star": [
+        "4-star Hotel",
+        "\u56DB\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "4-star-hotel",
+      "district": "T",
+      "lat": 22.149621956805646,
+      "lng": 113.55067600440651,
+      "address": "Noroeste do espa\xE7o entre as ilhas de Taipa e Coloane, a Sul do Hip\xF3dromo da Taipa, Taipa",
+      "phone": "+853 28838333",
+      "url": "http://www.pousadamarinainfante.com/tw/index.html",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/royal-infante-harbour-view-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/ce902a169e83e6b3956b9dc1a94dfa60da4bc430.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "s-hotel",
+      "n": [
+        "S HOTEL",
+        "\u827A\u820D",
+        "HOTEL S",
+        "\u85DD\u820D"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.193861412869296,
+      "lng": 113.53599237837437,
+      "address": "Pra\xE7a de Ponte e Horta, n.\xBAs 14 e 16, Travessa dos Trens, n.\xBA 2 e Rua do Bocage, n.\xBAs 2-2B, Macau",
+      "phone": "+853 28939393",
+      "url": "http://hotel-s.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/s-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/934eaa9c34a72d11edab7fcaa95339633ee0933f.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "san-tung-fong-commercial-inn-north-wing",
+      "n": [
+        "SAN TUNG FONG COMMERCIAL INN NORTH WING",
+        "\u65B0\u4E1C\u65B9\u5546\u52A1\u5BBE\u9986\u5317\u5EA7",
+        "ALA NORTE DA PENS\xC3O COMERCIAL SAN TUNG FONG",
+        "\u65B0\u6771\u65B9\u5546\u52D9\u8CD3\u9928\u5317\u5EA7"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.19581262314658,
+      "lng": 113.53729725617393,
+      "address": "Avenida de Almeida Ribeiro, n.\xBA 514 - 546, Rua de Cinco de Outubro, n.\xBAs 159 -161 e Travessa da Cordoaria, n.\xBA 10, Macau",
+      "phone": "+853 28777333",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/san-tung-fong-commercial-inn-north-wing/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/17d714756e6a6dba295ca4b5da7aa9946d9e1832.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "san-tung-fong-commercial-inn-south-wing",
+      "n": [
+        "SAN TUNG FONG COMMERCIAL INN, SOUTH WING",
+        "\u65B0\u4E1C\u65B9\u5546\u52A1\u5BBE\u9986\u5357\u5EA7",
+        "PENS\xC3O COMERCIAL SAN TUNG FONG, ALA SUL",
+        "\u65B0\u6771\u65B9\u5546\u52D9\u8CD3\u9928\u5357\u5EA7"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.19567752903788,
+      "lng": 113.53758425798895,
+      "address": "Terreno junto \xE0 Avenida de Almeida Ribeiro e Travessa da Cordoaria, Macau",
+      "phone": "+853 28999888",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/san-tung-fong-commercial-inn-south-wing/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/7d40a15c0a171a8b3cf04ee6226eac255981454e.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "hospedaria-san-va",
+      "n": [
+        "SAN VA HENG KEI",
+        "\u65B0\u534E\u5927\u65C5\u5E97",
+        "HOSPEDARIA SAN VA",
+        "\u65B0\u83EF\u5927\u65C5\u5E97"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.19466714568061,
+      "lng": 113.53746503590855,
+      "address": "Rua da Felicidade, n.\xBA 67, 1.\xBA a 3.\xBA andares, Macau",
+      "phone": "+853 28573701 /+853  66302395",
+      "url": "http://www.sanvahotel.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/hospedaria-san-va/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/89231d9200c74a700684b21d306de21da723d583.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "sands",
+      "n": [
+        "SANDS",
+        "\u91D1\u6C99",
+        "SANDS",
+        "\u91D1\u6C99"
+      ],
+      "star": [
+        "5-star Deluxe Hotel",
+        "\u4E94\u661F\u8C6A\u534E\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas de luxo",
+        "\u4E94\u661F\u8C6A\u83EF\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-deluxe-hotel",
+      "district": "M",
+      "lat": 22.191543754114633,
+      "lng": 113.55484853250067,
+      "address": 'Avenida da Amizade, Edif\xEDcio do Casino "Sands", Macau',
+      "phone": "+853 28883388",
+      "url": "http://www.sandsmacao.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/sands/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/3aab6d4512a7bd3d4e8bfc47c3fa9e85f396394d.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "sao-tiago-da-barra",
+      "n": [
+        "S\xC3O TIAGO DA BARRA",
+        "\u6FB3\u95E8\u5723\u5730\u7259\u54E5\u53E4\u5821",
+        "S\xC3O TIAGO DA BARRA",
+        "\u6FB3\u9580\u8056\u5730\u7259\u54E5\u53E4\u5821"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "M",
+      "lat": 22.182426711509223,
+      "lng": 113.53066461186398,
+      "address": "Avenida da Rep\xFAblica, na Fortaleza de S. Tiago da Barra, Macau",
+      "phone": "+853 28378111",
+      "url": "http://www.saotiago.com.mo/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/sao-tiago-da-barra/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/4f267006410d1044a217501679d6d081e9b8a6d6.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "sintra",
+      "n": [
+        "SINTRA",
+        "\u65B0\u4E3D\u534E\u9152\u5E97",
+        "SINTRA",
+        "\u65B0\u9E97\u83EF\u9152\u5E97"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "M",
+      "lat": 22.191069623333107,
+      "lng": 113.54145077396186,
+      "address": "Avenida de D. Jo\xE3o IV, n.\xBAs 58, 60 e 62 e Avenida Doutor M\xE1rio Soares, n.\xBAs 115, 117 e 119, Macau",
+      "phone": "+853 28710111",
+      "url": "http://www.hotelsintra.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/sintra/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/b6cff30b7099755468c72e66b30fe90364ae0b9b.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "sofitel-macau-at-ponte-16",
+      "n": [
+        "SOFITEL MACAU AT PONTE 16",
+        "\u6FB3\u95E8\u5341\u516D\u6D66\u7D22\u83F2\u7279\u5927\u9152\u5E97",
+        "HOTEL SOFITEL MACAU DE PONTE 16",
+        "\u6FB3\u9580\u5341\u516D\u6D66\u7D22\u83F2\u7279\u5927\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "M",
+      "lat": 22.197184885353565,
+      "lng": 113.53590127313481,
+      "address": "Rua das Lorchas e Rua do Visconde Pa\xE7o de Arcos, entre Pontes 12A a 20, Macau",
+      "phone": "+853 88610016",
+      "url": "http://www.sofitel.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/sofitel-macau-at-ponte-16/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/96e96f8e237f2f35bd009539fecece5b8de6da88.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "starworld-hotel",
+      "n": [
+        "STARWORLD HOTEL",
+        "\u661F\u9645\u9152\u5E97",
+        "MUNDO DE ESTRELAS",
+        "\u661F\u969B\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "M",
+      "lat": 22.189655413673563,
+      "lng": 113.54808494463379,
+      "address": "Rua Cidade de Sintra, n.\xBA 338, Macau",
+      "phone": "+853 28383838",
+      "url": "http://www.starworldmacau.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/starworld-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/dad71a35a3876436734e000f200396afc5fa243d.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "studio-city-hotel",
+      "n": [
+        "STUDIO CITY HOTEL",
+        "\u65B0\u6FE0\u5F71\u6C47\u9152\u5E97",
+        "HOTEL STUDIO CITY",
+        "\u65B0\u6FE0\u5F71\u6ED9\u9152\u5E97"
+      ],
+      "star": [
+        "4-star Hotel",
+        "\u56DB\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "4-star-hotel",
+      "district": "T",
+      "lat": 22.141037334757485,
+      "lng": 113.56183829358002,
+      "address": "Estrada do Istmo, n.\xBAs 981, 1011, 1041 e 1071",
+      "phone": "+853 88658888",
+      "url": "http://www.studiocity-macau.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/studio-city-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/acb8dbc0d73073edaf589452cfd31db682a54a1a.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "tai-loi",
+      "n": [
+        "TAI LOI",
+        "\u5927\u6765",
+        "TAI LOI",
+        "\u5927\u4F86"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.194560716081654,
+      "lng": 113.53656132998088,
+      "address": "Travessa das Virtudes, n.\xBA 20, 1.\xBA andar, Macau",
+      "phone": "+853 66625627",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/tai-loi/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/c09ec629d82be82f367189494cf08f16ee5e9cd2.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "the-13-palace",
+      "n": [
+        "THE 13 PALACE",
+        "\u5341\u4E09\u7687\u5BAB",
+        "O PAL\xC1CIO 13",
+        "\u5341\u4E09\u7687\u5BAE"
+      ],
+      "star": [
+        "5-star Deluxe Hotel",
+        "\u4E94\u661F\u8C6A\u534E\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas de luxo",
+        "\u4E94\u661F\u8C6A\u83EF\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-deluxe-hotel",
+      "district": "C",
+      "lat": 22.12925335674035,
+      "lng": 113.5582589233062,
+      "address": "Rua das \xC1rvores do Pagode, n.\xBAs 332,342 e 350, Coloane",
+      "phone": "+853 88626688",
+      "url": "http://www.the13.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/the-13-palace/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/8258b1ab9bab9d86fb23a77c99c43efaa2a46dc5.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "the-grand-suites-at-four-seasons",
+      "n": [
+        "THE GRAND SUITES AT FOUR SEASONS",
+        "\u56DB\u5B63\u540D\u835F",
+        "GRANDE SU\xCDTES DO FOUR SEASONS",
+        "\u56DB\u5B63\u540D\u8588"
+      ],
+      "star": [
+        "4-star Apartment Hotel",
+        "\u56DB\u661F\u7EA7\u516C\u5BD3\u5F0F\u9152\u5E97",
+        "Hot\xE9is-apartamentos de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u516C\u5BD3\u5F0F\u9152\u5E97"
+      ],
+      "classId": "4-star-apartment-hotel",
+      "district": "T",
+      "lat": 22.146287960293236,
+      "lng": 113.56185474888679,
+      "address": "COTAI, a Poente do Istmo Taipa-Coloane e a Sul da Estrada da Ba\xEDa de Nossa Senhora da Esperan\xE7a, Zona 6 e Zona 8 do pisos B1 a L40 e LMR",
+      "phone": "+853 28818888",
+      "url": "http://www.fourseasons.com/grandsuitesmacau/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/the-grand-suites-at-four-seasons/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/55901534f6900bb70b48ec973e604846e3c60df6.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "the-londoner-macao-hotel",
+      "n": [
+        "THE LONDONER MACAO HOTEL",
+        "\u6FB3\u95E8\u4F26\u6566\u4EBA\u9152\u5E97",
+        "O HOTEL LONDRINO MACAU",
+        "\u6FB3\u9580\u502B\u6566\u4EBA\u9152\u5E97"
+      ],
+      "star": [
+        "4-star Hotel",
+        "\u56DB\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 4 estrelas",
+        "\u56DB\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "4-star-hotel",
+      "district": "T",
+      "lat": 22.146346911998307,
+      "lng": 113.5653641334178,
+      "address": "COTAI, a Poente do Istmo Taipa-Coloane, parcelas 5 e 6",
+      "phone": "+853 28822878",
+      "url": "http://www.londonermacao.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/the-londoner-macao-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/3eb13e7baa5c1fbd8ff8551f3f1a5c63e2405f3a.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "the-parisian-macao",
+      "n": [
+        "THE PARISIAN MACAO",
+        "\u6FB3\u95E8\u5DF4\u9ECE\u4EBA",
+        "O PARISIENSE MACAU",
+        "\u6FB3\u9580\u5DF4\u9ECE\u4EBA"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "T",
+      "lat": 22.143694111133556,
+      "lng": 113.56084576007936,
+      "address": "COTAI, Estrada do Istmo, Lote 3 da Parcela 1",
+      "phone": "+853 28828833",
+      "url": "http://www.parisianmacao.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/the-parisian-macao/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/b239ab019ad8842ed56e8fbfbfb59f10e022c28b.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "the-ritz-carlton-macau",
+      "n": [
+        "THE RITZ-CARLTON MACAU",
+        "\u6FB3\u95E8\u4E3D\u601D\u5361\u5C14\u987F\u9152\u5E97",
+        "THE RITZ-CARLTON MACAU",
+        "\u6FB3\u9580\u9E97\u601D\u5361\u723E\u9813\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "T",
+      "lat": 22.146406401469235,
+      "lng": 113.55440139143383,
+      "address": "COTAI, Nascente da Avenida Marginal Flor de L\xF3tus e a Sul da Estrada da Ba\xEDa de Nossa Senhora da Esperan\xE7a",
+      "phone": "+853 88866868",
+      "url": "http://www.galaxymacau.com/hotels/the-ritz-carlton/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/the-ritz-carlton-macau/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/f71341f03086ecaaecc0c2e2744792f706239824.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "the-st-regis-macao",
+      "n": [
+        "THE ST. REGIS MACAO",
+        "\u6FB3\u95E8\u745E\u5409\u9152\u5E97",
+        "ST. REGIS MACAU",
+        "\u6FB3\u9580\u745E\u5409\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "T",
+      "lat": 22.14752781659506,
+      "lng": 113.56563748093083,
+      "address": "COTAI, a Poente do Istmo Taipa-Coloane, parcelas 5 e 6",
+      "phone": "+853 28828898",
+      "url": "http://stregismacao.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/the-st-regis-macao/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/b51cd09e301032481640a52589a2dcdc314159d0.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "the-venetian-macao",
+      "n": [
+        "THE VENETIAN MACAO",
+        "\u6FB3\u95E8\u5A01\u5C3C\u65AF\u4EBA\u9152\u5E97",
+        "THE VENETIAN MACAO",
+        "\u6FB3\u9580\u5A01\u5C3C\u65AF\u4EBA\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "T",
+      "lat": 22.14819952654166,
+      "lng": 113.56047145204877,
+      "address": "COTAI, a Poente do Istmo Taipa-Coloane e a Sul da Ba\xEDa da Nossa Senhora de Esperan\xE7a",
+      "phone": "+853 28828888",
+      "url": "http://www.venetianmacao.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/the-venetian-macao/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/357e5f97c633e431da114010f5c1c7aa61aaad0a.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "tin-lai",
+      "n": [
+        "TIN LAI",
+        "\u5929\u4E3D",
+        "TIN LAI",
+        "\u5929\u9E97"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.199842145804,
+      "lng": 113.5457156815661,
+      "address": "Rua do Almirante Costa Cabral, n.\xBA 77-A, 1\xBA a 4\xBA andares, Macau",
+      "phone": "+853 28522015",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/tin-lai/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/ce220823919dad3edaf8609d229365fe2122fea0.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "tin-tin",
+      "n": [
+        "TIN TIN",
+        "\u5929\u5929",
+        "TIN TIN",
+        "\u5929\u5929"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.192048766457134,
+      "lng": 113.54206333145117,
+      "address": 'P\xE1tio do Comandante Mata e Oliveira, n.\xBA 100, bloco "L", 1.\xBA andar, Macau',
+      "phone": "+853 66394177",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/tin-tin/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/8d5ed90380b32d5d58b86106b24226269defdeae.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "townswell-motel",
+      "n": [
+        "TOWNSWELL MOTEL",
+        "\u9547\u5174\u5BBE\u9986",
+        "PENS\xC3O RENASCEN\xC7A",
+        "\u93AE\u8208\u8CD3\u9928"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.195015383718072,
+      "lng": 113.54218724384441,
+      "address": "Cal\xE7ada das Verdades, n.\xBAs 6 a 6A, Macau",
+      "phone": "+853 28356868",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/townswell-motel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/5d97d625ef3f094245613d39388121e1f27dbc40.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "treasure-hotel",
+      "n": [
+        "TREASURE HOTEL",
+        "\u91D1\u5B9D\u6765\u9152\u5E97",
+        "HOTEL TESOURO",
+        "\u91D1\u5BF6\u4F86\u9152\u5E97"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "T",
+      "lat": 22.158018440587824,
+      "lng": 113.5736395827713,
+      "address": "Estrada da Ponta da Cabrita, n.\xB0s 1048 a 1106 e Avenida Wai Long, n.\xB0s 1145 a 1235-A, Taipa",
+      "phone": "+853 28850188",
+      "url": "http://treasurehotelmacau.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/treasure-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/f520a6744b38d075474f9f52c0de588aa79a8568.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "tung-fong",
+      "n": [
+        "TUNG FONG",
+        "\u4E1C\u65B9",
+        "TUNG FONG",
+        "\u6771\u65B9"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.19454570148457,
+      "lng": 113.5370765573474,
+      "address": "Travessa da Felicidade, n.\xBA 11, Macau",
+      "phone": "+853 28572710 /+853  66512735",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/tung-fong/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/5c42fdfbb94fdf6055f1b028a1c2314a6de60f81.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "u-inn",
+      "n": [
+        "U INN",
+        "\u60A0\u5BA2\u6808",
+        "PENS\xC3O U",
+        "\u60A0\u5BA2\u68E7"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.1943298226552,
+      "lng": 113.53938562197543,
+      "address": "Rua dos Mercadores n\xBA. 51 e Rua Oeste do Mercado de S. Domingos  n\xBA. 30 - 32",
+      "phone": "+853 28828801",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/u-inn/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/e2e3e4831ac39743ff9f4c9269682f8a3d48563c.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "victoria-hotel",
+      "n": [
+        "VICTORIA HOTEL",
+        "\u7EF4\u591A\u5229\u4E9A\u9152\u5E97",
+        "VICTORIA",
+        "\u7DAD\u591A\u5229\u4E9E\u9152\u5E97"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "M",
+      "lat": 22.210046,
+      "lng": 113.548559,
+      "address": "Estrada do Arco, n\xBA. 118, Macau",
+      "phone": "+853 28556688",
+      "url": "http://www.mo-victoria.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/victoria-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/f81632ce65e8ed4839fec2bb515e65e80d10d456.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "vila-tong-keng",
+      "n": [
+        "VILA TONG KENG",
+        "\u4E1C\u4EAC",
+        "VILA TONG KENG",
+        "\u6771\u4EAC"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.194696,
+      "lng": 113.537217,
+      "address": "Travessa da Felicidade, n.\xBA 10, 2\xBA andar, Ed\xEDficio Cheng Peng, Macau",
+      "phone": "+853 28937722",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/vila-tong-keng/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/38f6543a826da25ee3a98a7ad57fa11aa23f998e.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "vila-universal",
+      "n": [
+        "VILA UNIVERSAL",
+        "\u5927\u5229\u8FCE\u5BBE\u9986",
+        "VILA UNIVERSAL",
+        "\u5927\u5229\u8FCE\u8CD3\u9928"
+      ],
+      "star": [
+        "2-star Hotel",
+        "\u4E8C\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 2 estrelas",
+        "\u4E8C\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "2-star-hotel",
+      "district": "M",
+      "lat": 22.19488593759695,
+      "lng": 113.53736375046253,
+      "address": "Rua da Felicidade, n.\xBA 73, r/c e Kuoc-chai, Macau",
+      "phone": "+853 28573247",
+      "url": "",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/vila-universal/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/ce048285b9c1c1f6bc9bbb19dc452b8987800c8f.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "vo-peng",
+      "n": [
+        "VO PENG",
+        "\u548C\u5E73",
+        "VO PENG",
+        "\u548C\u5E73"
+      ],
+      "star": [
+        "Low-cost Accommodation",
+        "\u7ECF\u6D4E\u578B\u4F4F\u5BBF\u573A\u6240",
+        "Alojamento de baixo custo",
+        "\u7D93\u6FDF\u578B\u4F4F\u5BBF\u5834\u6240"
+      ],
+      "classId": "low-cost-accommodation",
+      "district": "M",
+      "lat": 22.19530598470672,
+      "lng": 113.53734439269516,
+      "address": "Rua da Caldeira, n.\xBA 39, 1.\xBA e 2.\xBA andares, Macau",
+      "phone": "+853 28573598",
+      "url": "http://macauvopeng@gmail.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/vo-peng/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/41a99df8b4f5d8ccb8e983dfb0f5f9558c9318c4.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "waldo-hotel",
+      "n": [
+        "WALDO HOTEL",
+        "\u534E\u90FD\u9152\u5E97",
+        "HOTEL WALDO",
+        "\u83EF\u90FD\u9152\u5E97"
+      ],
+      "star": [
+        "3-star Hotel",
+        "\u4E09\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 3 estrelas",
+        "\u4E09\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "3-star-hotel",
+      "district": "M",
+      "lat": 22.19323181962379,
+      "lng": 113.55304955286465,
+      "address": "Avenida da Amizade, n.\xBA 1071, Macau",
+      "phone": "+853 28886688",
+      "url": "http://www.waldohotel.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/waldo-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/65066494ff11983530068ee161c1748b965acbe7.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "wynn",
+      "n": [
+        "WYNN",
+        "\u6C38\u5229",
+        "WYNN",
+        "\u6C38\u5229"
+      ],
+      "star": [
+        "5-star Deluxe Hotel",
+        "\u4E94\u661F\u8C6A\u534E\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas de luxo",
+        "\u4E94\u661F\u8C6A\u83EF\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-deluxe-hotel",
+      "district": "M",
+      "lat": 22.188303004744952,
+      "lng": 113.54601679164927,
+      "address": 'Avenida de Sagres, Avenida 24 de Junho e Rua Cidade de Sintra, nos Novos Aterros do Porto Exterior, na zona B do empreendimento designado por "Fecho da Ba\xEDa da Praia Grande", Macau',
+      "phone": "+853 28889966",
+      "url": "http://www.wynnresortsmacau.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/wynn/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/5ace5af01fb0f69588314e106a29d4aec6d9a23c.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "wynn-palace",
+      "n": [
+        "WYNN PALACE",
+        "\u6C38\u5229\u7687\u5BAB",
+        "PAL\xC1CIO WYNN",
+        "\u6C38\u5229\u7687\u5BAE"
+      ],
+      "star": [
+        "5-star Deluxe Hotel",
+        "\u4E94\u661F\u8C6A\u534E\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas de luxo",
+        "\u4E94\u661F\u8C6A\u83EF\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-deluxe-hotel",
+      "district": "T",
+      "lat": 22.147695528575255,
+      "lng": 113.57120598427736,
+      "address": "COTAI, junto \xE0 Avenida da Nave Desportiva",
+      "phone": "+853 88898889",
+      "url": "http://www.wynnresortsmacau.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/wynn-palace/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/52639e638d289e99a2500bb795d24da21adb74c7.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "yoho-hollywood-roosevelt-hotel",
+      "n": [
+        "YOHO HOLLYWOOD ROOSEVELT HOTEL",
+        "YOHO\u8377\u91CC\u6D3B\u7F57\u65AF\u798F\u9152\u5E97",
+        "HOTEL YOHO HOLLYWOOD ROOSEVELT",
+        "YOHO\u8377\u91CC\u6D3B\u7F85\u65AF\u798F\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "T",
+      "lat": 22.155176,
+      "lng": 113.543494,
+      "address": "Avenida dos Jogos da \xC1sia Oriental, n.\xBAs 924 e 998, Taipa, em Macau",
+      "phone": "+853 82913223",
+      "url": "http://www.themacauroosevelt.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/yoho-hollywood-roosevelt-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/7762e2e070c875d0e84a25ff4ca48b20decb1add.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    },
+    {
+      "id": "yoho-treasure-island-hotel",
+      "n": [
+        "YOHO TREASURE ISLAND HOTEL",
+        "YOHO\u91D1\u94F6\u5C9B\u9152\u5E97",
+        "HOTEL YOHO ILHA DE TESOURO",
+        "YOHO\u91D1\u9280\u5CF6\u9152\u5E97"
+      ],
+      "star": [
+        "5-star Hotel",
+        "\u4E94\u661F\u7EA7\u9152\u5E97",
+        "Hot\xE9is de 5 estrelas",
+        "\u4E94\u661F\u7D1A\u9152\u5E97"
+      ],
+      "classId": "5-star-hotel",
+      "district": "M",
+      "lat": 22.187290744643022,
+      "lng": 113.54285787837591,
+      "address": "Rua do Leste do Lago n.\xBAs 229, 239 e 249, Macau",
+      "phone": "+853 28993300",
+      "url": "http://www.treasureislandresortsworld.com/",
+      "source": "https://www.macaotourism.gov.mo/en/accommodation/yoho-treasure-island-hotel/",
+      "image": "https://content.macaotourism.gov.mo/uploads/mgto_hotel/15659ecd7ee325a3e9a6260af58935042ab784f6.jpg",
+      "closed": false,
+      "checked": "2026-11-18"
+    }
+  ];
+
+  // MacauMatePages/src/providers.js
   var providers = {
     central: {
       type: "hotel",
@@ -8099,8 +12159,29 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
       image: "https://content.macaotourism.gov.mo/uploads/mgto_qtsas_2015/2025-71-1.jpg"
     }
   };
+  var hotelAliases = {
+    "hotel-central": ["central", "hotel"],
+    "the-parisian-macao": ["parisian", "hotelTaipa"],
+    "sofitel-macau-at-ponte-16": ["sofitel", "sofitel"]
+  };
+  for (const hotel of hotelCatalogue) {
+    const [id, placeId] = hotelAliases[hotel.id] ?? ["mgto-hotel-" + hotel.id, "stay-" + hotel.id];
+    const prior = providers[id] ?? {};
+    providers[id] = {
+      ...prior,
+      ...hotel,
+      id,
+      placeId,
+      type: "hotel",
+      terms: "hotelTerms",
+      url: prior.url || hotel.url,
+      source: hotel.source,
+      address: [hotel.address, hotel.address, hotel.address, hotel.address],
+      phone: hotel.phone || prior.phone || ""
+    };
+  }
 
-  // src/places.js
+  // MacauMatePages/src/places.js
   var unesco = "https://whc.unesco.org/en/list/1110/";
   var tourism = "https://www.macaotourism.gov.mo/en/sightseeing/macao-world-heritage";
   var places = {};
@@ -8391,10 +12472,11 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
       lng: p.lng,
       category: p.type,
       url: p.source,
-      address: p.address
+      address: p.address,
+      closed: !!p.closed
     };
   }
-  var hotelIds = Object.values(places).filter((p) => p.category === "hotel").map((p) => p.id);
+  var hotelIds = Object.values(places).filter((p) => p.category === "hotel" && !p.closed).map((p) => p.id);
   var commonNames = {
     paul: ["Ruins of St. Paul's", "\u5927\u4E09\u5DF4\u724C\u574A", "Ru\xEDnas de S\xE3o Paulo", "\u5927\u4E09\u5DF4\u724C\u574A"],
     dominic: ["St. Dominic\u2019s Church", "\u73AB\u7470\u5802", "Igreja de S\xE3o Domingos", "\u73AB\u7470\u5802"],
@@ -8409,7 +12491,7 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
   var portIds = Object.values(places).filter((p) => p.category === "port").map((p) => p.id);
   var venues = Object.values(places).filter((p) => p.category !== "port").map((p) => p.id);
 
-  // src/heritage.js
+  // MacauMatePages/src/heritage.js
   var guides = {};
   function guide(id, history, architecture, family, stories, q, options, correct) {
     guides[id] = {
@@ -8849,7 +12931,7 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
     ["UNESCO World Heritage Centre", unesco]
   ];
 
-  // src/learning.js
+  // MacauMatePages/src/learning.js
   var schema = 1;
   function signature(placeId) {
     const guide2 = guides[placeId];
@@ -8901,7 +12983,7 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
     };
   }
 
-  // src/visitor-facts.js
+  // MacauMatePages/src/visitor-facts.js
   var visitorFacts = {
     "pao-kong-temple-and-temple-of-divinity-of-medicine": {
       "hours": "",
@@ -10053,7 +14135,7 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
     }
   };
 
-  // src/planning-data.js
+  // MacauMatePages/src/planning-data.js
   var aliases = {
     "mgto-company-of-jesus-square": "paul",
     "mgto-section-of-the-old-city-walls": "paul",
@@ -10196,7 +14278,7 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
   }
   var allCandidateIds = heritageIds.filter((id) => !["gate"].includes(canonicalPlace(id)));
 
-  // src/planner.js
+  // MacauMatePages/src/planner.js
   var strategies = ["rich", "comfort", "smart"];
   var interests = [
     "culture",
@@ -11189,7 +15271,7 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
     return planTrip(raw, chosen, common);
   }
 
-  // src/photos.js
+  // MacauMatePages/src/photos.js
   var photos = {
     paul: {
       url: "https://upload.wikimedia.org/wikipedia/commons/0/04/Macau_-_Ruins_of_Saint_Paul.jpg",
@@ -11292,7 +15374,7 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
     return original.replace("/commons/", "/commons/thumb/") + "/" + width + "px-" + filename;
   }
 
-  // src/api.js
+  // MacauMatePages/src/api.js
   var accountEnabled = false;
   async function accountSession() {
     return null;
@@ -11355,7 +15437,7 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
     return request2.promise;
   }
 
-  // src/map.js
+  // MacauMatePages/src/map.js
   var tileSize = 256;
   function mapDirections(from, to, mode) {
     const a = places[from], b = places[to];
@@ -11605,7 +15687,7 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
     return () => observer.disconnect();
   }
 
-  // src/views.js
+  // MacauMatePages/src/views.js
   var esc = (v) => String(v ?? "").replace(
     /[&<>"']/g,
     (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]
@@ -11957,18 +16039,25 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
     };
   }
 
-  // src/services.js
+  // MacauMatePages/src/services.js
   var types = ["hotel", "food", "taxi"];
   var titles = { hotel: "hotelBooking", food: "restaurantBooking", taxi: "taxiBooking" };
   var external = (text, url, className = "button secondary smallbtn") => '<a class="' + className + '" href="' + esc(url) + '" target="_blank" rel="noopener noreferrer">' + esc(text) + " \u2197</a>";
   var button = (text, action, id = "", css = "secondary smallbtn") => '<button class="button ' + css + '" type="button" data-action="' + action + '" data-value="' + esc(id) + '">' + esc(text) + "</button>";
   var plusDays = (date, days) => new Date(Date.parse(date + "T12:00:00Z") + days * 864e5).toISOString().slice(0, 10);
   var dayIndex = (start, date) => Math.round((Date.parse(date + "T12:00:00Z") - Date.parse(start + "T12:00:00Z")) / 864e5);
+  var normalizeHotelName = (value) => String(value).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+  function findHotels(filters = {}, lang = "en") {
+    const query = normalizeHotelName(filters.query ?? "");
+    return Object.values(providers).filter((p) => p.type === "hotel" && (!filters.district || p.district === filters.district) && (!filters.classId || p.classId === filters.classId) && (!query || p.n.some((name) => normalizeHotelName(name).includes(query)))).sort((a, b) => local(lang, a.n).localeCompare(local(lang, b.n), lang));
+  }
   function createServices(model2, controls) {
     const tr2 = (key, vars) => t(model2.lang, key, vars);
     const l2 = (value) => local(model2.lang, value);
     const name = (id) => l2(places[id]?.n);
     const state = () => model2.serviceState;
+    const filters = () => state().hotelFilters ??= { query: "", district: "", classId: "", limit: 12 };
+    const districtName = (value) => tr2(value === "M" ? "hotelMacao" : value === "T" ? "hotelTaipaArea" : "hotelColoane");
     const draft = () => {
       const type = state().type ?? "hotel";
       const p = model2.trip?.profile;
@@ -11994,7 +16083,13 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
     function contact(record) {
       if (record.type === "taxi") return '<a class="button" href="tel:+85328812345">' + esc(tr2("callDispatch")) + "</a> " + external(tr2("officialWebsite"), "https://macaotaxi.com/en/");
       const provider = providers[record.provider];
+      if (provider.type === "hotel") return (provider.url ? external(tr2("hotelWebsite"), provider.url) : '<p class="muted">' + esc(tr2("hotelNoWebsite")) + "</p>") + external(tr2("hotelSource"), provider.source) + (provider.phone ? '<a class="button secondary smallbtn" href="tel:' + esc((provider.phone.match(/\+853\s*\d{8}/)?.[0] ?? provider.phone).replace(/[^+\d]/g, "")) + '">' + esc(tr2("callProvider")) + " \xB7 " + esc(provider.phone) + "</a>" : "");
       return external(tr2("providerWebsite"), provider.url) + (provider.phone ? '<a class="button secondary smallbtn" href="tel:' + provider.phone + '">' + esc(tr2("callProvider")) + " \xB7 " + esc(provider.phone) + "</a>" : "");
+    }
+    function hotelDirectory(selected) {
+      const f = filters(), all = findHotels(), matching = findHotels(f, model2.lang), shown = matching.slice(0, f.limit ?? 12);
+      const classes = [...new Set(all.map((p) => p.classId))];
+      return '<section class="hotel-directory" aria-labelledby="hotel-directory-title"><h3 id="hotel-directory-title">' + esc(tr2("hotelDirectory")) + "</h3><p>" + esc(tr2("hotelCoverage", { count: all.length })) + '</p><div class="hotel-filters"><label class="field hotel-search-field"><span>' + esc(tr2("hotelSearch")) + '</span><input type="search" id="hotel-search" value="' + esc(f.query) + '"></label><label class="field"><span>' + esc(tr2("hotelDistrict")) + '</span><select id="hotel-district">' + options(["", "M", "T", "C"], f.district, (id) => id ? districtName(id) : tr2("hotelAll")) + '</select></label><label class="field"><span>' + esc(tr2("hotelClass")) + '</span><select id="hotel-class">' + options(["", ...classes], f.classId, (id) => id ? l2(all.find((p) => p.classId === id).star) : tr2("hotelAll")) + '</select></label></div><div class="hotel-resultbar"><p role="status">' + esc(tr2("hotelMatches", { shown: shown.length, count: matching.length })) + "</p>" + button(tr2("hotelReset"), "hotel-reset") + '</div><div class="hotel-grid">' + shown.map((p) => '<article class="hotel-card' + (p.id === selected ? " is-selected" : "") + '"><img src="' + esc(p.image) + '" alt="' + esc(l2(p.n)) + '" loading="lazy" decoding="async"><div class="hotel-card-body"><p class="eyebrow">' + esc(districtName(p.district)) + "</p><h3>" + esc(l2(p.n)) + '</h3><p class="muted">' + esc(l2(p.star)) + "</p>" + (p.closed ? '<p class="notice">' + esc(tr2("hotelClosed")) + "</p>" : '<button class="button secondary smallbtn" type="button" data-action="hotel-select" data-value="' + esc(p.id) + '" aria-pressed="' + (p.id === selected) + '">' + esc(tr2(p.id === selected ? "hotelSelected" : "hotelChoose")) + "</button>") + external(tr2("hotelSource"), p.source, "textlink") + "</div></article>").join("") + "</div>" + (!matching.length ? '<p class="notice">' + esc(tr2("hotelNoMatches")) + "</p>" : "") + (shown.length < matching.length ? '<div class="actions hotel-more">' + button(tr2("hotelMore") + " \xB7 " + matching.length, "hotel-more") + "</div>" : "") + '<p class="muted mapnote">' + esc(tr2("hotelChecked")) + "</p></section>";
     }
     function requestName(record, lang = model2.lang) {
       return record.type === "taxi" ? local(lang, places[record.pickup]?.n) + " \u2192 " + local(lang, places[record.dropoff]?.n) : local(lang, providers[record.provider].n);
@@ -12015,14 +16110,14 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
     }
     function render2() {
       const d = draft(), type = d.type;
-      const providerIds = Object.keys(providers).filter((id) => providers[id].type === type);
+      const providerIds = Object.keys(providers).filter((id) => providers[id].type === type && !providers[id].closed);
       if (!providerIds.includes(d.provider) && type !== "taxi") d.provider = providerIds[0];
       const p = providers[d.provider];
       const locationIds = Object.keys(places);
       const section = '<section class="panel service-form"><form id="service-request-form"><div class="fieldgrid">' + (type !== "taxi" ? select3("provider", "provider", providerIds, d.provider, (id) => l2(providers[id].n)) : select3("pickup", "pickup", locationIds, d.pickup, name) + select3("dropoff", "dropoff", locationIds, d.dropoff, name)) + field2(type === "hotel" ? "checkin" : "serviceDate", "date", d.date, 'type="date" required') + (type === "hotel" ? field2("checkout", "checkout", d.checkout, 'type="date" required') + field2("rooms", "rooms", d.rooms, 'type="number" min="1" max="20" required') : "") + field2("serviceTime", "start", d.start, 'type="time" required') + field2("people", "people", d.people, 'type="number" min="1" max="99" required') + (type === "hotel" ? "" : field2("serviceDuration", "duration", d.duration, 'type="number" min="5" max="360" required')) + '</div><label class="field"><span>' + esc(tr2("serviceNotes")) + '</span><textarea name="notes" maxlength="500">' + esc(d.notes) + '</textarea></label><p class="notice">' + esc(tr2(type === "taxi" ? "taxiNotice" : p.terms)) + '</p><button type="submit" class="button">' + esc(tr2("saveRequest")) + "</button></form></section>";
       const providerCard = type === "taxi" ? '<section class="panel"><div class="service-icon">\u2197</div><h3>' + esc(tr2("taxiBooking")) + "</h3><p>" + esc(tr2("taxiNotice")) + "</p>" + contact(d) + "</section>" : '<section class="panel provider-card"><div class="thumb"><img loading="lazy" data-place-photo="' + p.placeId + '" src="' + esc(p.image) + '" alt="' + esc(l2(p.n)) + '"></div><h3>' + esc(l2(p.n)) + "</h3><p>" + esc(l2(p.address)) + "</p><p>" + esc(tr2(p.terms)) + '</p><div class="actions">' + contact(d) + "</div><small>\xA9 MGTO / DST</small></section>";
       const rows = state().requests.map((r) => '<article class="panel service-record"><div class="eyebrow">' + esc(tr2(r.status === "draft" ? "requestDraft" : "providerConfirmed")) + "</div><h3>" + esc(requestName(r)) + "</h3><p>" + esc(r.date + " \xB7 " + r.start) + " \xB7 " + esc(tr2("people")) + " " + r.people + "</p>" + (r.type === "hotel" ? "<p>" + esc(tr2("checkout")) + " \xB7 " + esc(r.checkout) + " \xB7 " + r.rooms + " " + esc(tr2("rooms")) + "</p>" : "") + (r.notes ? "<p>" + esc(r.notes) + "</p>" : "") + (r.ref ? "<p>" + esc(tr2("bookingRef")) + " \xB7 " + esc(r.ref) + "</p>" : "") + (r.status !== "draft" ? "<p>" + esc(tr2("confirmedAmount")) + " \xB7 " + (r.cost == null ? esc(tr2("unquoted")) : "MOP " + r.cost) + "</p>" : "") + '<div class="actions">' + contact(r) + button(tr2("copyRequest"), "service-copy", r.id) + button(tr2("recordConfirmation"), "service-confirm", r.id) + (r.status !== "draft" && r.type !== "taxi" ? button(tr2("integrateService"), "service-integrate", r.id) : "") + button(tr2("remove"), "service-remove", r.id) + "</div></article>").join("");
-      return '<main class="wrap innerpage"><div class="page-title"><div class="eyebrow">MACAU MATE</div><h2>' + esc(tr2("services")) + "</h2><p>" + esc(tr2("servicesBody")) + '</p></div><div class="tabs">' + types.map((k) => '<button type="button" class="tab" aria-pressed="' + (type === k) + '" data-action="service-type" data-value="' + k + '">' + esc(tr2(titles[k])) + "</button>").join("") + '</div><p class="notice">' + esc(tr2("providerHandoff")) + '</p><div class="split">' + section + providerCard + '</div><h3 class="section-title">' + esc(tr2("serviceRequests")) + '</h3><div class="stack">' + (rows || '<p class="notice">' + esc(tr2("noRequests")) + "</p>") + '</div><p class="muted mapnote">' + esc(tr2("serviceHistory")) + "</p></main>";
+      return '<main class="wrap innerpage services-page"><div class="page-title"><div class="eyebrow">MACAU MATE</div><h2>' + esc(tr2("services")) + "</h2><p>" + esc(tr2("servicesBody")) + '</p></div><div class="tabs">' + types.map((k) => '<button type="button" class="tab" aria-pressed="' + (type === k) + '" data-action="service-type" data-value="' + k + '">' + esc(tr2(titles[k])) + "</button>").join("") + "</div>" + (type === "hotel" ? hotelDirectory(d.provider) : "") + '<p class="notice">' + esc(tr2("providerHandoff")) + '</p><div class="split" id="service-booking-details">' + section + providerCard + '</div><h3 class="section-title">' + esc(tr2("serviceRequests")) + '</h3><div class="stack">' + (rows || '<p class="notice">' + esc(tr2("noRequests")) + "</p>") + '</div><p class="muted mapnote">' + esc(tr2("serviceHistory")) + "</p></main>";
     }
     function dialog(modal) {
       const original = state().requests.find((x) => x.id === modal.id);
@@ -12042,6 +16137,10 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
     async function submit(form, v) {
       if (form.id === "service-request-form") {
         const d = { ...draft(), ...v };
+        if (d.type !== "taxi" && (!providers[d.provider] || providers[d.provider].closed)) {
+          controls.toast("hotelClosed");
+          return true;
+        }
         if (!/^\d{4}-\d{2}-\d{2}$/.test(d.date) || fromTime(d.start) == null || d.type === "hotel" && d.checkout <= d.date) {
           controls.toast("serviceDateInvalid");
           return true;
@@ -12112,6 +16211,23 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
       }
     }
     const actions2 = {
+      "hotel-select": (id) => {
+        if (!providers[id] || providers[id].closed || providers[id].type !== "hotel") return;
+        state().type = "hotel";
+        state().drafts.hotel = { ...draft(), provider: id };
+        controls.save();
+        controls.render();
+        document.querySelector("#service-booking-details")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      },
+      "hotel-more": () => {
+        filters().limit = findHotels().length;
+        controls.render();
+      },
+      "hotel-reset": () => {
+        state().hotelFilters = { query: "", district: "", classId: "", limit: 12 };
+        controls.save();
+        controls.render();
+      },
       "service-type": (value) => {
         state().type = types.includes(value) ? value : "hotel";
         controls.save();
@@ -12135,10 +16251,35 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
         }
       }
     };
-    return { render: render2, dialog, submit, persistDraft, actions: actions2 };
+    let filterTimer;
+    function filterInput(target) {
+      if (target.id !== "hotel-search") return;
+      filters().query = target.value;
+      filters().limit = 12;
+      const cursor = target.selectionStart;
+      clearTimeout(filterTimer);
+      filterTimer = setTimeout(() => {
+        controls.save();
+        controls.render();
+        const input = document.querySelector("#hotel-search");
+        if (input) {
+          input.focus({ preventScroll: true });
+          input.setSelectionRange(cursor, cursor);
+        }
+      }, 180);
+    }
+    function filterChange(target) {
+      if (!["hotel-district", "hotel-class"].includes(target.id)) return;
+      clearTimeout(filterTimer);
+      filters()[target.id === "hotel-district" ? "district" : "classId"] = target.value;
+      filters().limit = 12;
+      controls.save();
+      controls.render();
+    }
+    return { render: render2, dialog, submit, persistDraft, actions: actions2, filterInput, filterChange };
   }
 
-  // src/app.js
+  // MacauMatePages/src/app.js
   var root = document.querySelector("#app");
   var storageKey = "macau-mate-trip-v1";
   var saved = {};
@@ -12944,6 +17085,7 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
     if (e.key === "Escape" && model.modal) actions.close();
   });
   root.addEventListener("change", (e) => {
+    serviceUI.filterChange(e.target);
     if (e.target.matches('#quiz-form input[name="answer"]')) {
       model.quizSelections[model.guideId] = e.target.value;
       delete model.quizFeedback[model.guideId];
@@ -12964,6 +17106,7 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
     }
   });
   root.addEventListener("input", (e) => {
+    if (!e.isComposing) serviceUI.filterInput(e.target);
     serviceUI.persistDraft(e.target.closest("form"));
     if (e.target.id === "trip-input") {
       model.input = e.target.value;
@@ -13169,3 +17312,4 @@ mapUnavailable|Map tiles are currently unavailable. Open external navigation for
 </script>
   </body>
 </html>
+
